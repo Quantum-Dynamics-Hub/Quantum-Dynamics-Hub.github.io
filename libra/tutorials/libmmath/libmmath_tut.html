@@ -1,0 +1,525 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+
+	<script src="../../../bootstrap/js/jquery.js"></script>        
+        <script src="../../../bootstrap/js/bootstrap.min.js"></script>
+	
+	<link href="../../../bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+	<link href="../../../bootstrap/css/style.css" rel="stylesheet">
+
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	
+	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
+	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shBrushPython.js"></script>
+	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shBrushBash.js"></script>
+	<link type="text/css" rel="stylesheet" href="../../../../pyxaid/syntaxhighlighter_3.0.83/styles/shCoreDefault.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type="text/javascript" async  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+	
+	<title>Libra</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-70773721-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+	
+    </head>
+    <body>
+
+	
+	<div class="row">
+      <div class="col-md-12"><h1>Libra: An open-source "Methodology Discovery" Library</h1></div>
+    </div>
+	
+    <nav class="navbar navbar-inverse h5" style="margin-top:-2px;">
+      <div class="container-fluid">
+        <div>
+          <ul class="nav navbar-nav">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../installation.html">Installation</a></li>
+            <li><a href="../../capabilities.html">Overview</a></li>
+            <li class="active"><a href="../../tutorials.html">Tutorials</a></li>
+            <li><a href="../../teaching.html">...</a></li>
+            <li><a href="../../soft_and_tuts.html">...</a></li>
+            <li><a href="../../contact.html">....</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+	
+	
+    <div class="container">
+      <div class="col-md-1"> </div>
+      <div class="col-md-10">
+        <div style="margin-left: 12px; width: 741px;"><br>
+		
+          <h3>Libmmath Tutorials</h3><br>
+		  
+		  The "libmmath" module implements the basic mathematical functionality (in the object oriented way). The working files showing how to use
+		  different objects are located in the /tests/test_mmath directory of the Libra package.
+		  Most of the tutorials are almost completely self-explanatory. Here, we only focus on most interesting/less straightforward conventions and 
+		  articulate some of our actions.
+		  
+		  <br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_mmath/test_vector.py" target="_new">test_vector.py</a></b><br><br>
+		  We can create a VECTOR object by using a default constructor. 
+		  <pre class="brush: python;">v1 = VECTOR()</pre>
+		  The vector stores 3 floating point numbers - x, y, and z coordinates. The default constructor sets all coordinates of v1 to zero.<br>
+		  The coordinates can be accessed via the members .x, .y, .z:
+		  <pre class="brush: python;">print v.x, v.y, v.z</pre>
+		  Note that the call 
+		  <pre class="brush: python;">print v</pre> 
+		  would print the address of the object - this is useful to check the identity of that
+		  object, as will be discussed later. <br>
+		  The constructor can also take 3 arguments, to initialize all coordinates:
+		  <pre class="brush: python;">v2 = VECTOR(1.0, -2.0, 3.0)</pre>
+		  Another vector can be used to initialize a new vector.<br><br>
+		  <pre class="brush: python;">v3 = VECTOR(v2)</pre>
+		  One can print the addresses of the vectors v2 and v3 to see that they are different. This means, that one can modify one object without 
+		  affecting the other one.<br>
+		  <p>
+		  Care must be exercised when dealing with assignments. In Python, all assignments are done by reference. This means that the assignent
+		  <pre class="brush: python;">v3 = v1</pre> would copy only the references. The variable v3 will then contain the reference to the previously created
+		  object v1. The main consequence of this is that the two "objects" are not independent. This is demonstrated in our tutorial. After the above assignent,
+		  we modify v1 and print both v1 and v3. You can see, that v3 now returns the same values as v1 - this is because v3 is merely a reference to the object
+		  v1. Analogously, one could affect v1 via modifying v3. By the way, this tricky side is common for all Python objects and complex data types, not only
+		  for Libra-spacific objects.
+		  </p>
+		  <p>The trick doesn't work for the pair v2 and v3. This is because we called a constructor to create v3 from v2. The constructor allocates new 
+		  memory and creates a totally independent object. To be on the safe side, call constructors (create new instances from scratch) whenever possible.</p>
+		  <p>Next, the script demonstrates the arithmetic operations overloaded for the objects of the VECTOR class - addition, subtraction, multiplication
+		  and division by the real number are all defined:
+		  <pre class="brush: python;">v3 = v1 + v2
+v3 = v1 - v2
+v3 = 2.0*v1 - v2*3.0		  
+v3 = v1/2.0
+</pre> 
+		  In addition, one can add up the vector and the number, which means the number will be added to all components of the new vector:
+		  <pre class="brush: python;">v3 = v1 + 1.0
+		  </pre>		  
+		  </p>
+		  <p>Some build-in functions-members of VECTOR class are demonstrated: length and its square,
+		  <pre class="brush: python;">v1.length()
+v2.length2()
+</pre>
+normalizaition - affects the initial vector to make it bigger or smaller (such that eventually its length is 1.0):
+<pre class="brush: python;">v1.normalize()</pre>
+unit - returns the unit vector (a new object), but doesn't affect the original object:
+<pre class="brush: python;">v2 = v1.unit()</pre>
+cross - computes the cross-product (vector product) of the two vectors v1 and v2 and puts it in the vector v3:
+<pre class="brush: python;">v3.cross(v1,v2)</pre>
+the multiplication is overloaded such that the product of two vectors is essentially a scalar product:
+<pre class="brush: python;">x = v1*v2</pre>
+		  </p>
+		  <p>Finally, we also demonstrate a very convenient feature - the vectorization of new data types. In order to be able to work with vectors
+		  of custom classes, such as VECTOR, we have defined a set of *List classes, where * indicates the name of the class which we want to vectorize.
+		  Specifically, the VECTORList class represents a list of objects, each of each is of VECTOR type. The object of such type corresponds to 
+		  C++ vector<VECTOR> array. Thus, one can pass vector<VECTOR> (typedef'ed as VECTORList) objects directly between Python and C++.
+		  On the Python side, this allows one to construct the lists of objects of VECTOR type and access the elements of such lists:
+		  <pre class="brush: python;">vlst = VECTORList()
+vlst = [v1, v2, v3]
+print vlst[0] # this returns the address of the first vector
+print vlst[1].x # this returns x component of the second vector in the list		  
+		  </pre>
+		  <br><br>
+		  </p>
+		 
+		 
+		  <br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_mmath/test_matrix.py" target="_new">test_matrix.py</a></b><br><br>
+		  <p>To create a matrix of an arbitrary size containing real-valued elements we use:
+		  <pre class="brush: python;">a = MATRIX(3,3)</pre>
+		  To set the value of i-th row and j-th column to the value v, we use the "set" member-function:
+		  <pre class="brush: python;">a.set(i,j,v)</pre>
+		  To return the value in i-th row and j-th column, we use the "get" member-function:
+		  <pre class="brush: python;">print a.get(i,j)</pre>
+		  To print matrix out, we use the "show_matrix" member-function:
+		  <pre class="brush: python;">a.show_matrix</pre>		  
+		  </p>
+		  <p>The description of more of MATRIX functionality will be added here later. So far, we can tell that, similar to VECTOR, many standard operations
+		  with objects of MATRIX and other types are overloaded to be most intuitive and follow standard mathematical conventions.</p>		  
+		  <p> Among more advanced member-functions implemented in the MATRIX module the script demonstrates the eigenvalue solver using the 
+		  Jacobi rotation method (which works only for symmetric matrices).
+		  <pre class="brush: python;">a.JACOBY_EIGEN(eva, eve, 1e-10)</pre>
+		  This function computes eigendecomposition of the matrix "a", and stores the eigenvectors and eigenvalues in the matrices "eve" and "eva", respectively.
+		  The number controls the desited accuracy. We further demonstrate the matrix multiplication operation by showing the results of the left- and 
+		  right-hand sides of the eigenvalue problem: a * EVEC = EVEC * EVAL
+		  <pre class="brush: python;">(a*eve).show_matrix()
+(eve*eva).show_matrix()
+</pre>
+		  </p>
+		  <p>Finally, we demonstrate the performance of the JACOBY_EIGEN function, but applying it to matrices of increasing size. On my Cygwin/Windows
+		  system, the diagonalization of the biggest matrix 150 x 150 (which is pretty small) takes about 8 seconds (which is pretty slow). Thus, the 
+		  algorithms may be suitable for small matrices. For larger matrices, one should use Eigen 3 functions wrapped in the "libmeigen" module (see 
+		  the <a href="#test_ceigen">test_ceigen.py</a> example). In this example, we also use the objects of the "Timer" class (see the <a href="#test_timer">
+		  test_timer.py</a>) that is very convenient for the benchmark purposes.
+		  </p>
+		  
+		  <br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_mmath/test_matrix2.py" target="_new">test_matrix2.py</a></b><br><br>
+		  <p>This script shows how to generate a sub-matrix from a bigger matrix (matrix popping) and how to populate a bigger matrix with the matrix elements
+		  of a smaller one (matrix pushing)</p>
+		  
+		  <p>We first create a 5 x 5 matrix A:
+		  <pre class="brush: python;">N = 5
+A = MATRIX(N,N)		  
+		  </pre>		 
+		  We then populate the matrix with some numbers using the set() function:
+		  <pre class="brush: python;">A.set(i,j,-3*i+j*j)</pre>		  
+		  Printing of the generated matrix gives:
+		  <pre class="brush: python;">A.show_matrix()
+>>>		  
+              0              1              4              9             16
+             -2             -1              2              7             14
+             -4             -3              0              5             12
+             -6             -5             -2              3             10
+             -8             -7             -4              1              8
+
+		  </pre>
+		  Lets also define another 5x5 matrix, B, with all elements set to zero. So, initially:
+		  <pre class="brush: python;">B.show_matrix()
+>>>		  
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0              0
+
+		  </pre>
+		  
+		  Now, lets say we want to extract a 2x2 matrix, a2x2, from the matrix A. First, we need to allocate memory by creating the actual object:
+		  <pre class="brush: python;">a2x2 = MATRIX(2,2)</pre>
+		  Next, we need to define which elements of the original matrix A we need to extract. This is done using the stensil - the list of the indices
+		  numerating colomns and rows the intersections of which will be extracted. For instance, if we want to get the upper left 2x2 block of the original
+		  matrix, we need to define the stensil as [0,1]. If we need the lower left 2x2 block, then we use [3,4]. Of course we can do something more 
+		  interesting - lets say the elements on the intersections of the 2-nd and 4-th coloumns and rows - then we use the[1,3] stencil. So the results will
+		  be:
+		  <pre class="brush: python;">pop_submatrix(A,a2x2,[0,1]); a2x2.show_matrix();
+>>>		  
+              0              1
+             -2             -1
+
+pop_submatrix(A,a2x2,[3,4]); a2x2.show_matrix();
+>>>		  
+              3             10
+              1              8
+
+pop_submatrix(A,a2x2,[1,3]); a2x2.show_matrix();
+>>>		  
+             -1              7
+             -5              3
+
+		  </pre>
+		  
+		  We can now push the (last) extracted matrix a2x2 to the bigger matrix B:
+		  <pre class="brush: python;">push_submatrix(B,a2x2,[0,1]); B.show_matrix();
+>>>		  
+             -1              7              0              0              0
+             -5              3              0              0              0
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0              0
+
+		  </pre>
+		  To show more pushing lets use another matrix a3x3 and push it together with the matrix a2x2 into B. After resetting matrix B to zero and
+		  extraxting ax3x3 from A in a certain way, lets do:
+		  <pre class="brush: python;">pop_submatrix(A,a3x3,[0,1,2]); B.show_matrix();
+>>>
+              0              1              4
+             -2             -1              2
+             -4             -3              0
+
+push_submatrix(B,a3x3,[0,1,4]); B.show_matrix();
+>>>		  
+              0              0              0              1              4
+             -0              0              0              0              0
+              0              0              0              0              0
+             -2              0              0             -1              2
+             -4              0              0             -3              0
+
+		  </pre>
+		  <p><b>Important: the size of the stencil should be consistent with the size of the pushed/popped matrix</b></p>
+		  
+		  <p><b>Potential use:</b> for density matrix initialization - SAD - superposition of atomic densities. In addition, this technique can also be used
+		  for the fragmentation approaches - when you compute the density matrix for each fragment (in its own atomic basis - this is one of the submatrices)
+		  and then need to stitch the matrices together to produce the overall density matrix - in the space of all atomic orbitals.</p>
+		  
+		  
+		  <br><br>
+		  <b><a id="test_ceigen" href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_mmath/test_ceigen.py" target="_new">test_ceigen</a></b><br><br>
+		  <p>This script simply shows how to solve the (generalized) eigenvalue problem: H*C = S*C*E</p>
+		  <p>We first generate the input matrices: the Hamiltonian matrix H is set to be real symmetric (hence Hermitian), the overlap matrix S is set to
+		  something other than trivial unity matrix:</p>
+		  <pre class="brush: python;">H.show_matrix()
+>>>
+         -0.001          0.001
+          0.001          0.001
+S.show_matrix()
+
+>>>
+1.0000000      0.50000000
+0.50000000     1.0000000
+		  </pre>
+	      <p>The eigenvalues and eigenvectors are then computed by a simple function:</p>
+		  <pre class="brush: python;">solve_eigen(2, H, S, E, C) </pre>
+		  Note, that the eigenvectors and eigenvalues can, in general, be complex-valued. This is why we initialize matrices C and E as the CMATRIX objects:
+		  <pre class="brush: python;">E = CMATRIX(2,2)
+C = CMATRIX(2,2)</pre>
+		  <p>To test the correctness of the eigenvalue solution, we compute the left- and right-hand sides of the equation H*C = S*C*E. However, since
+		  the multiplication of the complex and real matrices are is not defined yet, we need to convert the real matrices H and S into the complex
+		  counterparts (with zero imaginary components). This can be done using one of the overloaded constructors:</p>
+		  <pre class="brush: python;">cH = CMATRIX(H); cH.show_matrix()
+>>>
+(-0.0010000000,0.0000000)  (0.0010000000,0.0000000)
+(0.0010000000,0.0000000)  (0.0010000000,0.0000000)
+cS = CMATRIX(S); cS.show_matrix()
+
+>>>		  
+(1.0000000,0.0000000)  (0.50000000,0.0000000)
+(0.50000000,0.0000000)  (1.0000000,0.0000000)
+		  </pre>
+		  How, we can test the solution:
+		  <pre class="brush: python;">(cH*C).show_matrix()
+>>>
+(0.0018739952,0.0000000)  (-0.00069867167,0.0000000)
+(-0.00040337828,0.0000000)  (-0.0010819516,0.0000000)
+
+(cS*C*E).show_matrix()
+>>>
+(0.0018739952,0.0000000)  (-0.00069867167,0.0000000)
+(-0.00040337828,0.0000000)  (-0.0010819516,0.0000000)
+		  </pre>
+		  
+		  We can also check the generalized orthogonality condition: C.H() * S * C = I
+		  <pre class="brush: python;">(C.H() * cS * C).show_matrix()
+>>>
+(1.0000000,0.0000000)  (-1.6653345e-16,0.0000000)
+(-2.2204460e-16,0.0000000)  (1.0000000,0.0000000)
+		  </pre>
+		  
+		  
+		  
+		  <br><br>
+		  <b><a id="test_timer" href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_mmath/test_timer.py" target="_new">test_timer</a></b><br><br>		  
+		  <p> This small test shows how to use the Timer object for measuring the computation times</p>
+		  To create the timer object we do:
+		  <pre class="brush: python;">t = Timer()</pre>
+		  This is the only time the accumulator is set to zero. The accumulator contains the total time for all measured executions. The measurements are performed
+		  by setting the start point using 
+		  <pre class="brush: python;">t.start()</pre> and the end point using
+		  <pre class="brush: python;">t.stop()</pre>
+		  When the stop function is called, the time between stop() and previous start() is measured and added to the accumulator. To show the total accumulated 
+		  time, use the show() function
+		  <pre class="brush: python;">t.show()</pre>
+		  Since the only time the accumulator is set to zero is when the Timer object is created, there are two main usage modes of the Timer.
+		  <br>
+		  <b>Mode A: Total time</b> as in the first example:
+		  <pre class="brush: python;">t = Timer()
+for a in xrange(3):
+    t.start()
+	... here goes the task the time of which we measure ...
+    t.stop()
+    print "Time to compute = ", t.show(), " sec"		  
+		  </pre>
+		  In this mode, we create the Timer object only once, and then store the total time for each cycle of computations
+		  
+		  <br><br>
+		  <b>Mode B: Time per iteration</b> as in the second example:
+		  <pre class="brush: python;">for a in xrange(3):
+    t = Timer()
+    t.start()
+    ... here goes the task the time of which we measure ...
+    t.stop()
+    print "Time to compute = ", t.show(), " sec"		  
+		  </pre>
+		  In this more we create the Timer object for each cycle, and hence the time returned by the show() function corresponds to the time needed 
+		  for each single computational cycle.
+		  
+		  
+		  <br><br>
+		  <b><a id="test_random_data1" href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_random_and_data/test.py" target="_new">Random numbers generator: test.py</a></b><br><br>
+		  <p>This example shows how to generate some relatively standard random distributions: uniform (well, this is nothing but a wrapper of the
+		  intrinsic C++ functions), exponential, normal, and some other. The example also shows how to analyze the randomly distributed numbers, to
+		  plot some distributions.</p>
+		  <p> The very first step needed to generate random numbers in Libra, is to create an object of the <a>Random</a> class. This object is a container
+		  of the pseudorandom number sequences. This object has a common random seed, set up at the time of the object creation. Therefore, the object
+		  must be created only once and then appropriate random numbers can be extracted from the sequence. If new instance of the object is created 
+		  every time the random number is extracted, the sequence of the obtained numbers will contain many repetition of the same numbers, unless the 
+		  time between each call is large enough to obtain (system clock-dependent) very different random seed. The principle is illustrated by running 
+		  a small loop generating 10 random numbers (Test 1 and Test 1a). The particular number you'll see in the Test1 will vary each time you run the code,
+		  but it will stay more or less the same for all iterations. For instance:
+		  </p>
+		  <pre class="brush: python;">Test 1: Constructor is called each time when the number is generated
+0 0.26743836434
+1 0.26743836434
+2 0.26743836434
+3 0.26743836434
+4 0.26743836434
+5 0.26743836434
+6 0.26743836434
+7 0.26743836434
+8 0.26743836434
+9 0.26743836434
+
+Test 1a: Constructor is created only once
+0 0.26743836434
+1 0.761646950041
+2 0.584602647733
+3 0.541262961245
+4 0.0468970956499
+5 0.420079873605
+6 0.808454720214
+7 0.564376205469
+8 0.633402130396
+9 0.384234171074
+</pre>
+		  <p> To analyze the generated random numbers, we utilize the <a>DATA</a> class. The constructor takes a list of random numbers to store them 
+		  internally:
+		  </p>
+		  <pre>dy1 = DATA(y1)</pre>
+		  <p>To compute the density function for the sampled random numbers, we utilize the "Calculate_Distribution" method of the DATA class. The function
+		  takes another list, the one that defined the grid points (support of the distribution) and returns a list of two lists:
+		  The very first element of the returned list is a probability density function for all grid points (a list), `P(x)`. The second element of the
+		  returned list is a cumulant function: `F(x) = int_(-oo)^x P(x)dx` - the density function integrated up to the given grid point:
+		  </p>
+		  <pre>dens, cum = dy1.Calculate_Distribution(x)</pre>
+		  
+		  <p>To generate different random distribution, we call the appropriate functions (members of the class <a>Random</a>). The available distributions
+		  are:</p>
+		  <ul>
+		  <li>Uniform distribution: `P(x; a, b) = 1/(b-a)`. Methods: "uniform" - generates the numbers, "p_uniform" - computes
+		  the corresponding probability density function
+		  </li>
+		  <li>Exponential distribution: `P(x; lambda) = lambda * e^(-lambda * x)`. Methods: "exponential" - generates the numbers, "p_exponential" - computes
+		  the corresponding probability density function
+		  </li>
+		  <li>Normal distribution: `P(x) = (2 pi)^(-1/2) * e^(- 1/2*x^2)`. Methods: "normal" - generates the numbers, "p_normal" - computes
+		  the corresponding probability density function
+		  </li>
+		  <li>Poisson distribution: `P(n; lambda) = e^(-lambda)*lambda^n/(n!)`. Methods: "poiss1", "poiss2" (both correspond to n = 1) - generate the numbers, "p_poiss" - computes
+		  the corresponding probability density function
+		  </li>
+		  <li>Gamma and beta distributions are also available, but need more testing and description</li>
+		  </ul>
+		  <p> Examples of the random numbers generated and the related distribution functions (density and cumulant) are shown below:
+		  </p>
+		  
+		  <div class="container">
+		  <div class="row">
+		  <div class="col-md-4"><img src="reference_test_random_data/uniform.png"></div><div class="col-md-4"><img src="reference_test_random_data/normal.png"></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><img src="reference_test_random_data/exponential.png"></div><div class="col-md-4"><img src="reference_test_random_data/poiss1.png"></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">c</p></div><div class="col-md-4"><p class="text-center">d</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><img src="reference_test_random_data/poiss2.png"></div><div class="col-md-4">
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">e</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-8"><b>Figure 1.</b>(a) Uniform distribution on [0, 1]; (b) Normal distribution; 
+		  (c) Exponential distribution with `lambda = 1`; (d) Poisson distribution with `lambda = 5` and using "poiss1" function; 
+		  (e) Poisson distribution with `lambda = 1` and using "poiss2" function. Note that "poiss1" and "poiss2" functions both work well. It is the
+		  choice of the parameter `lambda` that affects the quality of generated data: as closer `lambda` to 0, the worse the generated random numbers are.
+		  </div>
+		  </div>
+		  </div> <!-- Figure 1 -->
+		  
+		  
+		  
+		  <br><br>
+		  <b><a id="test_metropolis" href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_random_and_data/test2.py" target="_new">Metropolis algorithm: test2.py</a></b><br><br>
+		  <p>Sometimes, we need to sample random numbers from a significantly more complex distributions. In this cases, the Metropolis sampling
+		  algorithm is a standard choice, especially in physical chemistry problems. In the present example we implement a Metropolis algorithm for sampling
+		  phase space points (both coordinates, `x`, and the momenta, `p_x`) from the Boltzmann distribution, `P(q,p) = 1/Z*exp(-(H(q,p))/(k_B T))`,corresponding to
+		  a given Hamiltonian, H(q,p). Here, `Z` is the partition function. In particular, we use a simple Harmonic oscillator Hamiltonian:
+		  `H(q, p) = p^2 /2 + 1/2*omega^2*x^2 + M*x`, where `M = (1/2*omega^2 * E_r)^(1/2)`
+		  This is implemented in the 
+		  <pre>boltz()</pre> function defined in the beginning of the script. 
+		  What the function does, is essentialy a random walk in the 2-dimensional phase space. Along the walk, new configurations are proposed and then either
+		  accepted or regected according to the Metropolis algorithm. After sufficiently long run (1000 steps, in this example) the generated point is 
+		  assumet to a statistically-independent one, drawn from the proper distribution. It is then returned upon the call of the "boltz" function.
+		  </p>
+		  <p>We generate 5000 pairs of numbers `(q, p)` and then compute probability distribution functions alsong q and p axes. The computed distributions
+		  are compared with the Boltzmann populations computed numerically for the given 2D grid. The results are presented in Figure 2.
+		  </p>
+		  <div class="container">
+		  <div class="row">
+		  <div class="col-md-4"><img src="reference_test_random_data2/metropol_x.png"></div><div class="col-md-4"><img src="reference_test_random_data2/metropol_p.png"></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
+		  </div>		  
+		  <div class="row">
+		  <div class="col-md-8"><b>Figure 2.</b>Probability distribution generated using the Metropolis sampling algorithm: 
+		  (a) Density function along the `q` coordinate (`p=0`); (b) Density function along the `p` axis (`q=0`).
+		  </div>
+		  </div>
+		  </div> <!-- Figure 2-->
+		  
+		  <br><br>
+		  <b><a id="test_metropolis" href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_random_and_data/test3.py" target="_new">Pseudorandom numbers generation: test3.py</a></b><br><br>
+		  <p> Well, this is not an intrinsic functionality of Libra, but rather just an interesting test case. One of the ineresting ways of generating
+		  "random" (really, pseudo-random) numbers is via deterministic mapping with the parameters chosen such that the mapping enters a chaotic regime.
+		  In particular, we consider the mapping `x_(n+1) = 4*r*x_n*(1-x_n)`, where `0 < r < 1` is a parameter. Depending on the choice of `r`, the mapping
+		  may enter a chaotic regime and would generate a sequence of pseudorandom numbers. The <pre>Calculate_Distribution(x)</pre> is useful here to 
+		  analyze the probability density of the generated numbers.
+		  </p>
+		  <p>For instance, we use the parameters `r = 0.98` and `x_0 = 0.2`. The generated sequence, as well as the corresponding density and cumulant 
+		  functions are shown in Figure 3.</p>
+		  <div class="container">
+		  <div class="row">
+		  <div class="col-md-4"><img src="reference_test_random_data3/mapping.png"></div><div class="col-md-4"><img src="reference_test_random_data3/case1.png"></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
+		  </div>		  
+		  <div class="row">
+		  <div class="col-md-8"><b>Figure 3.</b>Test case of pseudorandom numbers generated with a mapping `x_(n+1) = 4*r*x_n*(1-x_n)`. 
+		  (a) The sequence of generated pseudorandom points; (b) The probability density and cumulant functions 
+		  </div>
+		  </div>
+		  </div> <!-- Figure 3-->
+		  
+		  
+		  <pre class="brush: python;"></pre>
+
+		
+
+
+		  
+		  
+		  
+		</div>
+	  </div>
+	</div>
+	
+ 
+	
+	</body>
+
+</html>

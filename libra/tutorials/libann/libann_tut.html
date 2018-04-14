@@ -1,0 +1,139 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+
+	<script src="../../../bootstrap/js/jquery.js"></script>        
+        <script src="../../../bootstrap/js/bootstrap.min.js"></script>
+	
+	<link href="../../../bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+	<link href="../../../bootstrap/css/style.css" rel="stylesheet">
+
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	
+	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
+	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shBrushPython.js"></script>
+	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shBrushBash.js"></script>
+	<link type="text/css" rel="stylesheet" href="../../../../pyxaid/syntaxhighlighter_3.0.83/styles/shCoreDefault.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+
+	
+	<title>Libra</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-70773721-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+	
+    </head>
+    <body>
+
+	
+	<div class="row">
+      <div class="col-md-12"><h1>Libra: An open-source "Methodology Discovery" Library</h1></div>
+    </div>
+	
+    <nav class="navbar navbar-inverse h5" style="margin-top:-2px;">
+      <div class="container-fluid">
+        <div>
+          <ul class="nav navbar-nav">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../installation.html">Installation</a></li>
+            <li><a href="../../capabilities.html">Overview</a></li>
+            <li class="active"><a href="../../tutorials.html">Tutorials</a></li>
+            <li><a href="../../teaching.html">...</a></li>
+            <li><a href="../../soft_and_tuts.html">...</a></li>
+            <li><a href="../../contact.html">....</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+	
+	
+    <div class="container">
+      <div class="col-md-1"> </div>
+      <div class="col-md-10">
+        <div style="margin-left: 12px; width: 741px;"><br>
+		
+          <h3>Libann Tutorials</h3><br>
+		  
+		  The "libann" is a module that implements operations with artificial neural networks (ANNs). 
+		  
+		  <br><br>
+		  <b><a href="" target="_new">??.py</a></b><br><br>
+		  <p> We start by creating a default ANN object:  </p>
+		  <pre class="brush: python;">ANN = NeuralNetwork()</pre>
+		  This will initialize some of the internal parameters of the ANN class methods (e.g., learning or printout), but other
+		  than that the object is not of a great use yet.
+		  <p>In the next step:</p>
+          <pre class="brush: python;">ANN.CreateANN([2,2,1])</pre>
+		  <p>we define the architecture of our ANN. This procedure will initialize the internals of the ANN representation
+		  (weights and biases). The dimensions of these variables will be defined and memory allocated. The initial values
+		  will be set at random.
+		  </p>
+		  <p>In this particular example, we create an multilayer perceptron with 3 layers: 1 - input, 1 - hidden, and 1 - output. 
+		  Each of these layers has a number of nodes (neurons): The first (input) layer has 2 nodes, so the input to the ANN should 
+		  consist of 2 entries. The hidden layer also contains 2 neurons. The ouutput layer contains only 1 neuron, so the output 
+		  (and the target/reference) values should consist of 1 entry. I use the term "entry" to indicate that an ANN can, in general,
+		  operate on various types of input - strings, numbers, or maybe vectors or matrices. However, for most cases, we will implying
+		  just numbers (integers and floats).</p>
+		  
+		  <p>The content and all the internals of the ANN can be printed out with the "ShowANN()" function:</p>		  
+		  <pre class="brush: python;">ANN.ShowANN()</pre>
+		  <p>Or exported into a file (specially formatted) using the "ExportANN" function, which also takes the name of the output file
+		  as an argument:</p>
+		  <pre class="brush: python;">ANN.ExportANN("initial.ann")</pre>
+		  
+		  <p>The produced ".ann" file can be used to load an ANN with a sepcific state. For instance, the next lines
+		  use the "ImportANN" function to do just that - by loading the info about the previousely constructed ANN from a file.</p>
+		  <pre class="brush: python;">ANN1 = NeuralNetwork()
+ANN1.ImportANN("initial.ann")
+</pre>
+		  <p>The combination of the "ExportANN" and "ImportANN" functions can be very useful for saving the state of 
+          evolved (e.g., during the training ANN) and restarting the calculations from a particular ANN state.</p>
+
+		  
+		  
+		  
+		  <div class="container">
+		  <div class="row">
+		  <div class="col-md-4"><img src="reference_test_nuclear/_nucl_en.png"></div><div class="col-md-4"><img src="reference_test_nuclear/_nucl2_en.png"></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><img src="reference_test_nuclear/_nucl_phase.png"></div><div class="col-md-4"><img src="reference_test_nuclear/_nucl2_phase.png"></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">c</p></div><div class="col-md-4"><p class="text-center">d</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-8"><b>Figure 1.</b>Evolution of kinetic, potential, and total energy for harmonic (a) and Morse oscillators (b). Phase
+		  space (isoenergetic) trajectory for harmonic (c) and Morse (d) oscillators.
+		  </div>
+		  </div>
+		  </div> <!-- Figure 1 -->
+		  
+
+		
+		
+		<pre class="brush: python;"></pre>
+
+	</div>
+	</div>
+	</div>
+	</body>
+	
+	</html>

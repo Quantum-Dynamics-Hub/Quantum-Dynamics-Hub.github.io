@@ -1,0 +1,850 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+
+	<script src="../../../bootstrap/js/jquery.js"></script>        
+        <script src="../../../bootstrap/js/bootstrap.min.js"></script>
+	
+	<link href="../../../pyxaid/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+	<link href="../../../pyxaid/bootstrap/css/style.css" rel="stylesheet">
+
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	
+	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
+	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shBrushPython.js"></script>
+	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shBrushBash.js"></script>
+	<link type="text/css" rel="stylesheet" href="../../../../pyxaid/syntaxhighlighter_3.0.83/styles/shCoreDefault.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+
+	
+	<title>Libra</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-70773721-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+	
+    </head>
+    <body>
+
+	
+	<div class="row">
+      <div class="col-md-12"><h1>Libra: An open-source "Methodology Discovery" Library</h1></div>
+    </div>
+	
+    <nav class="navbar navbar-inverse h5" style="margin-top:-2px;">
+      <div class="container-fluid">
+        <div>
+          <ul class="nav navbar-nav">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../installation.html">Installation</a></li>
+            <li><a href="../../capabilities.html">Overview</a></li>
+            <li class="active"><a href="../../tutorials.html">Tutorials</a></li>
+            <li><a href="../../teaching.html">...</a></li>
+            <li><a href="../../soft_and_tuts.html">...</a></li>
+            <li><a href="../../contact.html">....</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+	
+	
+    <div class="container">
+      <div class="col-md-1"> </div>
+      <div class="col-md-10">
+        <div style="margin-left: 12px; width: 741px;"><br>
+		
+          <h3>Libhamiltonian_mm Tutorials</h3><br>
+		  <p>
+		  The "libhamiltonian_mm" is a module that implements molecular mechanics (MM) methods for computing interactions
+          in atomistic systems. The working files showing how to use different objects are located in the /tests/test_hamiltonian_mm directory of
+		  the Libra package. Most of the tutorials are almost completely self-explanatory. Here, we only focus on most interesting/less straightforward
+		  conventions and articulate some of our actions.
+		  </p>		
+		  <br><br>
+		  
+		  <p>Before we actually start the tutorials, we should first discuss the following 3 auxiliary files:		  
+		  </p>
+		  <ul>
+			<li><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/LoadMolecule.py" target="_new">LoadMolecule.py</a></li>
+			<li><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/LoadPT.py" target="_new">LoadPT.py</a></li>
+			<li><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/LoadUFF.py" target="_new">LoadUFF.py</a></li>
+		  </ul>
+		  <p style="color:red"><b>Important:</b> The examples below are designed for Cygwin. If you are working on Unix system, you would need to change the prefixes "cyg"
+		  to "lib" in the import lines of the Load*.py modules ( from cygmmath import *, from cygchemobjects import *, from cyghamiltonian import *)
+		  </p>
+		  <p>They all have a similar structure and are developed to perform similar actions - to load some data from specifically-formatter files to different
+		  data structures. The loading is based on the concept of regular expressions. First, we define some building blocks for constructing more complex 
+		  regular expressions. These building blocks essentially define the basic data types, such as int, float, string, etc.:
+		  <pre class="brush: python;">#------- Here are some basic patterns -------------
+INT    = '([1-9]([0-9]*))'
+NINT   = '([0-9]+)'
+SP     = '\s+'    
+DOUBLE = '([-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?)'
+WORD   = '([a-zA-Z]+)'
+ID     = '(([a-zA-Z]+)([a-zA-Z]+|\d+)*)'
+PHRASE = '"((\w|\W)+)"'
+compINT = re.compile(INT)
+		  </pre>
+		  Read more details on how to define regular expressions and how to work with them <a href="https://docs.python.org/2/library/re.html" target="_new">here</a>
+		  and <a href="http://www.tutorialspoint.com/python/python_reg_expressions.htm" target="_new">here</a>. 
+		  
+		  </p>
+		  <p>Next, we define named patterns:
+		  <pre class="brush: python;">#------- Here we define a format of file ----------
+# p - means 'Pattern'
+    pAtom_keyword = '(?P&ltAtom_keyword&gt'+'HETATM'+')'+SP
+    pAtom_id      = '(?P&ltAtom_id&gt'+DOUBLE+')'+SP    
+    pAtom_element = '(?P&ltAtom_element&gt'+WORD+')'+SP
+    pAtom_chain   = '(?P&ltAtom_chain&gt'+WORD+')'+SP
+    pAtom_id1     = '(?P&ltAtom_id1&gt'+DOUBLE+')'+SP
+    pAtom_x_coord = '(?P&ltAtom_x_coord&gt'+DOUBLE+')'+SP
+    pAtom_y_coord = '(?P&ltAtom_y_coord&gt'+DOUBLE+')'+SP
+    pAtom_z_coord = '(?P&ltAtom_z_coord&gt'+DOUBLE+')'+SP
+    pAtom_type    = '(?P&ltAtom_type&gt'+INT+')'+SP
+    pAtom_charge  = '(?P&ltAtom_charge&gt'+DOUBLE+')'+SP
+		   </pre>
+			Note, that we simply wrap the basic patterns (using their names) in the extended construction, in which we also define the identifyer of the 
+			given pattern. The identifyer is the given in the angle brackets and will later be used to access the value of the specific pattern of given type.
+			You may have noticed that the same basic pattern (e.g. DOUBLE or WORD in our example) may have different identifyers associated with it. The identifyers
+			hence serve the purpose of differentiating between patterns of the same type. For instance, lets say, the analysis suggested that you have 3 patterns
+			of DOUBLE type in your string. So, how are you going to say which DOUBLE contains which meaning? The identifyers do just that. In other words,
+			the identifyers add semantics (meaning) to the basic general patterns. This way we define meaningfull (carrying some semantics) patterns to be used
+			in our analysis: pAtom_keyword, pAtom_id, pAtom_x_coord, pAtom_y_coord, etc.		  
+		  </p>
+		  <p>But how we know which of the found patterns should be assigned to which pattern identifyer? Well, the most straightforward way is of course
+		  by the position of the patterns in some sequence of patterns. This is, basically, a format. To specify the format, we define the whole sequence of
+		  expected patterns in given order. For instance, the lines:
+		  <pre class="brush: python;">if format=="pdb":
+    Atom_Record = pAtom_keyword + pAtom_id + pAtom_element + pAtom_id1 + pAtom_x_coord + pAtom_y_coord + pAtom_z_coord + pAtom_charge 
+elif format=="pdb_1":
+    Atom_Record = pAtom_keyword + pAtom_id + pAtom_element + pAtom_id1 + pAtom_x_coord + pAtom_y_coord + pAtom_z_coord + pAtom_chain
+elif format=="true_pdb":
+    Atom_Record = pAtom_keyword + pAtom_id + pAtom_element + pAtom_mol + pAtom_chain + pAtom_id1 + pAtom_x_coord + pAtom_y_coord + pAtom_z_coord + pAtom_occ + pAtom_charge 
+		  </pre>
+		  define 3 formats for the Atom_Record lines in a files containing some structural information about system. Note that these format lines are the minimal
+		  sets needed for the program to find such records. If the input line contains anything beyond the pattern, it will still be discovered. For instance,in the
+		  first format "pdb", we can put any comments or any additional information about the atom, right after final pAtom_charge entry. This will still be a valid
+		  input.		  
+		  </p>
+		  <p>Similarly to Atom_Record format line we also define the Bond_Record and Fragment_Record formats, to search for different elements of input
+		  (connections between atoms, and grouping of the atoms in the rigid bodies, respectively).
+		  </p>
+		  <p>Once all the format lines are defined, we are ready to analyze our test and try to find any matches that correspond to any of those defined
+		  format lines (extended patterns). This is done in:
+		  <pre class="brush: python;">A = f.readlines()    
+#---------- Create atoms ----------------
+for a in A:        
+    m1 = re.search(Atom_Record,a)
+    if m1!=None:           
+        ...
+		  </pre>
+		  Here, we first read all lines of the input file, to store them as a list of lines in A. Then in each line (for a in A), we search for the Atom_Record
+		  patterns (and in the rest of the script for Bond_Record and Fragment_Record as well) - this is done with "re.search(Atom_Record, a)". The return
+		  result is the match object m1. It is equal to "None", if no pattern Atom_Record was found in the line a. Otherwise, the match object will contain 
+		  all the information we need.
+		  </p>
+		  <p>To access the information we need in a controlled way, we use the elementary pattern identifiers, together with "start()" and "end()" functions
+		  of the match object type:
+		  <pre class="brush: python;">atom_dict = {}
+atom_dict["Atom_element"] = a[m1.start('Atom_element'):m1.end('Atom_element')]
+atom_dict["Atom_cm_x"] = float(a[m1.start('Atom_x_coord'):m1.end('Atom_x_coord')]) * Angst_to_Bohr
+atom_dict["Atom_cm_y"] = float(a[m1.start('Atom_y_coord'):m1.end('Atom_y_coord')]) * Angst_to_Bohr
+atom_dict["Atom_cm_z"] = float(a[m1.start('Atom_z_coord'):m1.end('Atom_z_coord')]) * Angst_to_Bohr
+
+		  </pre>
+		  This way we create a Python dictionary with specially designed keywords. The keywords: Atom_element, Atom_cm_x, etc. will be importnat on next
+		  stage, namely, in the constructor of the Atom object of the "libchemobjects" library.
+		  </p>
+		  <p>In passing, we should emphasize the method for inputting lists of integers (can be adapted to different data types). We need this in Bond_Record
+		  and in Fragment_Record. For instance, the bond record contains the list of integers such that the first one is the identifier of the given atom,
+		  and the rest are the ids of all atoms that are connected covalently to the given one. In Fragment_Record we simply input a list of the ids for the
+		  atoms that are grouped together to form a fragment.
+		  </p>
+		  <p>For the case of Fragment_Record, the corresponding code to handle such lists will look like:
+		  <pre class="brush: python;">lst = compINT.findall(m3.group())
+gr_atoms = []
+i = 0
+while i &lt len(lst):
+    gr_atoms.append(int(float(lst[i][0])))
+    i = i + 1
+	      </pre>
+          Here, we use "findall()" function of the regular expression object compINT. We also use the "group()" function of the match object to customize
+		  the "findall" function (other options would produce different level of patterning). The output is the list of entries. The first element of each
+		  entry is the integer we wanted to read. This is then used to simplify the list "lst" to a normal list of integers "gr_atoms". 
+		  </p>
+		  
+		  <br><br>
+		  <p>The main difference between the 3 modules listed above comes in the types of Libra objects they are using. This also affect the specific way
+		  they are interfaced with Python script. Below we briefly describe the main mechanisms and object types.
+		  <ul>
+			<li><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/LoadMolecule.py" target="_new">LoadMolecule.py</a>
+				<p> The Python objects we construct in the above pattern analysis are used in the functions of the "libchemobjects" lirary:
+				<pre class="brush: python;">syst.CREATE_ATOM( Atom(univ,atom_dict)  ) 
+syst.LINK_ATOMS(int(float(lst[0][0])),int(float(lst[i][0])))
+syst.GROUP_ATOMS(gr_atoms,j)
+				</pre>
+				The first function, CREATE_ATOM simply creates an Atom object, using the dictionary "atom_dict". The keys of the dictionary should be properly chosen
+				so that the extraction of their values to the internal C++ variables would be meaningfull. See the constructor of objects of "Atom" type 
+				<a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/chemobjects/mol/Atom.cpp" target="_new">here</a> for the full list
+				of supported keys. The created atom becomes an element of Atoms array of the "syst" object.				
+				</p>
+				<p>The second function, links to atoms that belong to "syst" object (already created within it!). The linking actually updates the entire topology
+				of the system, creating all bonds, angles, dihedrals, and improper dihedrals records, all stored inside the "syst" object. As we can see, the 
+				LINK_ATOM funciton takes only 2 parameters - the ids of the two atoms we want to link (note, ids start with 1: 1,2,3, ..., not with 0!). 
+				</p>
+				<p>Finally, the GROUP_ATOMS function groups the atoms that are already in "syst" object to create an element of "Fragments" array of the "syst" 
+				object. The arguments to the function are simply the Python list of integers, containing the ids (not indices!) of the atoms to group, and the
+				integer that will become the Fragment id. 
+				</p>
+				<p>All 3 functions are defined in <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/chemobjects/chemsys/System_methods2.cpp" target="_new">
+				System_methods2.cpp</a> file.
+				</p>
+			</li>
+			<li>
+			<a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/LoadPT.py" target="_new">LoadPT.py</a>
+				<p>This file implements a procedure to load data into the Periodic Table object defined within the "Universe" object (passed by reference as
+				variable U). The "Universe" class is designed to contain all general-purpose information about chemical species and physical parameters.
+				It is used as a general database that contains such information. This database can be modified at every stage. It also used when creating 
+				different objects. So far, the main usage of the "Universe" class has been the storage of "PeriodicTable" variable. For details, see 
+				<a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/chemobjects/universe/Universe.h" target="_new"> here</a>. The "PeriodicTable"
+				is essentially a map between the symbolic element name and the structure (of "Element" type) containing essential information about the element.
+				Although, the database may be hard-coded, we prefer its loading from the corresponding 
+				<a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/elements.dat" target="_new">data file</a>. This way,
+				user may easily tune the properties of elements, to set them to even non-physical values (e.g. set some effective masses). As such, we need a 
+				way to load those data into the instances of the "Universe" class. This is exactly what "LoadPT.py" script does.
+				</p>
+				<p>Although the pattern recognition part is exactly the same as in LoadMolecule.py, the LoadPT.py script uses a different way to interface
+				Python and C++ objects. Namely, we first create an object of any arbitrary Python class:
+				<pre class="brush: python;"># First, declare the class (class name does not matter)
+class element:
+    pass
+# Now, create an object
+elem = element()
+	</pre>
+				As you can see, the class is empty - no data-members have been declared so far. However, one of the very interesting features of Python is 
+				the ability to define data members at later time - when they are first initialized with some value. In our example, this is done in the
+				following lines:
+				<pre class="brush: python;">elem.Elt_name        = a[m1.start('Element_name'):m1.end('Element_name')]
+elem.Elt_id          = int(float(a[m1.start('Element_atomic_number'):m1.end('Element_atomic_number')]))
+elem.Elt_number      = elem.Elt_id
+elem.Elt_nucleus_charge = elem.Elt_id
+elem.Elt_mass        = float(a[m1.start('Element_atomic_mass'):m1.end('Element_atomic_mass')]) * Mass_conv
+				</pre>
+				We now create an instance of the "Element" class. This is the Libra class, which is exposed to Python. This is done in:
+				<pre class="brush: python;">elt_record = Element()</pre>
+				Once the member-variables of the auxiliary Python class are defined and initialized, the Python object can be used as an input argument of 
+				the method of the "Element" class:
+				<pre class="brush: python;">elt_record.set(elem)</pre>
+				This instruction will extract the existing variables of the "elem" object and assign corresponding elements of the "elt_record" object.
+				In some sense, the procedure is similar to extracting values of the map by the names of the corresponding keys. The difference is that
+				we know use another feature of Python (also available at the C++ level with Boost.Python) - the verification of the presece of some
+				specifically-named attributes (variables) of the class. Thus, the names of fields of the auxiliary object "elem" should be properly
+				selected. For the full list of available attribute names, see the "set()" function in
+				<a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/chemobjects/universe/Element.cpp" target="_new">Element.cpp</a>.
+				</p>
+				<p>Finally, once the properties of the instance "elt_record" of the class "Element" are setup, we can add this record to the 
+				"PeriodicTable" variable of the "Universe" class. 
+				<pre class="brush: python;">U.Add_Element_To_Periodic_Table(elt_record)</pre>
+				The record object can also be printed via
+				<pre class="brush: python;">elt_record.show_info()</pre>
+				And, as you can see, the elements of the "elt_record" object can be accessed directly, e.g.
+				<pre class="brush: python;">print "load element", elem.Elt_name</pre>
+				To see the full list of exported data members and methods of the "Element" class, refer to the export file
+				<a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/chemobjects/universe/libuniverse.cpp" target="_new">libuniverse.cpp</a>.
+				</p>
+				<p style="color:red">The convention of Libra is put all exported data and function members of exported classes into the ".cpp" file with "lib" prefix.
+				</p>
+			</li>
+			<li>
+			<a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/LoadUFF.py" target="_new">LoadUFF.py</a>
+				<p>This script implements methods to load the parameters of the UFF force field. Since UFF is rather generic, one only needs atomic data.
+				The data are stored in the <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/uff.dat" target="_new">uff.dat</a> file.
+				Hence, we only look for the Atom_Record patterns, as well as for the force-field-wide settings. The outcome of the function is the object
+				of the "ForceField" class - "force_field". The object contains the lists (arrays) of records of different types. In this case we 
+				only set up the records of the "Atom_Record" type. The Python/C++ interface for the data of these variables is realized via an auxiliary 
+				class "atomrecord", like in the LoadPT example:
+				<pre class="brush: python;">class atomrecord:
+    pass
+	
+ff = atomrecord()
+ff.Atom_ff_int_type = int(float(a[m1.start('Atom_ff_int_type'):m1.end('Atom_ff_int_type')]))
+ff.Atom_radius      = float(a[m1.start('Atom_radius'):m1.end('Atom_radius')])
+ff.Atom_theta       = float(a[m1.start('Atom_theta'):m1.end('Atom_theta')])
+...
+
+for a in A:
+    m1 = re.search(UFF_Atom_Type_Record,a)
+
+    atom_record = Atom_Record()
+    atom_record.set(ff)
+    res = force_field.Add_Atom_Record(atom_record)
+				</pre>
+				The force-field-wide parameters are set up via the dictionary, like we did in LoadMolecule example:
+				<pre class="brush: python;">ff_par = {}
+for a in A:
+	m2 = re.search(FF_sigma_rule_record,a)
+    m3 = re.search(FF_epsil_rule_record,a)
+    ...
+		
+    if m2!=None:
+        ff_par["sigma_comb_rule"] = a[m2.start('FF_sigma_rule_value'):m2.end('FF_sigma_rule_value')]
+    if m3!=None:
+        ff_par["epsilon_comb_rule"] = a[m3.start('FF_epsil_rule_value'):m3.end('FF_epsil_rule_value')]
+	...
+			
+force_field.set(ff_par)
+				</pre>
+				</p>
+			</li>
+		  </ul>
+		  </p>
+		  
+		  
+		  <br><br>
+		  <br><br>
+		  
+		  <br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/test_mm1.py" target="_new">test_mm1.py</a></b><br><br>
+		  <p> We are now ready to study our first tutorial. This tutorial doesn't print much of fancy output, nor it does some complex calculations.
+		  Rather, this script demonstrates the basis steps of how to create the objects of main data types we would need for atomistic simulations.
+		  </p>
+		  <ol>
+			<li>First, we load the auxiliary modules that implement methods for reading parameter and input files.
+			<pre class="brush: python;">from LoadPT import * # Load_PT
+from LoadMolecule import * # Load_Molecule
+from LoadUFF import*
+			</pre>
+			</li>
+			<li>Second, we create the "Universe" object and setup some properties of our Universe:
+			<pre class="brush: python;"># Create Universe and populate it
+U = Universe()
+verbose = 0
+Load_PT(U, "elements.dat", verbose)
+			</pre>
+			<p>Here, "Load_PT" is the function that is defined in the LoadPT module. It populates the object "U" using the properties defined in the
+			file "elements.dat". The verbosity of the operations is controlled by the flag "verbose"</p>			
+			</li>
+			<li>To create an atomic system from a given file, we use
+			<pre class="brush: python;">#======= System ==============
+syst = System()
+Load_Molecule(U, syst, os.getcwd()+"/Clusters/2benz.ent", "pdb")
+			</pre>
+			The "Universe" object "U" is needed. In this example, the file to be loaded is located in the "/Clusters" directory and is called "2benz.ent". This
+			is the pdb-type format with some modifications. In particular, the last column of each "HETATM" record is considered to contain the partial charge
+			of the atom. To understad wich other options are available and which formats correspond to them, look into the
+			<a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/LoadMolecule.py" target="_new">LoadMolecule.py</a> file.
+			Alternatively, you can define your own format to read and the way to handle that format.
+			</li>
+			<li>One can ask Libra to automatically determine the functional groups (for organic molecules) this is done via:
+			<pre class="brush: python;">syst.determine_functional_groups(0)  # </pre>
+			The parameter of the function controls whether the ring-determination procedure should be used (1) or not(0). Knowledge of the rings is needed 
+			for the correct assignment of MM atomic types, although often the differences are negligible and one may skip rign-determination option. For UFF,
+			for instance, this would mean the sp<sup>2</sup>-hybridized C atoms would be assigned to types "C_2" rather than "C_R". The reason why one would
+			want to skip the rign-determination step is because it may be rather time-consuming (for very complex structures) and is not perfect yet.
+			For the full list of possible functional group names and the way the determination procedure works, refer to the file
+			<a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/chemobjects/chemsys/System_methods4.cpp" target="_new">System_methods4.cpp</a>.
+			
+			</li>
+			<li>Once the system is created and functional groups are determined (optionally), we can print some information about the system, to find out
+			whether the system is what we expect.
+			<pre class="brush: python;">sys.show_atoms()
+syst.show_fragments()
+syst.show_molecules()
+			</pre>
+			Note that when the overall system is loaded, we determine not only the bonds, angles, dihedrals and so, but also the partition of the overall 
+			system into molecules. Each disconnected from all other sub-graph of the graph of the entire system defines a molecule. So, in our case, we
+			have loaded 2 benzene molecules. And this information is confimed by the output of the "show_molecules()" function. In our "2benz.ent" file 
+			have also provided definition of the rigid fragments (not the same as functional groups): each molecule is treated as rigid fragment. By default,
+			if no definition of fragments is provided explicitly, each atom is treated as a separate fragment.
+			</li>			
+
+			<li>In the next step, we create an empty "ForceField" object named "uff" (you could choose any other name, of course, it is just convenient).
+			We then load the UFF parameters and settings into this object from the file, using the "Load_UFF" function of the LoadUFF.py module.
+			<pre class="brush: python;">#======= Parameters ==============
+# Create force field objects
+uff = ForceField()
+# Load parameters
+Load_UFF(uff)
+			</pre>			
+			</li>
+			<li>So far, we have loaded only the parameters. However, any force field is a combination of the parameters set and the choice of appropriate
+			functional. So, we need to define the functionals for computing interatoric energies.
+			<pre class="brush: python;"># Set up functional forms
+uff.set_functionals({"bond":"Harmonic","angle":"Harmonic","vdw":"LJ12_6"})
+			</pre>
+			The "set_functionals" method takes a dictionary argument that contains pairs of type: "potential-type":"choice of the potential of given type".
+			The full list of possible options can be found in the "set_interaction_type_and_functional" function in the 
+			<a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/hamiltonian/Hamiltonian_Atomistic/Hamiltonian_MM/Hamiltonian_MM_methods1.cpp" target="_new">Hamiltonian_MM_methods1.cpp</a>.
+			
+			</li>			
+		  </ol>
+
+		  <br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/test_mm2.py" target="_new">test_mm2.py</a></b><br><br>
+		  <p> As usual, we started with the test_mm1.py script and added new features to show. 
+		  </p>
+		  <ol>
+		  <li>
+		  <p>One of such features is the initialization of atomistic
+		  Hamiltonian - not just any atomistic one, but the one which relies on molecular mechanics (MM). This is done via:
+		  </p>
+		  <pre class="brush: python;">ham = Hamiltonian_Atomistic(1, 3*syst.Number_of_atoms)
+ham.set_Hamiltonian_type("MM")
+		  </pre>
+		  <p>However, the above instructions only create a default Hamiltonian object "ham" and set its internal properties (Hamiltonian type) to be molecular
+		  mechanics. No actual way of computing interactions is created yet. Before we can start actual computations, we need to setup interactions within this
+		  Hamiltonian. This is done via the function "set_interactions_for_atoms":
+		  <pre class="brush: python;">ham.set_interactions_for_atoms(syst, atlst1, atlst1, uff, verb, assign_rings)</pre>
+		  Most of the arguments of the function are relatively straighforward to understand. Perhaps, the only two parameters that require more
+		  attention are the 2-nd and 3-rd parameters, currently set to the same value of atlst1. These parameters are the lists of ids of the atoms interactions
+		  between which we want to setup. In pair interactions, only those interactions will be considered for which one atom belongs to one of the lists,
+		  and the other atom belongs to the other list. In the 3-body interactions, one or two of the atoms should belong to one of the lists, whereast the
+		  other two (or one) to the second list. Similar situation is for the the 4-body interactions. This option is introduced in order to be able to compute
+		  specific types of interactions in a partitioned system. For instance, if we have a system with 2 water molecule (1,2,3 - being the ids of the first molecule
+		  atoms, and 4,5,6 being the ids of the second molecule atoms), we can compute only water-water interactions (not internal contributions) by specifying
+		  the first list to be [1,2,3] and the second one to be [4,5,6]. If we want all possible interactions in the system (no partitioning), we can simply
+		  pass the list of ids of all atoms ([1,2,3,4,5,6]) to be both 2-nd and 3-rd arguments of the functions. This is what we do in our example. By the way,
+		  one can use this option also for combined QM/MM calculations. To compute interactions (only classical contributions) between the two sub-systems (QM and MM),
+		  one can simply define these reagions at the 2-nd and 3-rd parameters, respectively (or in the opposite order).
+		  </p>
+		  <p>The "set_interactions_for_atoms" function creates a number of entries, called interactions, for given system. For instance, one interaction
+			can be just a pair of covalently-bound atoms interacting via Harmonic ro Morse potential. An interaction can be a pair of non-bound atoms
+			interacting via Lennard-Jones or Morse potential to describe non-covalent interactions. Similarly, we have 3-body, 4-body, and many-body interactions.
+			In the latter case, a single "interaction" entry can contain all atoms in the system. This can be the case for non-separable potentials, or for
+			the accelerated algorithms: e.g. Ewald summation of electrostatics or when Verlet or cell lists are used to compute non-bonded vdW interactions.
+			To learn more on how the "interactions" are represented internally, refer to 
+			<a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/hamiltonian/Hamiltonian_Atomistic/Hamiltonian_MM/Hamiltonian_MM.h" target="_new">Hamiltonian_MM.h</a>.			
+			The statistics of how many and what type of interaction are presently created in the atomistic Hamiltonian can be printed using:
+			<pre class="brush: python;">ham.show_interactions_statistics()</pre>
+			For the present example of the 1-flouropropane, the output is following:
+			<pre class="brush: python;">Total number of interactions is 28
+Number of bond interactions = 10
+-------------------- active = 10
+Number of angle interactions = 18
+--------------------- active = 18
+Number of dihedral interactions = 0
+------------------------ active = 0
+...
+			</pre>
+			This agrees with our expectations of 10 bonds and 18 angles in the molecule (you can easily cound them, right?). Also, note that the output
+			also prints the number of so-called "active" interactions. These are the interactions which actually contribute to computation of energies
+			and forces. In the present case of the all-atomic model, all interactions are active. This is because, no rigid bodies containing more than
+			1 atom have been defined. When rigid bodies are defined, the frozen degrees of freedom become inactive interactions and do not contribute
+			to energies or forces.			
+		  </p>
+		  <p>Also, note that no dihedral or other types of interactions were created. This is related to the fact that earlier we have requested only
+		  bond and angle types of interactions in our force field setup (which was used to create corresponding interactions):
+		  <pre class="brush: python;">uff.set_functionals({"bond":"Harmonic","angle":"Harmonic","vdw":"LJ12_6"})</pre>
+		  </p>		  
+		  <p style="color:red">Note that pair interactions of vdw type have not been created even though we have requested. This is either a temporary bug 
+		  or I might have missed something in the setup. So be careful with it. The recommended approach to include vdw and electrostatic interactions is
+		  via the many-body potentials.</p>
+		  </li>
+		  <li>
+		  <p>Another feature that the present code demonstrates, is the possibility to setup the force-field object in a more compact way:
+		  <pre class="brush: python;">uff = ForceField({"bond_functional":"Harmonic","angle_functional":"Fourier","vdw_functional":"LJ","dihedral_functional":"General0","R_vdw_on":6.0,"R_vdw_off":7.0})
+Load_UFF(uff)
+		  </pre>
+		  Also, note that we have now requested the dihedral (4-body) interactions to be created. The output of the "show_interactions_statistics()" is now:
+		  <pre class="brush: python;">Total number of interactions is 46
+Number of bond interactions = 10
+-------------------- active = 10
+Number of angle interactions = 18
+--------------------- active = 18
+Number of dihedral interactions = 18
+------------------------ active = 18
+...
+		  </pre>
+		  That is we have included all dihedral interactions in our future calculations. 
+		  </p>
+		  </li>
+		  <li>One minor difference of the present code from the previous one is that we use different format of the molecular structure files. To read it correctly,
+		  we had to use the "pdb_1" option in our "Load_Molecule" function:
+		  <pre class="brush: python;">Load_Molecule(U, syst, os.getcwd()+"/Molecules/test1a.pdb", "pdb_1")</pre>
+		  <p>Just for quick reference, lets compare file lines expected in each of the formats:</p>
+		  
+		  <p><b>pdb</b></p>
+		  <pre class="brush: python;">HETATM    1  C           1      -2.649   1.175   0.000               -0.1500     
+HETATM    2  C           2      -1.254   1.175   0.000               -0.1500     
+...
+		  </pre>
+		  <p><b>pdb_1</b></p>
+		  <pre class="brush: python;">HETATM    1  C           0       1.275   0.350   0.000                       C
+HETATM    2  H           0       1.632   0.854   0.874                       H
+...
+</pre>
+		  
+		  </li>
+		  </ol>
+		  
+		  <br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/test_mm3.py" target="_new">test_mm3.py</a></b><br><br>
+		  <p> Well, this tutorial simply constructs atomistic MM Hamiltonians for a set of different molecules. The molecular structures are chosen to be
+		  quite diverse and somwhat exotic, sometimes. This is done also to verify the automatic atomic types assignment for the selected force filed.
+		  You can also vary the option of either to include the fact that some atoms belong to a certain ring, or simply ifnor that fact. You can see
+		  how the assigned data types depend on this.</p>
+		  
+		  <br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/test_mm4.py" target="_new">test_mm4.py</a></b><br><br>
+		  <p> So far, we have been creating rather abstract interactions - the ones that contained information about parameters and functional types, but
+		  not actual coordinates of atoms involved in interactions. Obviously, withough this specific information, we can't do specific calculations of 
+		  energy and forces. So, in this script we are about to do just that. 		  
+		  </p>
+		  <p>First, lets bind the abstrat interactions with the specific coordinates of atoms. This is done via:
+		  <pre class="brush: python;">ham.set_system(syst)</pre>
+		  The "abstract" interactions contain only pointers to the vectors containing atomic positions. The "set_system" function assigns the addresses of 
+		  specific vectors of the "syst" variable to the pointers in the "interaction" objects. This way, any changes of coordinates directly affect
+		  any following calculations of interactions in the atomistic system. We also save on memory - because we don't need to duplicate the information about
+		  the coordinates. Finally, we save a little on the variable updates - we don't need to update any variables of the "interaction" objects that might
+		  contain the positions each time the positions in the "syst" object are changed. Although copying of variables is not time-consuming operation, this
+		  approach greatly reduces the needs for constant maintenance, helping to make code smaller. 
+		  </p>
+		  <p>Finally, we are ready to perform actual computations. Remember, the interface is common for Hamiltonians of all types, so in this case we do:
+		  <pre class="brush: python;">ham.compute()</pre>
+		  This computes a 1x1 Hamiltonian "matrix" and the corresponding derivative "matrices". The only element of the matrix is, obviously, the potential
+		  energy of the ground state. The derivative "matrices" are the forces (gradients, actually). We utilize atomic units throughout the Libra code.
+		  To access the energy and forces, we can do:
+		  <pre class="brush: python;">print "Energy = ", ham.H(0,0), " a.u."
+print "Gradient 1 = ", ham.dHdq(0,0,0), " a.u."
+print "Gradient 3 = ", ham.dHdq(0,0,3), " a.u."
+		  </pre>
+		  What should be noted is that Gradient 3 - is the 3-rd component of the overall 3N-dimensional vector of gradients. Thus, dHdq(0,0,3) is not the gradient-vector
+		  with respect to the coordinates of the 3-rd atom, but is rather the x-component of the gradient of the second atom: g<sub>x,1</sub>, g<sub>y,1</sub>, 
+		  g<sub>z,1</sub>, g<sub>x,2</sub>, g<sub>y,2</sub>,...
+		  </p>
+		  <p>This tutorial also demonstrates one of the convenient functions of the "System" class. Namely, the "print_xyz" function. In our case, it is:
+		  <pre class="brush: python;">syst.print_xyz("molecule1.xyz",1) </pre>
+		  There are several more overloaded verions of this function (see 
+		  <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/chemobjects/chemsys/System_methods7.cpp" target="_new">System_methods7.cpp</a> for
+		  more details), but the parameters of the present signature have the meaning of the output file name (the file into which we want to print our system
+		  in the xyz format) and the integer index which can have arbitrary meaning, but is typically considered a frame index (usually in the MD simulations).
+		  This way, one can easily print out the MD trajectory into a single xyz file. In our example, we simply print out all of our test molecules into
+		  separate files.
+		  </p>
+		  
+		  
+		  <br><br>
+ 		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/test_mm5.py" target="_new">test_mm5.py</a></b><br><br>
+		  <p> Now, when we know how to compute energies and forces (negatives of gradients), we (of course!) want to construct an MD algorithm. Libra is 
+		  designed in such a way that the logically-different components are logically separated. This means, we have generic data types to store 
+		  dynamical variables (the "Nuclear" class for nuclear DOF, and "Electronic" class for electronic DOF) and the generic algorithms to propagate these
+		  dynamical variables. Our atomistic system is very specific and has a different meaning - it represents chemical system, describes its properties
+		  and provides the means to transform the system. Well, of course the "System" class contains the variables that can be considered dynamical (e.g
+		  atomic or fragment positions, orientations(for fragments), linear and angular momenta). However, the philosopy is to consider them descriptive 
+		  rather than dynamical.
+		  </p>
+		  <p>To combine the two data types, we use the conversion functions:
+		  <pre class="brush: python;">syst.extract_atomic_q(mol.q)
+syst.extract_atomic_p(mol.p)
+syst.extract_atomic_f(mol.f)
+syst.extract_atomic_mass(mol.mass)
+			</pre>
+			The "extract_*" functions extract components of the 3*N -dimensional variables q and p for the N-element array of "Atom_*" structures, each of 
+			element of which contains 3-D vectors of positions and momenta. Similar operation is performed to set up masses of all 3N degrees of freedom.
+			You can notice that this extraction performed only once. 
+		  </p>
+		  <p>Once the object "mol" of the "Nuclear" class is set up, it can be used to propagate the variables, similar as we did in model cases.
+		  See the <a href="../libdyn/libdyn_tut.html">libdyn</a></li> tutorial for more explanations, including the description of the functions used below.
+		  </p>
+		  <p style="color:red"><b>=== Now, a very tricky question (and you should be knowledgeable and careful about it).=== </b></p>
+		  <p> As you can see, we propagate only the
+		  variables q and p of the "mol" object. Yet, we use the object "syst", which is seemingly unchanged over the course of propagation, to print out
+		  the coordinates. In the long run (perhaps not in this test, but in the next), one can see that the coordinates stored inside the "syst" variable 
+		  and printed out every MD step do actually change. How does this happen?		  
+		  </p>
+		  <p>The answer is in the way different variables ("syst" and "mol" in particular) are related to each other inside of the functions we use.
+		  First, when we create an atomistic Hamiltonian, the Hamiltonian stores an internal variable of the "System" type (private member "_syst") - see
+		  <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/hamiltonian/Hamiltonian_Atomistic/Hamiltonian_Atomistic.h" target="_new">Hamiltonian_Atomistic.h</a>.
+		  The function "set_system" we used to bind our "syst" ovject and "interaction" objects simply sets the internal variable "_syst" (of the pointer 
+		  type) to point to the actual system we use to represent our system. In internal calculations, the Hamiltonian_Atomistic class uses the internal
+		  variable "_syst". However, since it is the pointer to the Python object, all changes in that object are reflected in the interaction computations.
+		  However, the reverse way works too: all modification of "_syst" inside the "Hamiltonian_Atomistic" class methods affect the Python object "syst".
+		  Now, the final component: when we call functions "compute_potential_energy" and "compute_forces" with the atomistic Hamiltonian,
+		  the input argument of class "Nuclear" ("mol" in our example) is first converted to the internal "_syst" object via the instructions
+		  "set_q" and "set_v" (e.g. see
+		  <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/dyn/Energy_and_Forces.cpp" target="_new">Energy_and_Forces.cpp</a> and 
+		  <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/hamiltonian/Hamiltonian_Atomistic/Hamiltonian_Atomistic.cpp" target="_new">Hamiltonian_Atomistic.cpp</a>
+		  files). Thus, all changes made in "mol" affect the internal "_syst" variable, which points to the outside Python object "syst", hence changing 
+		  it as well.		  
+		  </p>
+		  <p style="color:red"><b>========== End of the very tricky question section. ============ </b></p>
+		  
+		  <br><br>
+ 		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/test_mm5a.py" target="_new">test_mm5a.py</a></b><br><br>
+		  <p> This tutorial script is merely the cleaned up (no excessive information print) version of the previous one. In addition, we have used nested
+		  loops to print out the coordinates every 100 steps (each step is about 0.5 fs). The energetic properties (potential, kinetic, total energies) are
+		  printed every step. The total number of steps is 100 x 100, which os 5 ps. The energies are plotted in Fig. 1a. Fig. 1b shows the overlay of the 100
+		  configurations of the system over its evolution. One can see that there are certain fluctuations of the hydrogen atoms, whereas the carbon and fluorine
+		  nuclei remain almost fixed. This difference originates from the masses disparity. 
+		  </p>
+		  
+
+		<br><br>
+		<div class="container">
+		
+		  <div class="row">
+		  <div class="col-md-4"><img src="test_mm5a/_en_traj.png"></div><div class="col-md-4"><img src="test_mm5a/_mol_traj.jpg"></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
+		  </div>			  
+		  
+		  <div class="row">
+		  <div class="col-md-8"><b>Figure 1.</b>Ground-state MD of the 1-fluoropropane over 5 ps. a) Evolution of kinetic, potential, an total energies;
+		  b) The overlay of 100 configurations sampled every 100 (50 fs) steps. 
+		  </div>
+		  </div>
+		</div> <!-- Figure 1 -->
+		
+		
+		<br><br>
+ 		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/test_mm6.py" target="_new">test_mm6.py</a></b><br><br>
+		  <p> Earliear, we have mentioned that the objects of "System" class (in our case it is the "syst" variable) serves mostly for representing chemical
+		  system, its properties and for manipulations on that system. However, the class contains all variables needed for describing the dynamics of the
+		  system. Here, we show how to use them as the dynamical variables. In addition, we will show one of the important methodological features available
+		  in the Libra code - the rigid body MD (RB-MD).
+		  </p>
+		  <ol>
+		  <li>
+		  <p>First, lets define our system. This time, we use the cluster of 23 water molecules. If we look into our file, we will find the definition of 
+		  the fragments:
+		  <pre class="brush: python;">GROUP    1   2   3       FRAGNAME  WAT  O  H  H
+GROUP    4   5   6       FRAGNAME  WAT  O  H  H
+GROUP    7   8   9       FRAGNAME  WAT  O  H  H
+GROUP   10  11  12       FRAGNAME  WAT  O  H  H
+...
+		  </pre>
+		  The format is pretty simple - the keyword "GROUP" followed by the list in integers (which are the ids of the atoms included in this group), followed by
+		  the "FRAGNAME" keyword, the name of the group and by 3 literals which have no special meaning so far. In the present example, the fragmentation 
+		  scheme is pretty straightforward - each water molecule is treated as a separate rigid fragment. All internal bond stretching and angle bending modes
+		  are frozen. 
+		  </p>
+		  </li>
+		  <li>
+		  <p>There are no bonded interactions among the atoms of different water molecules, it is crucial to include non-bonded interactions in our 
+		  computational scheme. Earlier we have said about the limitations of the 2-body vdW and electrostatic terms. Here, we show how these types of
+		  interactions should actually be included. For this purpose, we add a many-body potential - see the last line:
+		  <pre class="brush: python;">uff = ForceField({"bond_functional":"Harmonic",
+"angle_functional":"Fourier",
+"dihedral_functional":"General0",
+"oop_functional":"Fourier",
+"mb_functional":"LJ_Coulomb","R_vdw_on":10.0,"R_vdw_off":15.0 })
+		  </pre>
+		  One can also see how the cutoff parameters for vdW interactions are defined. The "LJ_Coulomb" interaction potential takes care of both vdW and
+		  electrostatic interactions in our system.
+		  </p>
+		  </li>
+		  <li><p>Another new feature we find in this script is:
+		  <pre class="brush: python;">syst.init_fragments()</pre>
+		  This function is essential when we work with fragments larger than 1-atomic. This is needed because the function computes basic properties of the
+		  fragments - their masses, inertia tensors, internal coordinates, centers of mass, total moments, etc. 
+		  </p>
+		  </li>
+		  <li><p>Before we can start actual propagation, we still need to initialize Hamiltonian-dependent rigid-body properties. These are total forces and
+		  fragment torques. The "init_fragments" function does take care of this, but if it is called before atomic forces are zero, the total fragment
+		  forces and torques are zero. Thus, we call this function one more time (actually, we could call it only here, but the point is to show the
+		  difference - for the purposes of this tutorial) after the function "init_md" is completed. 
+		  </p>
+		  <p>The "init_md" is an auxiliary function we define right in this Python script. What should be emphasized here, is the way new functions
+		  exported from the Libra package are called in there. We already know several, so we briefly discuss 3:</p>
+			<ul>
+				<li><pre class="brush: python;">syst.Fragments[n].Group_RB.ekin_tr()
+syst.Fragments[n].Group_RB.ekin_rot()</pre>
+				These are the two functions of the RigidBody (from the "libdyn") class. Apparently, they return translational and rotational contributions to
+				kinetic energy of each fragment.
+				</li>
+				<li><pre class="brush: python;">syst.zero_forces_and_torques()</pre>
+				This instruction is very important, although it is very simple. It merely nullifies the forces and torques of all rigid fragments. Moreover,
+				it also sets to atomic forces to zero for all atomis in the included fragments. The calculations in Hamiltonian_Atomistic are organized in
+				the way that simply adds new forces to corresponding places. This is needed, so that initialization inside of one type of Hamiltonian (e.g.
+				QM) would not discard forces computed in another part (e.g. MM). So, the forces are simply added to one place. Thus, it is important to 
+				clean that space before we start computing all contributions to forces.
+				</li>
+				<li><pre class="brush: python;">syst.update_fragment_forces_and_torques()</pre>
+				The forces computed by the "compute_forces(mol, el, ham, 1)" procedure are the atomic forces (converted from "mol" structure to the "syst"
+				object via "syst.set_atomic_f(mol.f)" procedure). However, the total forces acting on the centers of mass of the fragments and the torques
+				are not computed automatically. The above instruction does this for us. 
+				<p>In the integration cycle, we do a little dance between different variables, including force initialization (to zero) and updates:
+				<pre class="brush: python;">syst.zero_forces_and_torques()
+syst.extract_atomic_q(mol.q)
+epot = compute_potential_energy(mol, el, ham, 1) 
+compute_forces(mol, el, ham, 1)
+
+syst.set_atomic_f(mol.f)
+syst.update_fragment_forces_and_torques()
+				</pre>
+				</p>
+				</li>
+			</ul>
+		  </li>
+		  <li>Finally, in the integration, we use the Verlet-type scheme for translational DOF, using the corresponding functions and data members
+		  of the "RigidBody" class:
+		  <pre class="brush: python;">syst.Fragments[n].Group_RB.apply_force(0.5*dt)
+syst.Fragments[n].Group_RB.apply_torque(0.5*dt)
+...
+syst.Fragments[n].Group_RB.shift_position(dt * syst.Fragments[n].Group_RB.rb_p * syst.Fragments[n].Group_RB.rb_iM)
+...
+		  </pre>
+		  Integration of orientational DOF is done with one of the RB-MD integrators:
+		  <pre class="brush: python;"># Propagate rotational DOFs
+if integrator=="Jacobi":
+    syst.Fragments[n].Group_RB.propagate_exact_rb(dt)
+elif integrator=="DLML":
+    ps = syst.Fragments[n].Group_RB.propagate_dlml(dt)
+		  </pre>
+		  In this example, only two methods are shown. For the complete list refer to
+		  <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/dyn/rigidbody/RigidBody.h" target="_new">RigidBody.h</a> file.
+		  </li>
+		  <li>Perhaps, the last note about this test script is the following. Once the have updated orientations of the rigid bodies and the positions of 
+		  their centers of mass, we need to translate these changes into the changes of Cartesian coordinates of all atoms included in updated fragments.
+		  This is done with the following snippet:
+		  <pre class="brush: python;">for n in xrange(syst.Number_of_fragments):
+    syst.update_atoms_for_fragment(n)
+		  </pre>
+		  </li>
+		  </ol>
+		  <p> The results of our 5 ps simulations (100 rounds, each 100 steps of 0.5 fs long) of the 23 water molecules are shown in Figure 2. We can see
+		  that the cluster stays stable, even though the kinetic energies are very large. We can observe only one molecule moving away from the rest of the
+		  cluster (the dotted line (oxygen) with spirals (hydrogens)). Nonetheless, the total energy remains constant and does not show any notable drift.
+		  </p>
+		  
+		<br><br>
+		<div class="container">
+		
+		  <div class="row">
+		  <div class="col-md-4"><img src="test_mm6/_en_traj.png"></div><div class="col-md-4"><img src="test_mm6/_mol_traj.jpg"></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
+		  </div>			  
+		  
+		  <div class="row">
+		  <div class="col-md-8"><b>Figure 2.</b>Ground-state MD of the 23 water molecules cluster over 5 ps. a) Evolution of kinetic, potential, an total energies;
+		  b) The overlay of 100 configurations sampled every 100 (50 fs) steps. 
+		  </div>
+		  </div>
+		</div> <!-- Figure 2 -->
+		
+		<br><br>
+ 		<b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/test_mm7.py" target="_new">test_mm6a.py</a></b><br><br>
+		<p> This tutorial is based on the previous one. It shows how we can organize our computations in a more modular and convenient way. Basically, 
+		we have taken the main portion of the integration procedures and formed an auxiliary Python function "md_step". Why? Well, the main rationale is 
+		that we can reuse it in different contexts, but we don't want to increase the size of our script. 
+		</p>
+		<p>As for the places where the new "md_step" function is used. As you can see, the propagation section now contains two logical partitions. In each
+		partition we perform RB-MD simulations, but in the first one we also cool our system periodically. This is done via:
+		<pre class="brush: python;">syst.cool()</pre>
+		This function simply sets momenta of all atoms and the linear and angular momenta of all rigid bodies to zero. Obviously, this is the way to
+		remove excess temperature from our system. When we alternate this with our normal RB-MD steps, we allow system to gradually find the potential energy
+		minimum. In the MD steps, the potential energy can convert into the kinetic energy. When the latter is taken away in the cooling step, the total
+		energy of the system decreases, and the phase space reagion which the system can explore decreases. Eventually, this procedure converged to a single point
+		which has minimal potential energy. This approach is essentially that of the <b>simulated annealing</b>.
+		</p>
+		<p>The cooling rate may be a critical factor. If the we take the excess of energy away sufficiently slowly, the system can explore bigger region
+		of the phase space. Therefore, the chances to find the global minimum increas. If the cooling rate is too large, the system would technically
+		be following the direction opposite of the gradient, so it would reduce to the <b>steepest descent</b> minimization. In this regime, it is more likely
+		that the system would end up in one of the local minima. 
+		</p>
+		<p> As we can see, the combination of MD and cooling works essentially as an optimization algorithm. This is what the first logical section is.
+		In our case, we perform 100 cycles of optimization. Each cycle consists of 10 MD steps followed by cooling. The energy evolution and the overlay of
+		100 nuclear configurations for this step are shown in Fig. 3 (panels a and b, repsectively). One can see that the total energy is almost always 
+		equal to the potential energy (except for the very beginning of the simulation), both decaying. This is exactly what we expect - the energy optimization
+		in action. The kinetic energy is large initiall decays fast to zero. Because each round consists of only 10 steps and because we always freeze the nuclear
+		motion, the overlay of the configurations in not that busy as in Fig. 2b, for instance. This overlay is essentially a rendering of the multidimensional
+		representation of the converging trajectory. 
+		</p>
+		<p>
+		The optimization is followed by the normal MD simulation with the same parameters as in the previous two RB-MD examples. The energies and trajectory
+		are shown in Fig. 3c and 3d, respectively. Note that the kinetic energy of the system is now much lower that what we had in the previous (unoptimized)
+		example. Also, no molecules fly away from the cluster. Instead, all molecules fluctuate much less than in the previous example. One can even recognize
+		the maxima of probability density to find atoms of different types. This way, one can identify individual water molecules, in contrast to much more
+		busy picture Fig. 2b.
+		</p>
+		
+		<br><br>
+		<div class="container">
+		
+		  <div class="row">
+		  <div class="col-md-4"><img src="test_mm6a/_en_cooling.png"></div><div class="col-md-4"><img src="test_mm6a/_mol_cooling.jpg"></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
+		  </div>			  
+		  
+		  <div class="row">
+		  <div class="col-md-4"><img src="test_mm6a/_en_md.png"></div><div class="col-md-4"><img src="test_mm6a/_mol_md.jpg"></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">c</p></div><div class="col-md-4"><p class="text-center">d</p></div>
+		  </div>			  
+		  
+		  <div class="row">
+		  <div class="col-md-8"><b>Figure 3.</b>Optimization and RB-MD of the 23 water molecules cluster. a) Evolution of kinetic, potential, an total energies
+		  during simulated annealing (optimization); b) The overlay of 100 configurations sampled every 10 (5 fs) steps during the simulated annealing; 
+		  c) Evolution of kinetic, potential, an total energies during normal RB-MD run; d) The overlay of 100 configurations sampled every 100 (50 fs) steps
+		  during normal RB-MD run. 
+		  </div>
+		  </div>
+		</div> <!-- Figure 3 -->
+		
+		
+		<br><br>
+ 		<b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/test_mm6b.py" target="_new">test_mm6b.py</a></b><br><br>
+		<p> This is example is essentially RB-MD without optimization. The only point of this test is to show that the initial momenta/angular momenta
+		can be initialized to have a certain values, that can be consistent (to certain extent) with the given temperature (total kinetic energy) and
+		the directions of total angular and linear momenta of the entire system. This is done with the function
+		<pre class="brush: python;">syst.init_fragment_velocities(300.0, VECTOR(1.0, 0.0, 0.0), VECTOR(0.0, 0.0, 1.0) )</pre>
+		Here, the first vector defines the total linear momentum of the system, whereas the second one defined the total angular momentum of the system.
+		</p>
+		
+				<br><br>
+		<div class="container">
+		
+		  <div class="row">
+		  <div class="col-md-4"><img src="test_mm6b/_mol_free_px_1_lx_1.jpg"></div><div class="col-md-4"><img src="test_mm6b/_mol_free_px_1_lz_1.jpg"></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
+		  </div>			  
+		  		  
+		  <div class="row">
+		  <div class="col-md-8"><b>Figure 4.</b>RB-MD of the 23 water molecules cluster with different initial atomic momenta generated to satisfy
+		  total linear and angular momenta of the overall system. a) P<sub>x</sub>=1, L<sub>x</sub>=1; b) P<sub>x</sub>=1, L<sub>z</sub>=1.
+		  </div>
+		  </div>
+		</div> <!-- Figure 4 -->
+		
+		<br><br>
+		<p>Figure 4 show the trajectories of 23 water molecules (5ps, 0.5 fs time step, 100 snapshots) computed with two initial conditions: 
+		P<sub>x</sub>=1, L<sub>x</sub>=1 (Fig. 4a) and P<sub>x</sub>=1, L<sub>z</sub>=1 (Fig. 4b). One can see qualitatively different trajectories.
+		In the first case, the combination of the translation of some molecules along positive x direction (and some along negative) and rotation around
+		this axis lead to formation of spiral many-particle trajectories (several molecules' motion creates such spirals). In the second case, one obtains
+		more of a ball, although one can recognize several molecules movig around the z axis, of the ball - like the sattelites around a palnet. 
+		</p>
+		
+		<br><br>
+ 		<b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/test_mm7.py" target="_new">test_mm7.py</a></b><br><br>
+		<p> This file is not yet working... 
+		</p>
+		
+		<pre class="brush: python;"></pre>
+
+	</div>
+	</div>
+	</div>
+	</body>
+	
+	</html>

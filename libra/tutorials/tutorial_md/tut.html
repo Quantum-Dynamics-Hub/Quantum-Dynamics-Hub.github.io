@@ -1,0 +1,601 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+
+	<script src="../../../bootstrap/js/jquery.js"></script>        
+        <script src="../../../bootstrap/js/bootstrap.min.js"></script>
+	
+	<link href="../../../bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+	<link href="../../../bootstrap/css/style.css" rel="stylesheet">
+
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	
+	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
+	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shBrushPython.js"></script>
+	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shBrushBash.js"></script>
+	<link type="text/css" rel="stylesheet" href="../../../../pyxaid/syntaxhighlighter_3.0.83/styles/shCoreDefault.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+
+	<script type="text/javascript" async  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+	<title>Libra</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-70773721-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+	
+    </head>
+    <body>
+
+	
+	<div class="row">
+      <div class="col-md-12"><h1>Libra: An open-source "Methodology Discovery" Library</h1></div>
+    </div>
+	
+    <nav class="navbar navbar-inverse h5" style="margin-top:-2px;">
+      <div class="container-fluid">
+        <div>
+          <ul class="nav navbar-nav">
+			<li><a href="index.html">Home</a></li>            
+            <li><a href="capabilities.html">Overview</a></li>
+			<li><a href="downloads.html">Download</a></li>
+			<li><a href="installation.html">Installation</a></li>
+            <li class="active"><a href="tutorials.html">Tutorials</a></li>
+            <li><a href="documentation.html">Documentation</a></li>
+            <li><a href="soft_and_tuts.html">...</a></li>
+            <li><a href="contact.html">....</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+	
+	
+    <div class="container">
+      <div class="col-md-1"> </div>
+      <div class="col-md-10">
+        <div style="margin-left: 12px; width: 741px;"><br>
+		
+          <h3>Topical Tutorials: Classical MD</h3><br>
+		  
+		  <p>
+		  This tutorial shows how to run classical molecular dynamics (MD) simulations of atomistic systems under various conditions. In principle,
+		  you can use these examples as a template for your particular calculations (also meaning you'd need to modify only very few parameters).
+		  The working files showing how to use different objects are located in the 
+		  <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_md" target="_new">/tests/test_md</a> directory of the Libra package.
+		  
+		  Before doing this tutorial, it is recommended to go through the 
+		  <a href="../libhamiltonian_mm/libhamiltonian_mm_tut.html">libhamiltonian_mm</a> tutorial, because it explains the main components 
+		  and the operations (the creation of molecular system, force fields, hamiltonians, setting up interactions, organizing MD workflow) of the
+		  <a>run_aa_md_state.py</a> file. This is the file we are to run in each sub-directory. It is almost the same for all cases, except for few 
+		  places in which we introduce certain variations. 
+		  </p>
+		  
+		  <br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_md/example_1_SubPc-C60/case1/run_aa_md_state.py" target="_new">
+		  Example 1: SubPc, case 1: NVE dynamics of the isolated system </a></b><br><br>		  
+		  <p> This is the first example in this tutorial, so we'll discuss some common elements here. In the later examples, we will focus only on the 
+		  distinctions between cases.
+		  </p>
+		  
+		  <p>The initial workflow for initialization is the following:  </p>
+		  <ul>
+		  <li>     
+		    Unitialize random number generator, create a Universe object and load data into it, create force field object and load data:
+		    <pre>rnd = Random()
+U = Universe(); LoadPT.Load_PT(U, os.getcwd()+"/elements.txt")
+uff = ForceField(...)
+LoadUFF.Load_UFF(uff,"uff.dat")
+			</pre>			
+		  </li>
+		  <li>
+		    Create molecular structure by loading a molecule from a file, initialize internal variables
+			<pre>syst = System()
+LoadMolecule.Load_Molecule(U, syst, "Pc-C60.ent", "pdb")
+syst.determine_functional_groups(0)  # do not assign rings
+syst.init_fragments()
+			</pre>
+		  </li>
+		  <li>
+		    Create an atomistic (MM type) Hamiltonian, perform initialization of internal variables (interactions), bind the Hamiltonian to 
+			the molecular system of interest (so that the energy/force evaluation is sensitive to the changes of the molecular structure "syst"),
+			and perform the first energy/force evaluation
+			<pre>ham = Hamiltonian_Atomistic(1, 3*syst.Number_of_atoms)
+ham.set_Hamiltonian_type("MM")
+ham.set_interactions_for_atoms(syst, atlst1, atlst1, uff, 1, 0)  # 0 - verb, 0 - assign_rings
+ham.set_system(syst);   ham.compute()
+			</pre>			
+		  </li>
+		  <li>
+		    Initialize some dynamic variables (not really used in these simulations, but are needed for other procedures)
+			<pre>el = Electronic(1,0)
+mol = Nuclear(3*syst.Number_of_atoms)
+nve_md.nve_md_init(syst, mol, el, ham)
+			</pre>
+		  </li>		  
+		  </ul>
+		  
+		  <p>So far we have performed only the initialization. Now, we can proceed to actual dynamics. In fact, the rest of the script does two
+		  types of dynamics: cooling (optimization by a simulated annealing) and the production MD. In addition to the previous tutorials,
+		  we now utilize the <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/scripts/state/State.h" target="_new">State</a> class
+		  of the libscript library. The <b>State</b> class is designed to represent a <u>thermodynamic state</u> of the system. That is it encodes 
+		  the state (coordinates/velocities) of the system, as well as the state of the bath (thermostat/barostat). It also contains information
+		  about the macroscopic and miscroscopic observables: potential, kinetic, total energies, extended system-bath energy, current temperature, pressure,
+		  simulation cell shape and volume, and other variables.
+		  </p>		 		  
+		  <p> Together with the <b>State</b> class, we use an auxiliary 
+		  <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/scripts/state/State.h" target="_new">MD</a> class, defined in the same header.
+		  This class is essentially a container for the MD settings. So, we first create an object of <b>MD</b> type and then pass it to the <b>State</b> object to
+		  tell it how to perform MD simulations:
+		  <pre>md = MD({"max_step":1,"ensemble":"NVE","integrator":"DLML","terec_exp_size":10,"dt":20.0,"n_medium":1,"n_fast":1,"n_outer":1})</pre>
+		  Here, we utilize a constructor that takes a Python dictionary and extracts values for the keywords relevant to/defined in the MD class.
+		  </p>
+		  <p>The State class has several methods for setups, initialization, and actual simulations. Consider several: </p>
+		  <ul>
+		    <li>
+			<pre>ST.set_system(syst)</pre> Bind the <b>System</b> type object to the <b>State</b> type object, so that all changes made to 
+			the "syst" variable are known to the "ST" object, and vice versa - all changes made internally by the "ST" object are reflected in
+			the variables of the "syst" oobject.
+			</li>			
+			<li>
+			<pre>ST.set_md(md)</pre> Bind the external "md" object to the "ST" object. So, once this is done, we can change the internal MD settings of the
+			"ST" object by changing the corresponding variables of the external "md" object. For instance, this can be used if we run several rounds of MD 
+			or optimization. In the first rounds of optimization, we may want to use smaller MD integration timesteps ("md.dt"), so do not destroy the system.
+			On the later rounds, we can increase this value (up to the stable integration limit), so to accelerate convergence. We can also vary the number of
+			MD steps performed in a sinle call of the "run_md" funciton (see below). This number is accessed by "md.max_step". Again, if you do an 
+			optimization, you may want to start with this number being relatively small (1 - 10). As you acheive the equilibrated state, 
+			you may icrease it. This parameter can be used to control/design the simulated annealing protocols. Finally, what you may want to change in "md"
+			between one run to another, is the ensemble type: you can start with the NVT and then switch to NVE. This is accessed by the "md.ensemble" variable.
+			Note, that to run an NVT simulation, you'd need to bind a thermostat to the "ST" object. So, generally it is easier to switch from NVT to NVE
+			(still keeping the thermostat) than from NVE to NVT (would need to bind a thermostat, and reinitialize some internal variables, which may be
+			not totally exact what you want to do).
+			</li>
+			<li>
+			<pre>ST.init_md(mol, el, ham, rnd)</pre> This function simply runs the consistency/sanity check and initializes all needed variables. The function
+			must be called prior to "run_md".
+			</li>
+			<li>
+			<pre>ST.run_md(mol, el, ham)</pre> This function runs an MD simulation on the system bound to the "ST" object as described by the "md" object
+			also bound to the "ST" object. Note: this is not a single MD step - rather it may be many steps. This function also propagates states of 
+			thermostat or barostat objects coupled to the "ST" object.
+			</li>
+			<li>
+			<pre>ST.cool()</pre> This function "cools" the system and thermostat by setting all atomic momenta/velocities to zero and by resetting thermostat
+			variables to a lower-energy state (so that they could absorb more energy). Together with "run_md" constitutes a simulated annealing procedure.
+			</li>			
+		  </ul>
+		  <p> The current micro/macroscopic descriptors of the State can be accessed via the exported variables: </p>
+		  <ul>
+		  <li><b>ST.E_kin</b> kinetic energy of the system</li>
+		  <li><b>ST.E_pot</b> potential energy of the system</li>
+		  <li><b>ST.E_tot</b> total energy of the system</li>
+		  <li><b>ST.H_NP</b> the extended system energy (Nose-Poicare Hamiltonian, or a Nose-Hoover invariant)</li>
+		  <li><b>ST.curr_T</b> current kinetic energy of the system</li>		  
+		  <li><b>ST.curr_V</b> current volume of the simulation cell</li>		  
+		  <li><b>ST.curr_P</b> current pressure of the system</li>		  
+		  </ul>
+		  <p>Please see the <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/scripts/state/State.h" target="_new">header file</a>
+		  or a corresponding section of the Documentatio, for a more comprehensive list of variables</p>
+		  
+		  
+		  <p>To summarize, the workflow of the simulation part is following: </p>
+		  <ul>		  
+		    <li>Create control variables: MD, thermostat, or barostats (if needed)
+			<pre>md = MD({"max_step":1,"ensemble":"NVE","integrator":"DLML","terec_exp_size":10,"dt":20.0,"n_medium":1,"n_fast":1,"n_outer":1})    
+therm = Thermostat({"Temperature":278.0,"Q":100.0,"thermostat_type":"Nose-Hoover","nu_therm":0.01,"NHC_size":5})
+			</pre>
+			</li>
+		    <li>Create a <b>State</b> object and bind system, thermostat (for NVT or NPT) or barostate (for NPT or NPH) to it, setup MD control:
+			<pre>ST = State() 
+ST.set_system(syst);
+#    ST.set_thermostat(therm)
+ST.set_md(md)
+</pre>
+			</li>
+			<li>Initialize (internal) State variables:
+			<pre>ST.init_md(mol, el, ham, rnd)</pre>
+			</li>
+			<li>Run several cooling cycles
+			<pre>for i in xrange(...):
+    ST.run_md(mol, el, ham)        
+    ST.cool()
+</pre>
+			</li>
+			
+			<li>Run the MD production 
+			<pre>for i in xrange(...):
+    ST.run_md(mol, el, ham)        
+</pre>
+			</li>
+		    
+		  </ul>
+
+		  <p>To analyze the MD run and to assess its quality, we plot some of the obervables in Fig. 1. We also show a video of the MD simulation (10 ps). </p>
+		  <br>
+		  <div class="container">
+		  <div class="row">
+		  <div class="col-md-4"><iframe width="100%" src="https://www.youtube.com/embed/zNQntfMyAHA" frameborder="10" allowfullscreen></iframe></div>
+		  <div class="col-md-4"><img src="example_1_SubPc-C60/case1/_md_T.png"></div>
+		  </div>
+		  <div class="row">		  
+		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><img src="example_1_SubPc-C60/case1/_md_tot.png"></div>
+		  <div class="col-md-4"><img src="example_1_SubPc-C60/case1/_md_NP.png"></div>		  
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">c</p></div><div class="col-md-4"><p class="text-center">d</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><img src="example_1_SubPc-C60/case1/_md_pot.png"></div>		  
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">e</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-8"><b>Figure 1.</b>SubPc-C60 system simulated in vacuum within the NVE ensemble for 10 ps.
+		  (a) MD movie; (b) temperature; (c) total energy; (d) extended energy (conserved invariant); (e) potential energy.		  
+		  </div>
+		  </div>
+		  </div> <!-- Figure 1 -->
+		  <br>
+		  <p><b>What we see:</b></p>
+		  <ul>
+		  <li>The dynamics is rather erratic, intermolecular separation fluctuates a lot. Temperature fluctuates a lot. Total energy and
+		  the conserved quantity show small decay (deviation from a straight horizontal line). These effects are largely due to the lack of
+		  equilibration and the choice of the initial configuration away from the energy minimum. Thus, the potential energy converts to 
+		  the kinetic, so we see a lot of temperature fluctuations, and hence the molecule shows very erratic motion. The lack of initial 
+		  thermalization also contributes to the deviation of the total energy/conserved quantity from the horizontal line, due to larger numerical
+		  errors in the beginning.</li>
+		  <li> The conserved quantity is the same a the total energy. This is true for NVE ensembles, or for NVT or NPT when thermostat/barostat 
+		  inertia parameters ("masses") are very large. 
+		  </li>
+		  <li>Potential energy fluctuation is much larger than the total energy/conserved invariant fluctuation. This means the integration
+		  scheme and parameters are reasonable.</li>
+		  </ul>
+		  
+		  
+		  
+<br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_md/example_1_SubPc-C60/case2/run_aa_md_state.py" target="_new">
+		  Example 1: SubPc, case 2: NVT dynamics of the isolated system </a></b><br><br>		  
+		  <p> We extend the previous case by actually adding a thermosat:
+		  <pre>therm = Thermostat({"Temperature":278.0,"Q":100.0,"thermostat_type":"Nose-Hoover","nu_therm":0.01,"NHC_size":5})
+ST.set_thermostat(therm)</pre>
+		  and by setting the "md.ensemble" variable to "NVT":
+		  <pre>md = MD({"max_step":100,<b>"ensemble":"NVT"</b>,"integrator":"DLML","terec_exp_size":10,"dt":20.0,"n_medium":1,"n_fast":1,"n_outer":1})</pre>
+		  We also do several cycles of cooling, before the NVT simulation. The results are now in Fig. 2
+		  </p>
+		  <br>
+		  <div class="container">
+		  <div class="row">
+		  <div class="col-md-4"><iframe width="100%" src="https://www.youtube.com/embed/JG9KMQ6GD9c" frameborder="10" allowfullscreen></iframe></div>
+		  <div class="col-md-4"><img src="example_1_SubPc-C60/case2/_md_T.png"></div>
+		  </div>
+		  <div class="row">		  
+		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><img src="example_1_SubPc-C60/case2/_md_tot.png"></div>
+		  <div class="col-md-4"><img src="example_1_SubPc-C60/case2/_md_NP.png"></div>		  
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">c</p></div><div class="col-md-4"><p class="text-center">d</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><img src="example_1_SubPc-C60/case2/_md_pot.png"></div>		  
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">e</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-8"><b>Figure 2.</b>SubPc-C60 system simulated in vacuum within the NVT ensemble for 10 ps.
+		  The thermostat frequency parameter nu_therm = 0.01. (a) MD movie; (b) temperature; (c) total energy; 
+		  (d) extended energy (conserved invariant); (e) potential energy.		  
+		  </div>
+		  </div>
+		  </div> <!-- Figure 2 -->
+		  <br>
+		  <p><b>What we see:</b></p>
+		  <ul>
+		  <li>The nuclear dynamics is more regular: geometry stays more-or-less fixed, with typical high-frequency stretching modes. Relative
+		  reorientation of the two molecules is observed at a longer timescale. The intermolecular distance fluctuates only little. Temperature
+		  fluctuation is much smaller than before, with the mean corresponding to the thermostat parameters. All these effects are due to 
+		  proper prior thermalization and the presence of thermostat with reasonable parameters.</li>
+		  <li>The conserved invariant is now different from the total energy (kinetic + potential) of the system. Here, the total energy shows large fluctuations,
+		  comparable to those of the potential energy. The conserved property show much smaller fluctuations. The conserved property don't show much of 
+		  drift (at list on this timescale), meaning it is reasonably accurate for the present purpose. 
+		  A typical "saturation" (sigmoidal) curve is observed in H_NP vs t. This is due to initial equilibration between system and thermostat (bath).
+		  This is normal, but the initial equilibration period may be not suitable for the calculations of some properties (due to its nonequilibrium nature)</li>		  
+		  </ul>		  
+		
+<br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_md/example_1_SubPc-C60/case3/run_aa_md_state.py" target="_new">
+		  Example 1: SubPc, case 3: NVT dynamics of the isolated system, smaller thermostat frequency </a></b><br><br>		  
+		  <p> Everything is same as in the previous case (case 2). The only difference is that we decrease the frequency 
+		  of the thermosat (increase inertia):
+		  <pre>therm = Thermostat({"Temperature":278.0,"Q":100.0,"thermostat_type":"Nose-Hoover",<b>"nu_therm":0.001</b>,"NHC_size":5})
+</pre>
+          The results are in Fig. 3
+		  </p>
+		  <br>
+		  <div class="container">
+		  <div class="row">
+		  <div class="col-md-4"><iframe width="100%" src="https://www.youtube.com/embed/z8FONIk02VM" frameborder="10" allowfullscreen></iframe></div>
+		  <div class="col-md-4"><img src="example_1_SubPc-C60/case3/_md_T.png"></div>
+		  </div>
+		  <div class="row">		  
+		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><img src="example_1_SubPc-C60/case3/_md_tot.png"></div>
+		  <div class="col-md-4"><img src="example_1_SubPc-C60/case3/_md_NP.png"></div>		  
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">c</p></div><div class="col-md-4"><p class="text-center">d</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><img src="example_1_SubPc-C60/case3/_md_pot.png"></div>		  
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">e</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-8"><b>Figure 3.</b>SubPc-C60 system simulated in vacuum within the NVT ensemble for 10 ps.
+		  The thermostat frequency parameter nu_therm = 0.001. (a) MD movie; (b) temperature; (c) total energy; 
+		  (d) extended energy (conserved invariant); (e) potential energy.		  
+		  </div>
+		  </div>
+		  </div> <!-- Figure 3 -->
+		  <br>
+		  <p><b>What we see:</b></p>
+		  <ul>
+		  <li>The nuclear dynamics remains similar to that in the previous case.</li>
+		  <li>The conserved invariant is conserved much better: the magnitude of fluctuations decreases, the overall drift decreases (this may be
+		  especially important for longer simulations), no equilibration period observed (no "saturation", just a horizontal line). 
+		  </li>		  
+		  </ul>		  
+
+<br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_md/example_2_Au/case1/run_aa_md_state.py" target="_new">
+		  Example 2: Au, case 1: NVT dynamics of isolated Au cluster in vacuum </a></b><br><br>		  
+		  <p> Now, lets consider a different type of systems. Instead of organic, go to inorganic. So, try gold. This is a bigger crystal
+		  created with a script (see another tutorial) that generates a supercell good for modeling systems with Au(111) surface. 
+		  Instead of molecular, go to crystalline. Well, we start with periodic-looking structure, but since there are no actual periodic 
+		  boundary conditions applyed, the system is still a formally molecular one (isolated cluster). 		  
+		  </p>
+		  <p> Because this particular system consists of atoms, rather than molecules, there are no bonded interactions (bond stretching, angle bending,
+		  dihedrals, imporopers, etc). Moreover, the system is not charged, so there are no electrostatic interactions either. The only type of interactions
+		  remaining are the vdw interactions. So, the setup of the ForceField object can be simplified:
+		  <pre>uff = ForceField({"mb_functional":"LJ_Coulomb","R_vdw_on":40.0,"R_vdw_off":55.0 })</pre>
+		  </p>
+		  <p>The second important alteration made in comparison to the Example 1 scripts, is that the format of the input file defining molecular structure 
+		  is different from the one we used before. The present file format follows closely the official pdb format. That is why we load it using the
+		  option "true_pdb" in the Load_Molecule function:
+		  <pre>LoadMolecule.Load_Molecule(U, syst, "au.pdb", "true_pdb")</pre>
+		  <p>We start simulating the Au cluster using the default UFF Lennard-Jones (LJ) parameters for Au atom: 
+		  `epsilon = 0.039` and `sigma = 3.293`. The results are in Fig. 4
+		  </p>
+		  <br>
+		  <div class="container">
+		  <div class="row">
+		  <div class="col-md-4"><iframe width="100%" src="https://www.youtube.com/embed/sR9teHT4xRc" frameborder="10" allowfullscreen></iframe></div>
+		  <div class="col-md-4"><img src="example_2_Au/case1/_md_T.png"></div>
+		  </div>
+		  <div class="row">		  
+		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><img src="example_2_Au/case1/_md_tot.png"></div>
+		  <div class="col-md-4"><img src="example_2_Au/case1/_md_NP.png"></div>		  
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">c</p></div><div class="col-md-4"><p class="text-center">d</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><img src="example_2_Au/case1/_md_pot.png"></div>		  
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">e</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-8"><b>Figure 4.</b>Au system simulated in vacuum within the NVT ensemble for 10 ps.
+		  The thermostat frequency parameter nu_therm = 0.001. (a) MD movie; (b) temperature; (c) total energy; 
+		  (d) extended energy (conserved invariant); (e) potential energy.		  
+		  </div>
+		  </div>
+		  </div> <!-- Figure 4 -->
+		  <br>
+		  <p><b>What we see:</b></p>
+		  <ul>
+		  <li>The system dissociates: interatomic interactions are too weak to resist thermal activation, to the overall cluster simply evaporates/sublimates</li>
+		  <li>As the system exands to the infinity, it passes the configuration that delivers a minimum (at least along this direction) of the potential 
+		  energy, with the minimal value of ca. -0.055 a.u. The following expansion brings the system to the state with potential energy approaching zero. THat
+		  state corresponds to infinite separation of all Au atoms from each other (and hence Au-Au interaction approaches zero). In a sense, the dynamics
+		  scans (only by chance) the potential energy surface along the "crystal" expansion coordinate. 
+		  </li>
+          <li>As the minimal value of the potential energy is on the order of 0.055 a.u., the total energy turns out to be on the order of 
+		  0.3 a.u., implying the kinetic energy is much larger than the interatomic interaction energy. It then clear why the system sublimates.</li>
+		  <li>Temperature fluctuates around the specified value. The invariant quantity fluctuates only little. The magnitude of such fluctuation is
+          much smaller than the total energy fluctuation. So, the integration and thermalization is going on well.</li>
+		  </ul>		  		  
+
+<br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_md/example_2_Au/case2/run_aa_md_state.py" target="_new">
+		  Example 2: Au, case 2: NVT dynamics of isolated Au cluster in vacuum, larger `epsilon` </a></b><br><br>		  
+		  <p> Ok. We now run one more simulation with the `epsilon` parameter of Au scaled by the factor of 10: `epsilon = 0.39`. 
+		  The results are in Fig. 5
+		  </p>		  
+		  <br>
+		  <div class="container">
+		  <div class="row">
+		  <div class="col-md-4"><iframe width="100%" src="https://www.youtube.com/embed/w8KgJnHZmhI" frameborder="10" allowfullscreen></iframe></div>
+		  <div class="col-md-4"><img src="example_2_Au/case2/_md_T.png"></div>
+		  </div>
+		  <div class="row">		  
+		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><img src="example_2_Au/case2/_md_tot.png"></div>
+		  <div class="col-md-4"><img src="example_2_Au/case2/_md_NP.png"></div>		  
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">c</p></div><div class="col-md-4"><p class="text-center">d</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><img src="example_2_Au/case2/_md_pot.png"></div>		  
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">e</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-8"><b>Figure 5.</b>Au system simulated in vacuum within the NVT ensemble for 10 ps.
+		  The thermostat frequency parameter nu_therm = 0.001. Using a scaled `epsilon` value of 0.39 :
+		  (a) MD movie; (b) temperature; (c) total energy; (d) extended energy (conserved invariant); (e) potential energy.		  
+		  </div>
+		  </div>
+		  </div> <!-- Figure 5 -->
+		  <br>
+		  <p><b>What we see:</b></p>
+		  <ul>
+		  <li>Temperature and invariant fluctuations - all is fine.</li>
+		  <li>Potential energy approaches some negative value. Also, the total energy approaches somewhat negative value (although not far from 0.0).
+		  These plots suggest that the system does not dissociate fully - some atoms will stay bound.
+		  </li>
+          <li>Incomplete dissociation: this prediction is also supported by the visualization of the dynamics. We can see how the Au cluster sublimates,
+		  but smaller clusters are also forming.</li>		  
+		  </ul>		  		  
+		  
+<br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_md/example_2_Au/case3/run_aa_md_state.py" target="_new">
+		  Example 2: Au, case 3: NVT dynamics of isolated Au cluster in vacuum, even larger `epsilon` and smaller `sigma`</a></b><br><br>		  
+		  <p> Lets keep the parameters changing even more. We now set `epsilon = 2.8` and reduce `sigma` to `sigma = 3.0` (well, we could be just with
+		  the `epsilon` parameter alone, but I was curious to try a new thing). The results are in Fig. 6
+		  </p>		  
+		  <br>
+		  <div class="container">
+		  <div class="row">
+		  <div class="col-md-4"><iframe width="100%" src="https://www.youtube.com/embed/dmuGj6VHMMQ" frameborder="10" allowfullscreen></iframe></div>
+		  <div class="col-md-4"><img src="example_2_Au/case3/_md_T.png"></div>
+		  </div>
+		  <div class="row">		  
+		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><img src="example_2_Au/case3/_md_tot.png"></div>
+		  <div class="col-md-4"><img src="example_2_Au/case3/_md_NP.png"></div>		  
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">c</p></div><div class="col-md-4"><p class="text-center">d</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><img src="example_2_Au/case3/_md_pot.png"></div>		  
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">e</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-8"><b>Figure 6.</b>Au system simulated in vacuum within the NVT ensemble for 10 ps.
+		  The thermostat frequency parameter nu_therm = 0.001. Using a scaled parameters: `epsilon = 2.8` and `sigma = 3.0` :
+		  (a) MD movie; (b) temperature; (c) total energy; (d) extended energy (conserved invariant); (e) potential energy.		  
+		  </div>
+		  </div>
+		  </div> <!-- Figure 6 -->
+		  <br>
+		  <p><b>What we see:</b></p>
+		  <ul>
+		  <li>Temperature and invariant fluctuations - all is fine.</li>
+		  <li>Both potential and total energies are sufficiently negative for the whole duration of time. No relaxation dynamics is observed
+		  except for a very short time, meaning the parameters lead to a reasonably stable system. 		  
+		  </li>
+          <li>From the MD visualisation, we observe pretty stable lattice dynamics. It can well correspond to a heated metal, although a bit
+		  stronger interactions may be more accurate.</li>		  
+		  </ul>		  		  
+
+<br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_md/example_2_Au/case4/run_aa_md_state.py" target="_new">
+		  Example 2: Au, case 4: NVT dynamics of a periodic Au cluster, using scaled `epsilon`</a></b><br><br>		  
+		  <p> So, we know how to produce a stable Au cluster in isolated molecule calculations. Now, it is time to switch to a bit more complex case -
+		  periodic systems. We will not run an MD with periodic boundary conditions (PBC), which means the atoms are always confined into the simulation
+		  box and they interact with their own replicas (and replicas of all other atoms) in the periodically translated nearby boxes.
+		  </p>	
+          <p> We start with the scripts and parameters from the case 2: `epsilon = 0.39` and `sigma = 3.293`. On top of that we introduce two additions:		  
+		  </p>
+		  <ul>
+		  <li>We define a simulation box, via the properties of the "syst" object:
+		  <pre>T1 =  VECTOR(32.6970772436, 0.0, 0.0)
+T2 =  VECTOR(16.3485386218, 28.3164995224, 0.0)
+T3 =  VECTOR(0.0, 0.0, 26.6970517757)
+syst.init_box(T1, T2, T3)
+</pre>
+          This is sufficient to tell the State functions that the simulations are for a periodic system.
+		  </li>
+		  <li>
+		  Previously, we utilized an "LJ_Coulomb" functional for vdw interactions. At this point, it is good only for the isolated systems. It would not
+		  work when a periodic box is defined. So, we choose an appropriate functional that incorporates periodic effects:
+		  <pre>uff = ForceField({"R_vdw_on":10.0,"R_vdw_off":12.0, "mb_functional":"vdw_LJ1","mb_excl_functional":"vdw_LJ1"})</pre>
+		  </li>
+		  </ul>
+		  <p>Everything else remains as before. The simulation results are summarized in Fig. 7</p>
+		  <br>
+		  <div class="container">
+		  <div class="row">
+		  <div class="col-md-4"><iframe width="100%" src="https://www.youtube.com/embed/wDxcviNwadQ" frameborder="10" allowfullscreen></iframe></div>
+		  <div class="col-md-4"><img src="example_2_Au/case4/_md_T.png"></div>
+		  </div>
+		  <div class="row">		  
+		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><img src="example_2_Au/case4/_md_tot.png"></div>
+		  <div class="col-md-4"><img src="example_2_Au/case4/_md_NP.png"></div>		  
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">c</p></div><div class="col-md-4"><p class="text-center">d</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><img src="example_2_Au/case4/_md_pot.png"></div>		  
+		  </div>
+		  <div class="row">
+		  <div class="col-md-4"><p class="text-center">e</p></div>
+		  </div>
+		  <div class="row">
+		  <div class="col-md-8"><b>Figure 7.</b>Au system simulated with PBC within the NVT ensemble for 10 ps.
+		  The thermostat frequency parameter nu_therm = 0.001. Using a scaled parameters: `epsilon = 0.39` and `sigma = 3.293` :
+		  (a) MD movie; (b) temperature; (c) total energy; (d) extended energy (conserved invariant); (e) potential energy.		  
+		  </div>
+		  </div>
+		  </div> <!-- Figure 7 -->
+		  <br>
+		  <p><b>What we see:</b></p>
+		  <ul>
+		  <li>Temperature and invariant fluctuations - all is fine.</li>
+		  <li>In the MD visualization, we see that the system remains crystalline. Hops of the surface atoms from one surface
+		  to the opposite one are observed (due to PBC). The internal atoms show some lattice vibrations. Although the system remains confined,
+		  it is not a solid. Rather, it is a partially melted one (remember, the system would dissociate to smaller clusters if not the periodic box).		  
+		  </li>
+          <li>Potential energy is close to zero. The total energy is large positive number. This suggests the system behaves as a gas (even not as the
+		  partially melted solid).</li>		  
+		  </ul>		
+		  
+		<pre class="brush: python;"></pre>
+
+	</div>
+	</div>
+	</div>
+	</body>
+	
+	</html>

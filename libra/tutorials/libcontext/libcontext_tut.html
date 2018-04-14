@@ -1,0 +1,527 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+
+	<script src="../../../bootstrap/js/jquery.js"></script>        
+        <script src="../../../bootstrap/js/bootstrap.min.js"></script>
+	
+	<link href="../../../bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+	<link href="../../../bootstrap/css/style.css" rel="stylesheet">
+
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	
+	<script type="text/javascript" async  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	
+	
+	<title>Libra</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-70773721-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+	
+    </head>
+    <body>
+
+	
+	<div class="row">
+      <div class="col-md-12"><h1>Libra: An open-source "Methodology Discovery" Library</h1></div>
+    </div>
+	
+    <nav class="navbar navbar-inverse h5" style="margin-top:-2px;">
+      <div class="container-fluid">
+        <div>
+          <ul class="nav navbar-nav">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../installation.html">Installation</a></li>
+            <li><a href="../../capabilities.html">Overview</a></li>
+            <li class="active"><a href="../../tutorials.html">Tutorials</a></li>
+            <li><a href="../../teaching.html">...</a></li>
+            <li><a href="../../soft_and_tuts.html">...</a></li>
+            <li><a href="../../contact.html">....</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+	
+	
+    <div class="container">
+      <div class="col-md-1"> </div>
+      <div class="col-md-10">
+        <div style="margin-left: 12px; width: 741px;"><br>
+		
+          <h3>Libcontext Tutorials</h3><br>
+		  
+		  <br><br>
+		<b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_context/test_context.py" target="_new">test_context.py</a></b><br><br>
+		<p>The context library is developed to work with the arbitrary data structures - ideally of arbitrary format and complexity. The second main point
+		is that the objects representing these data structures would be accessible from C++ and Python. This can eventually be convenient for flexible customization
+		of some internally-implemented algorithms: e.g. passing some development flags and parameters to the implementation side. But enough words, lets see
+		how this works.
+		</p>
+		<p>
+		First, lets create a Context object:
+		<pre class="brush: python;">ctx = Context()</pre>
+		The object doesn't contain much so far. Essentially it is a wrap around the Boost.Property_tree Property_tree template class, the instance of which
+		is hidden as the "ctx_pt" private variable. But this is not the only data we have. The class also stores the relative "path" where we are in this
+		property tree. This is stored in the "path" variable (also private).
+		</p>
+		<p>To retrieve the "path" variable, we use the method "get_path":
+		<pre class="brush: python;">ctx.get_path()</pre>
+		which is set to "glob_context" by default.
+		</p>
+		<p>Perhaps one of the most convenient used of the "Context" class can be storing the content of variables of such type as XML files.
+		This can be done via:
+		<pre class="brush: python;">ctx.save_xml("ctx_1.xml")</pre>
+		In our present example, this will print an "empty" XML file containing only the header
+		<xmp><?xml version="1.0" encoding="utf-8"?></xmp>
+		</p>
+		<p> An alternative way to create a variable of "Context" type (and initialize it) is to call one of the overloaded constructors.
+		<pre class="brush: python;">ctx = Context("ctx_example.xml")</pre>
+		The argument is the name of an XML file that we want to turn into the variable of "Context" type. Our tutorial comes together with a predefined
+		file "ctx_example.xml" shown below:
+		</p>
+		<br>
+		<xmp><?xml version="1.0" encoding="utf-8"?>
+<control_params>
+    <runtype>nscf</runtype>
+    <hamiltonian>eht</hamiltonian>
+    <spin_method>unrestricted</spin_method>
+    <DF>0</DF>
+    <guess_type>sad</guess_type>
+    <nac_min_orbs>
+        <0>1</0>
+        <1>2</1>
+        <2>3</2>
+    </nac_min_orbs>
+    <x>
+        <param1>1</param1>
+        <param2>Chalk</param2>
+        <param3>
+            <0>0</0>
+            <1>1</1>
+            <2>2</2>
+        </param3>
+    </x>
+</control_params>
+</xmp>
+		<p>Returning the value of "path" variable as before (with "get_path" method), will give us "control_params". That is the path is set to the 
+		outermost tag of the read XML file. 
+		</p>
+		<p>To show that the created structure is not empty as before, we can print it into another file, say "ctx_2.xml". You can see that the newly 
+		created "ctx_2.xml" file contains same fields and data as the original file "ctx_example.xml". The only difference is that some extra blank lines
+		are inserted. I don't know why is this so - perhaps something related to property_tree formatting. Anyway, it is not critical.
+		</p>
+		
+		<p>Now lets see how to change the path names. To do this we use the "set_path" member function. In the script below:
+		<pre class="brush: python;">ctx = Context("ctx_example.xml")
+ctx.set_path("new_control_params")
+ctx.save_xml("ctx_2a.xml")
+		</pre>
+		We read the existing XML file, which sets the path of the "ctx" object to the "control_params" value. We then change the current path to the new
+		value "new_control_params", and then print the object back to the new file "ctx_2a.xml". Looking into the output, you will notice that the 
+		"ctx_2.xml" file is essentially the original file (with extra blank lines), but with the uppermost level tag being redefined to be "new_control_params".
+		</p>
+		<p>Now, lets see how we can manually edit the XML tree stored in the object of "Context" class. Well, editing here mostly implies adding new
+		properties or changing the existing ones, not so much of deleting the nodes. The adding of new properties with simple data types is demonstrated in
+		the following script:
+		<pre class="brush: python;">ctx = Context()
+ctx.set_path("new_path")
+param1 = 1.0
+ctx.add("param1", param1)
+param2 = "Chalk"
+ctx.add("param2", param2)		
+		</pre>
+		Here, we first change the name of the outermost tag (the "path" variable) from its default value to the customized one. We then create new variables
+		and assign the variables of appropriate type to their values. Here we demonstrate the creation of variable the "param1" of integer type, storing the
+		value of 1.0, and the creation of the variable "param2" of string type, storing the value of "Chalk". 
+		</p>
+		<p><b>Important design/philosophy notes</b>
+		Now, why do I refer to these tags as variables?
+		Well, because one can imagine a class of some type with couple of internal variables - "param1" and "param2" defined in it. One would them be able to
+		use those variables via some methods or directly. The variables would be accessible both in C++ implementation, but would need to be exported to Python.
+		The problem with such implementation would be that in different context we would need different sets of variables, so we would need to define 
+		multiple classes storing context-specific information. This is a lot of work to implement and maintain those classes, to export them to Python, and
+		to setup the C++/Python/file input/output data flows. As a generic alternative, we created the "Context" class, which may contain arbitrary collection
+		of data-fields. The data flow between C++/Python sides and file is easy and straightforward. One might actually think of using something like
+		"map" of "maps" or "list" or "list" data structures, but one wouls still need to define the interface between Python and C++ implementation. Moreover,
+		there would be no XML write/read support. With the "Context" data type these operations are inherited from the Boost.Property_tree template. 
+		One more advantage of this data representation is that the variables and the variable names are detached as much as possible: imagine you have defined
+		a class and have used it in many other places to implement a lot of other functionality. But, at some point you have realized you wanted to change
+		some variable name to a "better" one. What then - change all the code that you have created? With the "Context" data type, you can change variable
+		name relatively easy - just add another one, or redefine the meaning of the old one.
+		</p>
+		<p>Alright, so we have added couple of variables (in XML language, we would call them data fields or tags) of different simple types. How would we call
+		them back? What if the user is unsure what the name of the variable is? These questions are taken care of in the member-function "get". Consider the
+		examples:
+		<pre class="brush: python;">print ctx.get("param1", -1) 
+print ctx.get("param1a", -1) 
+print ctx.get("param2", "Milk") 
+print ctx.get("param2a", "Milk") 
+		</pre>
+		Here, we access the content of a given variable by calling the common "get" function with the name of the variable we want to access. We also supply
+		the function with the default result - it is returned in case when no variable with provided name have been found in the data tree. In our case,
+		since the variables "param1" is already defined, the returned value will be 1, which we set in the earlier steps. However, because the variable 
+		"param1a" has not been defined yet, when trying to access it and return its value, only the default value provided in the "get" function will be 
+		returned. In this case it is -1. The same situation with the value "Chalk" defined in the variable "param2" and the default value "Milk", defined
+		as the default returned value, if the variable "param2" is not found.
+		</p>
+		<p>Further, we can add the data of more complex type. Specifically, we show how a list of integers can be added. On the C++ side, the data type 
+		"intList" is defined, which is essentially "vector<int>". The list with 3 elements is created using the following instructions:
+		<pre class="brush: python;">param3 = intList()
+for i in xrange(3):
+    param3.append(i)		
+		</pre>
+		The final list can then be added to the object of "Context" type with the "add" function we used with simple data types. Before we retrieve the
+		created data variables, we define another intList object with only one element (containing -1), as the default return value. The resulting object
+		is now written into the "ctx_3.xml" file:
+		</p>		
+		<xmp><?xml version="1.0" encoding="utf-8"?>
+<new_path>
+    <param1>1</param1>
+    <param2>Chalk</param2>
+    <param3>
+        <0>0</0>
+        <1>1</1>
+        <2>2</2>
+    </param3>
+</new_path>
+
+		</xmp>
+		<p>Points to notice: a) the name of the uppermost tag is the one we set in the beginning of the procedure; b) the way the arrays are printed out -
+		each element comes with the tag which is derived from the index of that element.</p>
+		<p>We are now in position to cover even more interesting operation on the objects of the "Context" class. Namely, we are going to show 2 more 
+		features of "add" function:
+		<ul>
+			<li>"add" called with the variable which is already defined - simply overwrites the old value of that variable. This is demonstrated on this
+		script: <pre class="brush: python;">p1 = 2.0
+ctx.add("param1", p1)
+ctx.save_xml("ctx_4a.xml")</pre>
+		Here, we try to add another "param1" variable to the "ctx" variable. But because it is already defined (with value of 1), we don't actually create 
+		yet another tag (with the same name as the one already existing), but we rather replace the old value (1.0) with the new one (2.0). The eventual 
+		result is printed in the "ctx_4a.xml" file, which is essentially the same as "ctx_3.xml", but with the value of the "param1" variable equal to 2.0.
+			</li>
+			<li>"add" can be used to combine two objects of the "Context" type - to create complex, many-level structures. Here we add one object, "ctx1",
+			derived from the earlier generated "ctx_3.xml" file with the latter's top tag renamed to "old_path". The object "ctx1" is added as a branch
+			of another earlier-derived object "ctx". The final "ctx" object is printed into file "ctx_4b.xml". The corresponding code is:
+			<pre class="brush: python;">ctx.add(ctx1) 
+ctx.save_xml("ctx_4b.xml")
+			</pre>
+			The output is:
+			<xmp><?xml version="1.0" encoding="utf-8"?>
+<new_path>
+    <param1>2</param1>
+    <param2>Chalk</param2>
+    <param3>
+        <0>0</0>
+        <1>1</1>
+        <2>2</2>
+    </param3>
+    <old_path>
+        
+    
+    
+    
+
+        <param1>1</param1>
+        <param2>Chalk</param2>
+        <param3>
+            
+        
+        
+        
+    
+            <0>0</0>
+            <1>1</1>
+            <2>2</2>
+        </param3>
+    </old_path>
+</new_path>
+
+			</xmp>
+			Where you can see how one XML is nested into the other one.
+			</li>
+		</ul>	
+		</p>
+		<p>Finally, one can extract one XML from the other (more complex). Or, equivalently, one can extract sub-object of the "Context" type from the
+		complex object of that type. This capability is very convenient for accessing specific portion of complex data withough much of efforts as would
+		be necessary in the element-wise access modes. The extraction is done via yet another version of the "get" function, as demonstrated by
+		the script below:
+		<pre class="brush: python;">ctx2 = ctx.get("old_path", ctx)
+print "path=", ctx2.get_path()
+ctx2.save_xml("ctx_5.xml") 
+		</pre>
+		Here, the "ctx" passed as the second argument comes as the default return variable - in case the sub-tree with the outer-level tag "old_path" would
+		not be found. Fortunately, it is present in our case, making the "get()" function to return the sub-tree with the outermost level being "old_path".
+		The resulting "Context" variable is printed out to "ctx_5.xml", so the result can be visualized:
+		<xmp><?xml version="1.0" encoding="utf-8"?>
+<old_path>
+    <param1>1</param1>
+    <param2>Chalk</param2>
+    <param3>
+        
+        
+        
+        
+    
+        <0>0</0>
+        <1>1</1>
+        <2>2</2>
+    </param3>
+</old_path>
+
+		</xmp>
+		In case we want to extract an even deeper level of objects, we need to use "." separator in the names of the variables. For instance, one would need
+		to use "old_path.param3" to access the intList variable "param3":
+		<xmp><?xml version="1.0" encoding="utf-8"?>
+<old_path>
+    <param3>
+        <0>0</0>
+        <1>1</1>
+        <2>2</2>
+    </param3>
+</old_path>
+
+		</xmp>
+		</p>
+
+  	    <br><br>
+		<b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_context/test_control_parameters.py" target="_new">test_control_parameters.py</a></b><br><br>
+		<p>This script simply loads the parameters controlling some simulations (not really affecting any simulations yet, just showing). We use the example
+		XML input file that specifies all the parameters for such hypothetical simulations. This is only to show how one can easily define simulation 
+		protocols using an XML format and loading those protocols into the code. Since the data members of the "Context" class can be accessed via low-level
+		C++ implementations, this feature provides a convenient mechanism for providing input to arbitrary simulations. Note: presently we still use some of
+		the older specific classes that store the parameters of simulations. Eventually, the goal will be to switch to the new scheme, which is sketched in
+		the <a href="https://sourceforge.net/p/libracode/code/ci/master/tree/src/context/ctx_Control_Parameters.cpp" target="_new">"ctx_Control_Parameters.cpp"
+		</a> file. Consider the following code:
+		<pre class="brush: cpp;">// <calculations>
+  std::string hamiltonian = "eht";          add("calculations.hamiltonian", hamiltonian);
+  std::string spin_method = "unrestricted"; add("calculations.spin_method", spin_method);
+  int DF = 0;                               add("calculations.DF", DF);
+  // </calculations>
+
+  // <guess_options>
+  std::string guess_type = "sad";           add("guess_options.guess_type", guess_type);
+  // </guess_options>
+
+  // <scf_options>
+  std::string scf_algo = "oda";             add("scf_options.scf_algo", scf_algo);
+  int use_disk = 0;                         add("scf_options.use_disk", use_disk);
+  int use_rosh = 0;                         add("scf_options.use_rosh", use_rosh);
+		</pre>
+		Here, the column to the left shows how the variables of the class can be initialized in the default constructor. Obviously, the variables would
+		need to be declared in the heated file. On the contrary, the column to the right shows how the variables can be defined and initialized in the
+		new way, using the XML-type schema. The possibility for sctructuring options into logical blocks is also shown - just use the "." separator. 
+		For instance, the subsections of the "calculations" tag (section) are defined as "calculations.hamiltonian", "calculation.spin_method", etc. For 
+		farther level of structuring, use more dots. 		
+		</p>
+		<p>Also note that "add" function is called as is, within the construction (not via "." directive). This is because the "ctx_Control_Parameters"
+		class is the derivative class of the base "Context" class. Also, think of this possibility - since we don't need to declare variables - the variables
+		of the class are actually added at the point of object creation (in the constructor), and can eventually be added as necessary. This enables great
+		degree of flexibility in working with the code.
+		</p>
+
+
+  	    <br><br>
+		<b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_qe/test_1_no_soc/test_context.py" target="_new">Reading spin-polarized QE wavefunction, no SOC</a></b><br><br>
+		<p>Now, lets discuss more practical application of the <a>Context</a> class. Specifically, with its help we can conveniently and compactly read the
+		XML files generated by QE programs (pw.x and pw_export.x). Also, note that the files for this and several following tutorials are in the 
+		"tests/test_qe" folder, not in "tests/test_context" as before. </p>
+		<p>To start this tutorial, we'll need to run some QE calculations first. This is done by running the simple Shell script:
+		<pre>sh ./run.sh</pre>
+		Of course, you'd first need to edit the script to indicate the paths of the pw.x and pw_export.x executable of the QE distribution. Since this 
+		is a mere example, we set the kinetic energy cutoff defining plane wave basis to a ridiculously small value of 2 Ry. This value of course
+		doesn't have any physical meaning (that is it leads to non-physical = very poor wavefunctions), but helps accelerating the calculations, so
+		the tutorial can be run in seconds. We also use a very small ethylene molecule, so the calculations are very fast. Therefore, we don't even need to
+		use any sort of job managers (SLURM/PBS) and can simply run the calculations in the command line (terminal), also on personal computers and laptops.		
+		</p>
+		<p>Now, when the first step is completed, our folder will contain a lot of additional files and directories, namely: 
+		<pre> x.scf.out  x.exp.out  x.wfc  x.paw  x.export  x.save</pre>		
+		</p>
+		<p>The ".out" files will contain the output of the corresponding calculations. The "x.wfc" file is a binary file containing the wavefunction.
+		This file is ustilized by the "pw_export.x" program to generate the "x.export" file containing all the details of the calculations in a human-readable
+		format. Specifically, we will need the files "x.wfc1" and "x.wfc2". These files contain the plane-wave representation of thealpha and beta orbitals.
+		These are the main files for us to read, at least for the present purpose. Luckily, when the "pw_export.x" converts the "x.wfc" file into a human-readable
+		format, it also uses an XML formatting. This allows us to utilize the "Context" data type to read all the data. 
+		</p>
+		<p>The main Python file for this tutorial is "test_context.py". It contains an already predefined function that reads the generated XML files.
+		We first create a Context object from a given data file (either "x.export/x.wfc1" or "x.export/x.wfc2", as reminded by the comment, vide infra):
+		<pre>ctx = Context(filename)  #("x.export/wfc.1")</pre>
+		Because the file names are composed utilizing the dots ("."), the access to the childrens of the XML is problematic ("." is also a default level 
+		separator). To avoid this complication, we setup the path separator to be a forward slash "/": 
+		<pre>ctx.set_path_separator("/")</pre>
+		Now, we can access the data in this XML file. But where are we? The highest level XML tag for the "x.wfc1" file is "Kpoint.1". This info returned
+		by the "get_path()" function:
+		<pre>ctx.get_path()</pre>
+		The children of the present branch are: "Info", "Wfc.1", "Wfc.2", ... , "Wfc.10". This is shown by the "show_children" function:
+		<pre>ctx.show_children(upper_tag)</pre>		
+		Before we start reading the actual wavefunction, it helps to determine the number of the wavefunctions to read and their size (how many planewaves
+		is used in the corresponding expansions). Luckily, this information is printed out withing the &lt Info &gt tag as the attributes "nbnd" and "ngw",
+		respectively. However, there is a little complication: these are the attributes rather than the children of the given parent. The access to these
+		data elements is possible via the "xmplattr" specifier within the "get" function:
+		<pre>ngw = int(float(ctx.get("Info/&ltxmlattr&gt/ngw","n")))
+nbnd = int(float(ctx.get("Info/&ltxmlattr&gt/nbnd","n")))</pre>
+		Once the parameters are read out, we can allocate memory for the wavefunctions we are going to read. The coefficients are the complex-valued
+		numbers. That is why we create an object of the CMATRIX type:
+		<pre>coeff = CMATRIX(ngw,nbnd)</pre>
+		</p>
+		<p>All right, it is time to actually read the data. So we iterate over all molecular orbitals. For each one we use the "get" function to
+		access a big string with the coefficients for given MO:
+		<pre>all_coeff = ctx.get("Wfc."+str(band), "n").split(',')</pre>
+		However, the resulting variable "all_coeff" must be split and converted into a numerical vaules. This is done with the Python's "split" funciton.
+		Note that we use it twice - with comma and whitespace being delimiters. That is because of the particular format of the data file. 
+		Eventually, the extracted real and imaginary components of the wavefunctions are placed into the appropriate positions of the coeff matrix.
+		</p>
+		<p>Having reviewed the basic workflow of the "read_qe_wfc" function, we can now focus on the data extracted from the wavefunction files.
+		At the upper level of the script, we read the wavefunctions from the two created files:
+		<pre>coeff_1 = read_qe_wfc("x.export/wfc.1", "Kpoint.1")
+coeff_2 = read_qe_wfc("x.export/wfc.2", "Kpoint.2")</pre>
+        "coeff_1" then contains the wavefunction coefficients for the alpha spin orbitals, whereas "coeff_2" - the coefficients for the beta spin orbitals:
+		`psi_(alpha,i)(r) = sum_(vec G) coeff1_(vec G, i) * exp(-i*vec r* vec G)` and 
+		`psi_(beta,i)(r) = sum_(vec G) coeff2_(vec G, i) * exp(-i*vec r* vec G)`, where `vec G` is grid point corresponding to given coefficient
+		`coeff(1//2)_(vec G, i)`, and `i` is the MO index.
+		In a sense, these coefficients only define the spatial components of the wavefunction, but the orthogonality of the different spin compnents is
+		included implicitly. At the same time, the orthogonality of the same-sping components originates solely from the spatial components of the wavefunctions.
+		</p>		
+		<p>So, we are to veryfy the orthogonaity of the read-out wavefunction. For that we use the matrices of the coefficients to compute the MO overlap 
+		matrices. It can be shown that, if the matrices of the read out coefficients are denoted by `CC_sigma`, then the overlap matrices will be computed as:
+		`CC_sigma^+ * CC_(sigma')`. This is exactly what happens in the following lines:
+		<pre>ovlp_1  = coeff_1.H() * coeff_1
+ovlp_2  = coeff_2.H() * coeff_2
+ovlp_12 = coeff_1.H() * coeff_2</pre>
+        The resulting diagonal elements are printed out in the final lines:
+		<pre>for n in xrange(nbnd):
+    print n, ovlp_1.get(n,n), ovlp_2.get(n,n), ovlp_12.get(n,n)  #  ovlp.get(2*n,2*n) + ovlp.get(2*n+1,2*n+1)</pre>
+		</p>
+		<p>A typical output we obtain is as follows:
+		<pre>0 (1.04877477553+0j) (1.0487747831+0j) (0.361462952487-0.984516669087j)
+1 (1.02675327918+0j) (1.02675326853+0j) (0.934770633999+0.424765991079j)
+2 (1.00056599139+0j) (1.00056598332+0j) (0.675717706035-0.737928097295j)
+3 (1.00203159721+0j) (1.0020315889+0j) (0.999917299386+0.065059263695j)
+4 (1.00138083746+0j) (1.00138085753+0j) (0.632221648325-0.776568982429j)
+...
+		</pre>
+		Indicating, that, indeed, the orthogonality of the same-spin orbitals is satisfied (yet, not perfectly - this is due to a pseudopotential), but the
+		spatial components of the different-spin orbitals are not orthogonal.
+		</p>
+
+        <br><br>
+		<b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_qe/test_2_soc/test_context.py" target="_new">Reading spin-polarized QE wavefunction, with SOC</a></b><br><br>		
+		<p>Now, lets consider what happens in the so-called non-collinear magnetism case. That is when the spin-orbit coupling (SOC) has been turned on in QE calculations.
+		Practically, the calculations with the SOC are turned on in QE by adding the following lines:</p>
+		<pre>noncolin = .true.,
+lspinorb = .true.
+</pre>
+        <p>Well, it is the first line that includes SOC. But the second one is important because it uses the relativistic contributions of the pseudopotentials.
+		Naturally, the pseudopotential must be fully-relativistic, so be careful which pseudopotential you choose.</p>
+		<p>It worth mentioning yet another important difference between the calculations with SOC vs. those without. In the former case, all orbitals
+		can only be sinlgy-occupied, so they do not come in pairs, really. For our case of ethylene, there are 12 electrons. Thus, we must have at least
+		12 orbitals ("nbnd" keyword). For instance, in the no-SOC case, we used nbnd = 10, meaning there were 10 pairs of orbitals (degenerate in the
+		restricted "nbnd = 1" case, and non-necessarily degenerate in the unrestricted "nbnd = 2" case). Therefore, there were 2 x 10 = 20 boxes to place 12
+		electrons in. In the SOC case, what we put as "nbnd" parameter becomes this "total number of boxes". So, 10 wouldn't work for 12 electrons. 
+		Thus, we have to specify a bigger number. To be consistent with the previous calculations, we set it to 20. 
+		</p>Unlike the no-SOC case, the "x.export" folder contains only a single "x.wfc1" file, but it contains all 20 mixed-spin spin-orbitals. Thus,
+		we read only a single set of coefficients:
+		<pre>coeff_1 = read_qe_wfc("x.export/wfc.1", "Kpoint.1")</pre> 
+		and eventually generate only a single overlap 20 x 20 matrix `CC^+ * CC`.
+		<p>
+		<p>The obtained overlap matrix has many non-zero off-diagonal elements. Even more, if we look at the overlaps of the all spin-orbitals with themselves:
+		`&ltphi_i|phi_i&gt`, we will realize that these orbitals are not even close to being normalized:
+		<pre>for n in xrange(nbnd):
+    print n, ovlp_1.get(n,n)
+</pre>
+yields:
+		<pre>0 (1.02443684199+0j)
+1 (0.0266042220572+0j)
+2 (0.139267745328+0j)
+3 (0.889144577478+0j)
+4 (0.888119459544+0j)
+5 (0.112494587016+0j)
+6 (0.0507915967346+0j)
+7 (0.951410929907+0j)
+8 (0.994833982418+0j)
+9 (0.00665142590924+0j)
+10 (0.920340108029+0j)
+11 (0.0780997833238+0j)
+12 (0.989535626349+0j)
+13 (0.0116616044233+0j)
+14 (0.301073003024+0j)
+15 (0.699541638265+0j)
+16 (0.998792830325+0j)
+17 (0.00196769992476+0j)
+18 (0.985180678025+0j)
+19 (0.0162256452939+0j)
+</pre>
+		</p>
+		<p>This is because, the actual wavefunctions are now the two-component spinors: `psi_n = ((phi_(2n)), (phi_(2n+1)))`. So, in a sense, we still have
+		pairs of orbitals, but now these are not the pure alpha and beta orbitals, but rather the components of the mixed spin-orbital onto the 
+		alpha and beta spin-projections, respectively. The scalar product of the two 2-component spinors is naturally redefined as:
+		`&ltpsi_i | psi_j&gt = (phi_(2n)^(**), phi_(2n+1)^(**)) * ((phi_(2k)), (phi_(2k+1))) = &ltphi_(2n) | phi_(2k)&gt + &ltphi_(2n+1) | phi_(2k+1)&gt`
+		</p>
+		<p>Therefore, the overlaps of the spinor functions with themselves would be computed as:
+		<pre>for n in xrange(nbnd/2):
+    print n, ovlp_1.get(2*n,2*n) + ovlp_1.get(2*n+1,2*n+1)
+</pre>
+        yielding what we expect:
+		<pre>0 (1.05104106405+0j)
+1 (1.02841232281+0j)
+2 (1.00061404656+0j)
+3 (1.00220252664+0j)
+4 (1.00148540833+0j)
+5 (0.998439891353+0j)
+6 (1.00119723077+0j)
+7 (1.00061464129+0j)
+8 (1.00076053025+0j)
+9 (1.00140632332+0j)
+</pre>
+        Analogously, the overlap of the spinor functions is close to the unity matrix with the off-diagonal elements being close to zero. Sometimes, non-zeores
+		are observed, which is a shortcoming of using initially non-orthogonalized components of the spin functions (due to pseudopotential).
+		</p>
+		
+        <br><br>
+		<b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_qe/test_3_k_points/test_context.py" target="_new">Reading QE wavefunction with multiple k-points</a></b><br><br>		
+		<p>At this point, the present example is similar to the case of spin-polarized single k-point calculations. For instance, computing 4 k-points (which
+		reduces to 3 points, due to symmetry) we obtain 3 wavefunction files. Reading any two e.g. "wfc.1" and "wfc.2" and computing overlaps of the MOs, we obtain
+		the following output
+		<pre>0 (1.04878324101+0j) (1.04877880774+0j) (0.960488846972-0.40471846792j)
+1 (1.02675835448+0j) (1.02696595901+0j) (-0.96102713939+0.313492371105j)
+2 (1.00056477437+0j) (1.00056489853+0j) (-0.698521529145+0.706478390388j)
+3 (1.00202587042+0j) (1.00202330917+0j) (0.759135707805-0.643372340036j)
+4 (1.00138601246+0j) (1.00139640066+0j) (0.927733749575+0.309393483075j)
+5 (0.998501237069+0j) (0.998490129371+0j) (0.573394151582-0.797361402973j)
+6 (1.00164701762+0j) (1.00069396103+0j) (-0.078514822579-0.514976061515j)
+7 (1.00064408284+0j) (1.00159826473+0j) (0.512426211958-0.0897928010766j)
+8 (1.00077135343+0j) (1.00073037272+0j) (-0.894107244735+0.241768140532j)
+9 (1.00003434517+0j) (1.00003547747+0j) (0.856855028405-0.470077889037j)
+</pre>
+        indicating that the MOs within the same k-point bundle are orthogonal, but that they are not across the k-points. In fact, if the multiple
+		k-points calculations are performed self-consistently, the MOs are orthogonal also across different k-points. The reason we don't obtain
+		real unities, is due to more compicated procedure to compute the MO overlaps - the formula would go beyond the simple `CC^+ * CC`. There 
+		will be additional couplings due to different k-points (in a sense, these are the counterparts of the AO overlaps when the MOs are represented
+		in a localized AO basis). The computation of the "overlaps" is a bit complicated, and will be discussed in the future versions of this tutorial.
+		</p>
+		
+		
+		  
+		  
+		</div>
+	  </div>
+	</div>
+	
+ 
+	
+	</body>
+
+</html>

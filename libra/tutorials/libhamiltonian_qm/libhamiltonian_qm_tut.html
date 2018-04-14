@@ -1,0 +1,508 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+
+	<script src="../../../bootstrap/js/jquery.js"></script>        
+        <script src="../../../bootstrap/js/bootstrap.min.js"></script>
+	
+	<link href="../../../bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+	<link href="../../../bootstrap/css/style.css" rel="stylesheet">
+
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	
+	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
+	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shBrushPython.js"></script>
+	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shBrushBash.js"></script>
+	<link type="text/css" rel="stylesheet" href="../../../../pyxaid/syntaxhighlighter_3.0.83/styles/shCoreDefault.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+
+	
+	<title>Libra</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-70773721-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+	
+    </head>
+    <body>
+
+	
+	<div class="row">
+      <div class="col-md-12"><h1>Libra: An open-source "Methodology Discovery" Library</h1></div>
+    </div>
+	
+    <nav class="navbar navbar-inverse h5" style="margin-top:-2px;">
+      <div class="container-fluid">
+        <div>
+          <ul class="nav navbar-nav">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../installation.html">Installation</a></li>
+            <li><a href="../../capabilities.html">Overview</a></li>
+            <li class="active"><a href="../../tutorials.html">Tutorials</a></li>
+            <li><a href="../../teaching.html">...</a></li>
+            <li><a href="../../soft_and_tuts.html">...</a></li>
+            <li><a href="../../contact.html">....</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+	
+	
+    <div class="container">
+      <div class="col-md-1"> </div>
+      <div class="col-md-10">
+        <div style="margin-left: 12px; width: 741px;"><br>
+		
+          <h3>Libhamiltonian_qm Tutorials</h3><br>
+		  
+		  The "libhamiltonian_qm" is a sub-module of the "libhamiltonian_atomistic" module. The "libhamiltonian_qm" implements quantum-mechanical Hamiltonians 
+		  for atomistic calculations. The working files showing how to use
+		  different objects are located in the /tests/test_hamiltonian_qm directory of the Libra package.
+		  Most of the tutorials are almost completely self-explanatory. Here, we only focus on most interesting/less straightforward conventions and 
+		  articulate some of our actions.
+		  
+		  <br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_qm/test_qm1.py" target="_new">test_qm1.py</a></b><br><br>
+		  <p> Alright, lets start with this first script. Well, this one is gonna be pretty extensive, since it shows many different features available.
+		  However, once this is done, we should be able to understand other examples much faster.
+		  </p>
+		  <ol>
+		  <li><b>Set up universe and create molecular system.</b>Well, we start with already familiar (from 
+		  <a href="../libhamiltonian_mm/libhamiltonian_mm_tut.html" target="_new">libhamiltonian_mm</a> tutorials - see it first, if you haven't done so) procedures to setup Universe,
+		  and load molecular system. In our first example, the sistem is very simple - just a single carbon atom. 
+		  </li>
+		  <li><b>Load Control and Model parameters.</b>Next, we create two objects that will contain all parameters controlling our calculations. The first object is of class "Control_Parameters":
+		  <pre class="brush: python;">prms = Control_Parameters()
+get_parameters_from_file("control_parameters_indo.dat", prms)
+#get_parameters_from_file("control_parameters_eht.dat", prms)
+		  </pre>		  
+		  This object is constructed using the specially-formatted file, which sets up all detials on what type of calculations to be performed and how.
+		  For the list of accepted options provided in the input file, refer to the 
+		  <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/hamiltonian/Hamiltonian_Atomistic/Hamiltonian_QM/Control_Parameters/Control_Parameters.h" target="_new">Control_Parameters class</a>
+		  In the snippet above we have two options for calculations - either INDO or EHT. If we want the latter - just uncomment the second line and comment the
+		  first. Loading one of those configuration/control files will then affect which parameter files will be used (as defined in the control file) and 
+		  which additional actions we will be performing (according to the correspondingly set up options of the "prms" object).
+		  <p>The second object is of class "Model_Parameters". It contains the Hamiltonian-specific set of parameters. We first construct a default object using
+		  <pre class="brush: python;">modprms = Model_Parameters()</pre>
+		  And then, depending on the type of Hamiltonian we are looking to construct, we load Hamiltonian-specific information - from some parameters input
+		  file:
+		  <pre class="brush: python;">if(prms.hamiltonian=="eht"):
+    set_parameters_eht(prms, modprms)
+elif(prms.hamiltonian=="indo"):
+    set_parameters_indo(prms, modprms);
+          </pre>
+		  The expected formats of the files with the parameters are different for INDO and EHT calculations. In addition, for EHT, we have extra cards that
+		  are used for advanced customization of the Hamiltonian (e.g. self-consistent EHT, adding atomic pseudopotentials, etc.). To learn more on the
+		  expected formats and on the units of the parameters, refer to the 
+		  <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/hamiltonian/Hamiltonian_Atomistic/Hamiltonian_QM/Model_Parameters/Model_Parameters_INDO.cpp" target="_new">Model_Parameters_INDO.cpp</a>
+		  and
+		  <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/hamiltonian/Hamiltonian_Atomistic/Hamiltonian_QM/Model_Parameters/Model_Parameters_EHT.cpp" target="_new">Model_Parameters_EHT.cpp</a>
+		  files for INDO and EHT setups, respectively.
+		  </p>
+		  </li>		  
+		  <li><b>Create AO basis and mappings.</b>
+		  When we know the number of atoms and their types and positions, we can dress them with atomic orbitals (AO). Each atomic orbital is treated as an
+		  independent object. The AO basis, hence, is essentially a list of AO objects. The specifics of the AO depend on the basis type chosen. Presently,
+		  we use only STO-3G(double zeta) basis. The main procedure here is:
+		  <pre class="brush: python;">basis_ao, Nelec, Norb, atom_to_ao_map, ao_to_atom_map = set_basis_STO_3G_DZ(mol_at_types, R, modprms, verb) </pre>
+		  The rest of this section (actually the instructions preceeding this line)  are simply preparations of the input arguments, so they would be of
+		  expected type. In this preparation, we heavily use the exported complex data types:
+		  <pre class="brush: python;">mol_at_types = StringList()
+R = VECTORList()
+basis = AOList()
+atom_to_ao_map = intMap()
+ao_to_atom_map = intList()
+		  </pre>
+		  The first one is a list of strings (vector&ltstring&gt in C++), the second - is the list of VECTOR objects (vector&ltVECTOR&gt in C++), the
+		  third - is the list of AO objects (vector&ltAO&gt in C++), the last one the list of integers (vector&ltint&gt in C++), and finally, the one before
+		  the last is the list of lists of integers - in that sense in is a map that mapps one integer onto the other (hence its type name) - it corresponds to
+		  vector&lt &ltint&gt &gt in C++. 
+		  <p>The beauty of Python is that the functions are allowed to return several results (essentially, this is a tuple containing several entries). This is
+		  what we use in the function call above. Let us briefly discuss what is returned.
+		  </p>
+		  <ul>
+			<li><b>basis_ao</b> - is the list of objects of AO type - our Atomic Orbitals</li>
+			<li><b>Nelec, Norb</b> - the numbers of electrons and orbitals for the system of interest</li>
+			<li><b>atom_to_ao_map</b> - the map that puts the correspondence between atomic indices and indices of atomic orbitals on each atom.
+			Specifically, atom_to_ao_map[i] is a list of indices of all AOs localized on the atom with index i</li>
+			<li><b>ao_to_atom_map</b> - the map which is in a sense inverse of the atom_to_ao_map. Specifically, ao_to_atom_map[i] is the index of the atom
+			on which the AO with index i resides.</li>
+		  </ul>		  
+		  </li>
+		  
+		  <br>
+		  <li><b>for EHT: load and pre-process the parameters that are specific to EHT Hamiltonian. </b>
+		  <p>This is done via two special functions:
+		  <pre class="brush: python;">set_parameters_eht_mapping(modprms, basis_ao)
+set_parameters_eht_mapping1(modprms,syst.Number_of_atoms,mol_at_types)</pre>
+		  Also note that "modprms" argument also is being modified, since it is passed by the reference. See more on what these functions are doing in
+		  <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/hamiltonian/Hamiltonian_Atomistic/Hamiltonian_QM/Model_Parameters/Model_Parameters.cpp" target="_new">Model_Parameters.cpp</a>
+		  file.
+		  </p>
+		  </li>
+		  
+		  <br>
+		  <li><b>compute AO overlap matrices</b>
+		  <p>Since we are doing only single-point calculations in this tutorial, the overlap matrix in the AO basis is not changed, and can be computed only
+		  once. The calculations are performed with:</p>
+		  <pre class="brush: python;">update_overlap_matrix(x_period, y_period, z_period, t1, t2, t3, basis_ao, Sao)</pre>
+		  <p>Here, matrix Sao is passed by reference, so it'll collect all the results. Other arguments are the input parameters. The x_period, y_period,
+		  and z_period parameters set up how many of replica of the original unit cell should be produced in the corresponding directions. This is needed
+		  for periodic calculations and affect the way the overal elements are computed. The parameters t1, t2, t3 are the unit cell vectors, defining the
+		  translations of the unit cell in all directions (not necessarily just x, y, z - these are only names, in reality t1, t2, t3 can be non-orthogonal
+		  to each other). </p>
+		  </li>
+		  
+		  <br>
+		  <li><b>compute the core Hamiltonian</b>
+		  <p>Once the overlap matrix is computed, the core Hamiltonians can be computed. For the EHT Hamiltonian, the core Hamiltonian is directly related to
+		  the overlap matrix, so no special preparations are required:
+		  <pre class="brush: python;">elif(prms.hamiltonian=="eht"):
+    Hamiltonian_core_eht(syst, basis_ao, prms, modprms, atom_to_ao_map, ao_to_atom_map, Hao,  Sao, debug)
+		  </pre>
+		  In case of INDO and related (CNDO and CNDO/2 are requested by setting "opt" parameter to 1) Hamiltonians, the overlap of atomic orbitals is assumed
+		  to be identiry matrix, which is set by:
+		  <pre class="brush: python;">Sao.Init_Unit_Matrix(1.0)</pre>
+		  In addition, some core Hamiltonian parameters (electron repulsion and nuclear-nuclear potentials) must be pre-computed. This is done via:
+		  <pre class="brush: python;">indo_core_parameters(syst, basis_ao, modprms, atom_to_ao_map, ao_to_atom_map, opt,0)</pre>
+		  Note that, as a part of our efficiency optimization scheme, the derivatives of the resulting parameters with respect to all nuclei will be 
+		  written as a bunch of binary files. The derivatives of the electron repulsion (ERI) integrals, will appear as files named like "deri.x_0.bin",
+		  "deri.y_0.bin", "deri.z_0.bin", "deri.x_1.bin", "deri.y_1.bin", ..., "deri.x_N.bin", "deri.y_N.bin", "deri.z_N.bin" and "dV_AB.x_0.bin",
+		  "dV_AB.y_0.bin", "dV_AB.z_0.bin", ... , "dV_AB.x_N.bin", "dV_AB.y_N.bin", "dV_AB.z_N.bin". These are the temporary files (although they are
+		  not removed automatically yet). They are used during calculations of core and Fock Hamiltonians. 
+		  </p>
+		  </li>
+		  
+		  <br>
+		  <li><b>compute eigenvalues/eigenvectors, populations, and density matrix</b>
+		  Once the core Hamiltonian is formed, we can compute the corresponding eigenvalues and eigenvectors, populations, orbital energies, and 
+		  density matrix. The following operations are described in the <a href="../libcalculators/libcalculators_tut.html" target="_new">libcalculators tutorial</a>.
+		  </li>
+		  </ol>
+		  
+		  
+		  <br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_qm/test_qm2.py" target="_new">test_qm2.py</a></b><br><br>
+		  <p> This tutorial simply combines the last computations into a sinlge function "Fock_to_P". We are already familiar with it by the 
+		  <a href="../libcalculators/libcalculators_tut.html" target="_new">libcalculators tutorial</a>.		  
+		  </p>
+		  
+		  <br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_qm/test_qm3.py" target="_new">test_qm3.py</a></b><br><br>
+		  <p> So far we have learned how to construct the core Hamiltonian (density-independent). However, the Fock Hamiltonian does depend on density.
+		  In this tutorial, we will show how to compute the density-dependent Hamiltonian (Fock) matrix.
+		  To make calculations more interesting, we have switched to a diatomic molecule (BH) rather than a single atom. You can, of course, choose from the
+		  one of the commented options to load CO, C<sub>2</sub>, or CH<sub>4</sub> molecules.
+		  </p>
+		  <p>Well, first of all, we repeat all the calculations shown in the previous example. Next, we introduce a new data type - "Electronic_Structure".
+		  It contains the essential information about the atomistic electronic structure calculations, including wavefunctions, orbital energies, density matrices,
+		  and so on. One can learn more about the class from <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/hamiltonian/Hamiltonian_Atomistic/Hamiltonian_QM/Electronic_Structure.h" target="_new">Electronic_Structure.h</a>.
+		  </p>
+		  <p>In this tutorial, we demonstrate how to create an object of this type and how to set up some essential properties. This is all done with
+		  
+		  <pre class="brush: python;">el = Electronic_Structure(Norb)
+el.set_Hao(Hao)
+el.set_Sao(Sao)
+el.set_P_alp(res_alp[2])
+el.set_P_bet(res_bet[2])
+		  </pre>
+		  As we can see, the constructor used takes only one parameter as the argument - this is the number of orbitals (states). This information is used
+		  to allocate memomry for all necessary marices and variables, and to initialize them, if possible. The internal representation of all matrices
+		  included in the "Electronic_Structure" class used pointers to the "MATRIX" variables. Hence, to setup these variables, we use specially-designed
+		  mamber-functions "set_Hao", "set_Sao", etc. The situation is similar with the one discussed in the "test_mm5.py" example of the 
+		  <a href="../libhamiltonian_mm/libhamiltonian_mm_tut.html" target="_new">libhamiltonian_mm tutorial</a>.  
+		  The "Electronic_Structure" data type is introduced to make the management of all variables involved in electronic structure calculations
+		  simple and flexible.
+		  </p>
+		  <p>In the next stage, we use the "el" object of the "Electronic_Structure" type as an argument of our next function - "Hamiltonian_Fock_indo" or
+		  "Hamiltonian_Fock_eht":
+		  <pre class="brush: python;">if(prms.hamiltonian=="indo"):
+    Hamiltonian_Fock_indo(el, syst, basis_ao, prms, modprms, atom_to_ao_map, ao_to_atom_map)
+elif(prms.hamiltonian=="eht"):
+    Hamiltonian_Fock_eht(el, syst, basis_ao, prms, modprms, atom_to_ao_map, ao_to_atom_map)
+		  </pre>
+		  These functions will compute the first guess of the Fock matrix. Why the first guess? Well, because the density matrix we use is only the first
+		  guess density matrix (that corresponds to the core Hamiltonian). It is not yet self-consistent with the Fock matrix itself. This will be taken
+		  care of in the following examples.
+		  </p>
+		  <p>The computed Fock matrices (one for alpha, one for beta channels) can be accessed via: "get_Fao_alp()" member-function:
+		  <pre class="brush: python;">el.get_Fao_alp().show_matrix()</pre>
+		  </p>
+		  
+		  
+		  <br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_qm/test_qm4.py" target="_new">test_qm4.py</a></b><br><br>
+		  <p> All right, lets take care of self-consistency now. You can guess what I mean, right? Of course, it is self-consisten field (SCF) algorithm, which
+		  we are ready to implement in this script.		  
+		  </p>
+		  <p> Well, the initial calculations follow the previous script completely. This way we obtain: core Hamiltonian, guess density, guess Fock matrix.
+		  Since the convergence of the SCF calculations is judged on the basis of the electronic energy, we need to compute such energy for each iteration.
+		  So we start by evaluating the energy for the guess density and guess Fock matrix:
+		  <pre class="brush: python;">E = energy_elec(el.get_P_alp(), el.get_Hao(), el.get_Fao_alp()) + energy_elec(el.get_P_bet(), el.get_Hao(), el.get_Fao_bet())
+print "Initial energy = ", E
+		  </pre>
+		  We have saved our current (initial guess) density matrices, in order to compute error in density on next iteration.
+		  </p>
+		  <p>
+		  Using the guess Fock matrices, we update electron density:
+		  <pre class="brush: python;">res_alp = Fock_to_P(el.get_Fao_alp(), el.get_Sao(), Nelec_alp, degen, kT, etol, pop_opt)
+res_bet = Fock_to_P(el.get_Fao_bet(), el.get_Sao(), Nelec_bet, degen, kT, etol, pop_opt)
+	      </pre>
+		  Note that the first argument of the function is the Fock matrix (in the first - guess - step, we used our core Hamiltonian as such initial Fock matrix).
+		  The functions solve the eigenvalue problem using the update Fock matrices, and generate updated density matrices.		  
+		  </p>
+		  <p>On the next step, we update the variables of our "el" object to reflect updates of the density matrices:
+		  <pre class="brush: python;">el.set_P_alp(res_alp[2])
+el.set_P_bet(res_bet[2])
+		  </pre>
+		  and then, we use the update "el" object to compute new Fock matrix, similarly to how we did it in the first iteration.		  
+		  </p>
+		  <p>Using old density matrix and the one, updated in this iteration, we estimate the error in density as the sum of absolute values of 
+		  the maximal elements of the difference matrices for alpha and beta channels:
+		  <pre class="brush: python;">d_err = math.fabs((el.get_P_alp()-P_alp_old).max_elt()) + math.fabs((el.get_P_bet()-P_bet_old).max_elt())</pre>
+		  and then we update the "old" matrices:
+		  <pre class="brush: python;">P_alp_old = el.get_P_alp()
+P_bet_old = el.get_P_bet()</pre>
+		  </p>
+		  <p>In a similar way, on every iteration we compute the electronic energy of the system and estimate error in energy.</p>
+		  <p>Finally, we verify stopping criteria. We stop iterations when: a) we have done over i iterations (may or may not converge); 
+          b) we have converged both in energy and density matrix - see the corresponding parameters that set these criteria.</p>
+		  
+		  <p> Running our calculations, we find that EHT calculations converge in no iterations (this is expected, because the standard EHT Hamiltonian
+		  does not depend on density). The resulting output for BH molecule is:
+		  <pre>Electronic energy =  -2.01844394621
+Bands(alp)    Occupations(alp)       Bands(bet)    Occupations(bet)
+ -0.61736179     1.00000000   -0.61736179     1.00000000
+ -0.39186018     1.00000000   -0.39186018     1.00000000
+ -0.30987017     0.00000000   -0.30987017     0.00000000
+ -0.30987017     0.00000000   -0.30987017     0.00000000
+  0.38258714     0.00000000    0.38258714     0.00000000
+          </pre>
+		  
+		  When using the INDO Hamiltonian, it takes about 17 iterations to converge to energy convergence threshold of 1e-8 and density matrix
+		  convergence threshold of 1e-7.
+		  The corresponding INDO output is:
+		  <pre>Electronic energy =  -5.10744079771
+Bands(alp)    Occupations(alp)       Bands(bet)    Occupations(bet)
+ -0.81017370     1.00000000   -0.81017370     1.00000000
+ -0.43724604     1.00000000   -0.43724604     1.00000000
+  0.07171926     0.00000000    0.07171926     0.00000000
+  0.07171926     0.00000000    0.07171926     0.00000000
+  0.28771977     0.00000000    0.28771977     0.00000000
+		  </pre>
+
+		  </p>
+		  
+		  
+ 		  <br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_qm/test_qm5.py" target="_new">test_qm5.py</a></b><br><br>
+		  <p> One of the main ideas of the Libra package is its "methodology development" orientation. In the previous example we have constructed the 
+		  iterative SCF scheme. Although it is pretty-much a standard tachniques, we have been able to access each of its steps, the and control everything
+		  we wanted. Once this "methodology" is developed = working, debugged, and is ready for use, it can be made a single unit that can be used to 
+		  construct methodologies of higher level of complexity. To do this, we translate our previous Python script into C++ and expose it back to Python
+		  as a simple unit - the "scf" function. The function is defined in 
+		  the <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/hamiltonian/Hamiltonian_Atomistic/Hamiltonian_QM/SCF.h" target="_new">SCF.h</a> file
+		  and subordinate files. Of course, in our case, our C++ implementation adds some advanced options - e.g. the choice of the convergence acceleration 
+		  techniques, I/O to temporary binary files (to save on operative memory - this is especially important for computations involving large systems, when
+		  matrices to store over 1000 states become notable in terms of memory consumption). 
+		  </p>
+		  <p>So, in this example we show how to use such function, instead of explicit steps discussed in the previous example:
+		  <pre class="brush: python;">E = scf(el, syst, basis_ao, prms, modprms, atom_to_ao_map, ao_to_atom_map, 0); </pre>
+		  Note that the parameters controlling the "scf" function behaviour have been read into "prms" object from the the corresponding setup file.		 
+		  </p>
+		  <p>As one can see, the output of the "scf" function coincides with the output of the previous explicit calculations. Note that our control
+		  file doesn't request any additional options that can be involved in SCF calculations (advanced convergence options). The advanced options will
+		  be discussed in a separate tutorial. <!-- (5a - to do). -->
+		  </p>
+
+		  
+		  
+		  <br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_qm/test_qm6.py" target="_new">test_qm6.py</a></b><br><br>
+		  <p>Following the multi-level code hierarchy of Libra package, we have implemented a C++ analog of the long set of instructions in the previous
+		  examples. Thus, all preparation steps that take care of initialization of parameters, pre-computations of some properties and setting control
+		  parameters are now hidden inside the "init_qm_Hamiltonian" function. In analogy with creation of the MM Hamiltonian (see the corresponding
+		  <a href="../libhamiltonian_mm/libhamiltonian_mm_tut.html" target="_new">tutorial</a>), we first initialize a generic atomistic Hamiltonian, but 
+		  set its type to "QM" rather than "MM":
+		  <pre class="brush: python;">ham = Hamiltonian_Atomistic(2, 3*syst.Number_of_atoms)
+ham.set_Hamiltonian_type("QM")
+		  </pre>
+		  Note, however, that for QM calculations the dimensionality of the electronic sub-space (the number of electronic states) is now usually larger than
+		  1 (as was in MM case). In this particular example, we request to create the Hamiltonian with 2 states. Another important piece of information - the
+		  number of such states is not the number of electronic states (bands, orbitals) that will be computed inside the routines. It is the number of 
+		  excited states we plan to incude in our dynamics calculations (e.g. in NA-MD). The default way Libra treats these excited states is based on consideration
+		  of some excitonic effects. Namely, the excited states (as defined by input excitations) are defined as the ground-state Slater determinant with 
+		  properly (according to the input excitations) modified occupation numbers. The orbitals remain to be those of the ground-state calculations, however
+		  the energies of the states are treated as total (electronic + nuclear) energies of the states with different occupation numbers, without additional
+		  optimization of orbitals. This is essentially the delta-SCF technique. The energy calculations, even without self-consistent iterations
+		  may become quite expensive. If the number of excited states we want to consider is large, the computational costs scale accordingly. Thus, the dimensionality
+		  of electronic sub-space of the created Hamiltonians should not be very large. This is often justified, because only a few low-lying excited
+		  states are typically of the most interest. Note, however, that this dimensionality must agree with the number of input excitations (or at least to be
+		  smaller than that), for the program to work. Alternatively, you'll see the error message and program will stop.
+		  </p>
+		  Similar to MM Hamiltonian, we bind the Hamiltonian with the object that contains the information about the atomistic system:
+		  <pre class="brush: python;">ham.set_system(syst)</pre>
+		  </p>
+		  <p>
+		  Like we said in the beginning, most of the essential instructions are hidden in the "init_qm_Hamiltonian" function:
+		  <pre class="brush: python;">ham.init_qm_Hamiltonian("control_parameters_indo.dat")
+#ham.init_qm_Hamiltonian("control_parameters_eht.dat")
+		  </pre>
+		  The function takes only one argument - the name of the file that contains all the control parameters, including the name of the
+		  file that contains parameters for the selected Hamiltonian (model parameters). Thus, providing only the name of the control parameters file
+		  is sufficient.
+		  </p>
+		  <p>Finally, for QM calculations, we must provide the definitions of the excited states we are interested in. This is done using the "add_excitation"
+		  function:
+		  <pre class="brush: python;">ham.add_excitation(0,1,1,1)
+		  </pre>
+		  As you can see, we add 1 excitations - this is more in agreement with the first parameter of the Hamiltonian_Atomistic constructor - "2". 
+		  This is because the ground-state configuration is already present.
+		  As we noted above, the total number 1 + number of excitations is in agreement with the dimensionality of the Hamiltonian.
+		  The meaning of the parameters passed to the above "add_excitation" instructions is this:
+		  <pre>add_excitation(from_orbital, from_spin, to_orbital, to_spin)
+		  </pre>
+		  Here, "from_orbital" - is the index of the orbital from which electron is promoted, starting with HOMO of the given system (HOMO is assumed to
+		  have index 0), "to_orbital" - is the analogous number, but saying to which orbital the electron is moved. The indexing convention is the same.
+		  "from_spin", "to_spin" - are the indices determining the sets of initial and final orbitals (1 - for alpha-channel, -1 - for beta-channel).
+		  </p>
+		  <p>The ground state is present by the default, no "ground-state excitations" are needed. In our example, the excitation that is added 
+		  promotes alpha-electron from HOMO to the alpha-LUMO orbital.
+		  </p>
+		  <p>Once the calculations are done with the "compute()" function, the elements of the electronic Hamiltonian (adiabatic representation) can be
+		  accessed via general functions of the "Hamiltonian" class:
+		  <pre class="brush: python;">print "Energy = ", ham.H(i,i), " a.u."</pre>
+		  </p>
+		  
+		  
+		  <br><br>
+		  <b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_qm/test_qm7.py" target="_new">test_qm7.py</a></b><br><br>
+		  <p> This tutorial first resorts to the explicit construction of core and Fock Hamiltonians and all related variables. Once the self-consistent
+		  solution is found, the derivatives of core and Fock matrices w.r.t to coordinates of each of the two atoms (here we consider a diatomic
+		  molecule) are computed. So far, the derivatives of the Hamiltonians are shown for the INDO method, those for the EHT are currently being implemented.
+		  </p>
+		  <p>The instructions to compute derivatives of the matrices are:
+		  <pre class="brush: python;">Hamiltonian_core_deriv_indo(syst, basis_ao, prms, modprms, atom_to_ao_map, ao_to_atom_map, Hao, Sao, DF, c, dHao_dx, dHao_dy, dHao_dz, dSao_dx, dSao_dy, dSao_dz )
+
+Hamiltonian_Fock_derivs_indo(el, syst, basis_ao, prms, modprms, atom_to_ao_map, ao_to_atom_map, c, dHao_dx, dHao_dy, dHao_dz, dFao_alp_dx, dFao_alp_dy, dFao_alp_dz, dFao_bet_dx, dFao_bet_dy, dFao_bet_dz)
+
+update_derivative_coupling_matrix(x_period, y_period, z_period, t1, t2, t3, atom_to_ao_map, ao_to_atom_map, basis_ao, c, Dao_x, Dao_y, Dao_z);
+		  </pre>
+		  The first function returns derivatives of the core Hamiltonian and overlap matrices into the objdects dHao_dx, ... dSao_dz passed as references.
+		  The second function uses these matrices (to save on computaions) and returns the derivatives of the Fock matrix via the objects dFao_alp_dx,... dFao_bet_dz.
+		  The third function computes the derivative coupling matrices &ltAO(i)|d/dR_c|AO(j)&gt in the AO basis - to store in the Dao_x, ... Dao_z matrices.
+		  In all functions, we use a parameter "c", which has the meaning of the index of the nuclus with respect to whose position we take all the above deri
+		  vatives.
+		  </p>
+		  <p>
+		  What is important to note in the output is that the derivatives of the core and Fock matrices with respect to atom 0 are opposite to the derivatives
+		  w.r.t. to atom 1, for instance:
+		  <pre>dHao_dR[0]
+		  
+    -0.10052935              0              0              0   -0.075007803
+              0    -0.10052935              0              0              0
+              0              0    -0.10052935              0              0
+              0              0              0    -0.10052935     -0.1164242
+   -0.075007803              0              0     -0.1164242    -0.30158806
+
+   
+dHao_dR[1]
+   
+     0.10052935              0              0              0    0.075007803
+              0     0.10052935              0              0              0
+              0              0     0.10052935              0              0
+              0              0              0     0.10052935      0.1164242
+    0.075007803              0              0      0.1164242     0.30158806
+		  </pre>
+		  these are x-components of the derivatives.
+		  or, for the Fock matrices:		 
+		  <pre>dFao_alp_dR[0]
+
+   0.0087794032              0              0              0     -0.1209614
+              0   0.0087794032              0              0  7.3621607e-19
+              0              0   0.0087794032              0              0
+              0              0              0   0.0087794032    -0.13631227
+     -0.1209614  7.3621607e-19              0    -0.13631227  -0.0087794032
+
+		  
+dFao_alp_dR[1]
+
+  -0.0087794032              0              0              0      0.1209614
+              0  -0.0087794032              0              0 -7.3621607e-19
+              0              0  -0.0087794032              0              0
+              0              0              0  -0.0087794032     0.13631227
+      0.1209614 -7.3621607e-19              0     0.13631227   0.0087794032
+
+		  </pre>
+		   The same symmetry holds for derivatives of the overlap matrix. 
+		  </p>
+		  <p> Another important observation is that the derivative coupling matrices, Dao_x, ... do not have any special symmetry properties: 
+		  the matrices are neither symmetric by themselves, nor they are symmetric/anti-symmetric/opposite with respect to the derivative couplings
+		  computed for the different atom. For instance, for the x component we have:
+		  <pre>Dao[0] matrices
+
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0              0
+     0.15700516              0              0     0.24369731              0
+		  </pre>
+		  for the 1-st atom and
+		  <pre>Dao[1] matrices
+
+              0              0              0              0    -0.15700516
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0    -0.24369731
+              0              0              0              0              0
+		  </pre>
+		  for the 2-nd one.		 
+		  </p>
+		  <p>Although there are no special symmetries on the derivative couplings, there is still one property which one should be aware of.
+		  Namely, the sum of the derivative coupling matrix and its transpose are equal to the derivative of the overlap matrix w.r.t. to given 
+		  coordinate: D_ij + D_ji = dSao/dR = &ltAO(i)|d/dR_c AO(j)&gt + &ltd/dR_c AO(i)| AO(j)&gt = d/dR_c &ltAO(i) | AO(j)&gt. 
+		  Indeed, look at the Dao[0] matrices (x component shown above) and at the derivative of the overlap matrix w.r.t. x coordinate of the
+		  first atom:
+		  <pre>dSao_dR[0]
+
+              0              0              0              0     0.15700516
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0     0.24369731
+     0.15700516              0              0     0.24369731              0
+		  </pre>
+		  </p>
+
+		  
+		  <pre class="brush: python;"></pre>
+		  
+		  
+		  
+		  
+
+
+		  
+		  
+		  
+		</div>
+	  </div>
+	</div>
+	
+ 
+	
+	</body>
+
+</html>

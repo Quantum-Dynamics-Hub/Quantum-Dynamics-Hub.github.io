@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+
+	<script src="../bootstrap/js/jquery.js"></script>        
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+	
+	<link href="../bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+	<link href="../bootstrap/css/style.css" rel="stylesheet">
+
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	
+	<title>Libra</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-70773721-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+	
+    </head>
+    <body>
+
+	
+	<div class="row">
+      <div class="col-md-12"><h1>Libra: An open-source "Methodology Discovery" Library</h1></div>
+    </div>
+	
+    <nav class="navbar navbar-inverse h5" style="margin-top:-2px;">
+      <div class="container-fluid">
+        <div>
+          <ul class="nav navbar-nav">
+            <li><a href="index.html">Home</a></li>            
+            <li><a href="capabilities.html">Overview</a></li>
+			<li><a href="downloads.html">Download</a></li>
+			<li><a href="installation.html">Installation</a></li>
+            <li class="active"><a href="tutorials.html">Tutorials</a></li>
+            <li><a href="documentation.html">Documentation</a></li>
+            <li><a href="soft_and_tuts.html">...</a></li>
+            <li><a href="contact.html">....</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+	
+	
+    <div class="container">
+	
+	<div class="row">	
+		<div class="col-md-4">
+		<a target="_blank" href="tutorials/tutorial_mc/tut.html">
+        <img style="width: 480px; float: left; margin-left: 1px; margin-right: 1px; margin-top: 1px; margin-bottom: 1px;"
+       		 title="Lattice Monte Carlo" alt="Lattice Monte Carlo" src="tutorials/tutorial_mc/toc.png">					
+		</a>
+		</div>
+		
+		<div class="col-md-4">
+		<a target="_blank" href="tutorials/tutorial_md/tut.html">
+		<img style="width: 480px; float: left; margin-left: 1px; margin-right: 1px; margin-top: 1px; margin-bottom: 1px;"
+       		 title="Atomistic Molecular Dynamics" alt="Atomistic Molecular Dynamics" src="tutorials/tutorial_md/toc.png">					
+		</a>
+		</div>
+
+		<!--
+		<div class="col-md-4">
+		<img style="width: 480px; float: left; margin-left: 1px; margin-right: 1px; margin-top: 1px; margin-bottom: 1px;"
+       		 title="Lattice Monte Carlo" alt="Lattice Monte Carlo" src="tutorials/tutorial_mc/toc.png">					
+		</div>
+		-->
+		
+	</div>
+	
+      <div class="col-md-1"> </div>
+      <div class="col-md-10">
+        <div style="margin-left: 12px; width: 741px;"><br>
+		
+          <h3>General notes on Tutorials</h3><br>
+		  Before we go into discussion of particular examples, let us first describe a few common points:
+		  <ol>
+			<li><b>Setup proper environment variables in all scripts.</b> Well, since we are still working on polishing the cmake-based installer, one 
+			has to add the proper paths to Python path variable. This can be done in the script as:<br>
+			<pre class="brush: python;">
+cwd = os.getcwd()
+sys.path.insert(1,cwd+"/../../_build/src/mmath")
+sys.path.insert(1,cwd+"/../../_build/src/mmath/meigen")
+			</pre>
+			<br>
+			Here, the "cwd" contains the path of the directory in which the current script has been called. For the purposes of these tutorials the present 
+			directory is one of the sub-folders of the "/libracode/tests" directory. Thus, the "_build" directory is two levels higher ("/../../"). In the 
+			"_build" folder there is a "src" folder created during the configuring and compilation. This "src" directory contains the sub-folders, similar 
+			to those present in the original "src" directory that contains only the source code. Each of the sub-directories will (after successful built
+			process) contain the collersonding libraries. These libraries are essentially the Python modules, which can be loaded into Python scripts via
+			the "import" command. So, in our present file system, we use the instructions in the snippet above to make the modules available.
+			Of course, one is free to use absolute paths rather than relative as in the example above. Also, one can probably add the location of all libraries
+			to the LD_LIBRARY_PATH or PYTHONPATH or both in the .bash_profile file, so not to use the above sys.path.insert() function. We reserve the
+			latter option until later - when we are finished with a proper installer, but you can start using this option today, if you find it useful.
+			</li>
+			<li><b>Choose a proper prefix for the module names.</b> The present tutorials will be run in my Cygwin terminal (Linux emulator on Windows), so in the
+			compillation step, we have chosen the option to build binaries for Cygwin. The generated libraries carry the name prefix "cyg" instead of expected
+			"lib". This is why, in our test scripts we load modules using:<br>
+			<pre class="brush: python;">
+from cygmmath import *
+from cygmeigen import *
+from cyglinalg import *
+			</pre>
+			If you are working on Unix-based machines (Linux or MacOS), in the configuration/compillation step you would need to comment denining the flag to 
+			build Cygwin binaries. Hence, you will get libraries with the names starting with expected "lib" prefix. Hence, to load the modules, you would
+			need to use:
+<pre class="brush: python;">
+from libmmath import *
+from libmeigen import *
+from liblinalg import *
+			</pre>
+
+			</li>	
+			<li><p style="color:red"><b>UPDATE</b></p> (7/17/2016): I have figured out how the above two steps can be avoided, so that both environment
+			variable and module name could be chosen automatically, depending on which OS you are using. In fact, we no longer need the paths to 
+			specific sub-modules (unless this is really what you need) and just loading core Libra modules and associated Libra Python scripts (libra_py)
+			is sufficient. I'm updating test-tutorials, so that this convenient functionality appears everywhere, but the process is slow, so you might
+			want to use the older (above 2) recipes or to adjust the scripts according to the new procedure (look in the updated examples). When this
+			is done for all test-tutorials, I'll  remove the above 2 steps (and this one), so you could just go straight to the tutorials.</li>
+		  </ol>
+		 <br>
+		With that, my friend, we are ready to use the library and try the tutorials out.
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		
+		<h3>Tutorials for specific libraries</h3>
+		<ul>
+		<li>Mathematics library: <a href="tutorials/libmmath/libmmath_tut.html">libmmath</a></li>
+		<li>Calculators library: <a href="tutorials/libcalculators/libcalculators_tut.html">libcalculators</a></li>
+		<li>Dynamics library: <a href="tutorials/libdyn/libdyn_tut.html">libdyn</a></li>
+		<li>MM Hamiltonians library: <a href="tutorials/libhamiltonian_mm/libhamiltonian_mm_tut.html">libhamiltonian_mm</a></li>
+		<li>QM Hamiltonians library: <a href="tutorials/libhamiltonian_qm/libhamiltonian_qm_tut.html">libhamiltonian_qm</a></li>
+		<li>Input/Output library: <a href="tutorials/libio/libio_tut.html">libio</a></li>
+		<li>Context library: <a href="tutorials/libcontext/libcontext_tut.html">libcontext</a></li>
+		<li>Periodic cell library: <a href="tutorials/libcell/libcell_tut.html">libcell</a></li>		
+		</ul>				
+
+		  
+		  
+		</div>
+	  </div>
+	</div>
+	
+ 
+	
+	</body>
+
+</html>

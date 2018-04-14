@@ -1,0 +1,7 @@
+Run:
+
+ffmpeg -r 20 -i untitled.%05d.bmp movie.mp4
+
+
+In the Far3 command line
+
