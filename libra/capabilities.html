@@ -1,171 +1,180 @@
 <!DOCTYPE HTML>
 
 <html>
-    <head>
+  <head>
+    <title>Libra</title>
 
-        <script src="../bootstrap/js/jquery.js"></script>
-        <script src="../bootstrap/js/bootstrap.min.js"></script>
-        <link href="../bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
-        <link href="../bootstrap/css/style.css" rel="stylesheet">
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-        <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-            ga('create', 'UA-70773721-1', 'auto');
-            ga('send', 'pageview');
-        </script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-70773721-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
 
-        <title>Libra</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
+  <body>
+    <!-- Title -->
+    <div class="row">
+      <div class="col-12"><h1>Libra: An open-source "Methodology Discovery" Library</h1></div>
+    </div>
 
-    <body>
-        <div class="row">
-            <div class="col-md-12"><h1>Libra: An open-source "Methodology Discovery" Library</h1></div>
+    <!-- Navigation bar  style="margin-top:-2px;" -->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item active"><a class="nav-link" href="capabilities.html">Overview</a></li>
+        <li class="nav-item"><a class="nav-link" href="downloads.html">Download</a></li>
+        <li class="nav-item"><a class="nav-link" href="installation.html">Installation</a></li>
+         
+         <!--  Non-dropdown
+        <li class="nav-item"><a class="nav-link" href="tutorials.html">Tutorials</a></li>
+         -->
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            Tutorials
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="tutorials.html">Tutorials</a>
+            <a class="dropdown-item" href="tutorials/tutorial_md/tut.html">Molecular Dynamics</a>
+            <a class="dropdown-item" href="tutorials/tutorial_mc/tut.html">Monte Carlo</a>
+          </div>
+
+        </li>
+        <li class="nav-item"><a class="nav-link" href="documentation.html">Documentation</a></li>
+        <li class="nav-item"><a class="nav-link" href="soft_and_tuts.html">...</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">....</a></li>
+      </ul>
+    </nav>
+
+
+    <!-- Content   -->
+    <div class="container-fluid margin-left">
+      <div class="row">
+        <h3>Overview of the code</h3><br>
+      </div>
+
+      <div class="row">
+        <div class="col-1"><b>Number</b></div>
+        <div class="col-2"><b>Library name</b></div>
+        <div class="col-2"><b>Dependencies</b></div>
+        <div class="col-7"><b>Intent</b></div>
+      </div>
+
+      <div class="row">
+        <div class="col-1">1</div>
+        <div class="col-2">libmmath</div>
+        <div class="col-2">2, Eigen (optional)</div>
+        <div class="col-7">mathematical operations and functions</div>
+      </div>
+
+      <div class="row">
+        <div class="col-1">2</div>
+        <div class="col-2">libio</div>
+        <div class="col-2">none</div>
+        <div class="col-7">direct interface between Python objects and C/C++ code, XML data read/write</div>
+      </div>
+
+      <div class="row">
+        <div class="col-1">3</div>
+        <div class="col-2">libcontext</div>
+        <div class="col-2">1,2</div>
+        <div class="col-7">XML read/write of arbitrary C/C++ and Python objects. Functionality of constructing XML structures from Python</div>
+      </div>
+
+      <div class="row">
+        <div class="col-1">4</div>
+        <div class="col-2">libcell</div>
+        <div class="col-2">1</div>
+        <div class="col-7">handling simulation unit cell partitioning: creation of Verlet or neighbor list, PBC operations</div>
+      </div>
+
+      <div class="row">
+        <div class="col-1">5</div>
+        <div class="col-2">libpot</div>
+        <div class="col-2">1,4</div>
+        <div class="col-7">Collection of interatomic interaction potentials, model potentials, etc.</div>
+      </div>
+
+      <div class="row">
+        <div class="col-1">6</div>
+        <div class="col-2">libcalculators</div>
+        <div class="col-2">1</div>
+        <div class="col-7">
+          General functions for computing properties such as Fermi energy, electronic energy, density matrix, 
+          creation of electronic excitation objects, etc. Note, these functions are general enough so they rely
+          only on the simplest data types
         </div>
+      </div>
 
-        <nav class="navbar navbar-inverse h5" style="margin-top:-2px;">
-        <div class="container-fluid">
-        <div>
-            <ul class="nav navbar-nav">
-                <li><a href="index.html">Home</a></li>
-                <li class="active"><a href="capabilities.html">Overview</a></li>
-                <li><a href="downloads.html">Download</a></li>
-                <li><a href="installation.html">Installation</a></li>
-                <li><a href="tutorials.html">Tutorials</a></li>
-                <li><a href="documentation.html">Documentation</a></li>
-                <li><a href="soft_and_tuts.html">...</a></li>
-                <li><a href="contact.html">....</a></li>
-            </ul>
+      <div class="row">
+        <div class="col-1">7</div>
+        <div class="col-2">libqchem</div>
+        <div class="col-2">1</div>
+        <div class="col-7">
+          Low-level operations for quantum-chemical calculations: orbitals objects, basis creation, 
+          molecular integrals and their derivatives
         </div>
+      </div>
+
+      <div class="row">
+        <div class="col-1">8</div>
+        <div class="col-2">libhamiltonian</div>
+        <div class="col-2">1, 2, 4, 5, 6, 7</div>
+        <div class="col-7">
+          Model and atomistic (quantum and classical MM) Hamiltonians – both types are unified to have a common interface
         </div>
-        </nav>
+      </div>
 
-        <div class="container">
-        <div class="col-md-1"></div>
-        <div class="col-md-10">
+      <div class="row">
+        <div class="col-1">9</div>
+        <div class="col-2">libdyn</div>
+        <div class="col-2">1, 10</div>
+        <div class="col-7">
+          Integrators for classical and quantum propagation, also includes thermostats and barostats, 
+          as well as ensembles of quantum-classical systems.
+        </div>
+      </div>
 
-<!--            <div style="margin-left: 12px; width: 741px"> -->
-            <div style="margin-left: 12px; width: 100% ">
-                <h3>Overview of the code</h3><br>
-                <div class="row">
-                    <div class="col-md-1"><b>Number</b></div>
-                    <div class="col-md-2"><b>Library name</b></div>
-                    <div class="col-md-2"><b>Dependencies</b></div>
-                    <div class="col-md-7"><b>Intent</b></div>
-                </div>
+      <div class="row">
+        <div class="col-1">10</div>
+        <div class="col-2">libchemobjects</div>
+        <div class="col-2">1, 9</div>
+        <div class="col-7">
+          Data types to represent chemical objects – atoms, fragments, molecules and to perform analysis and manipulations on them
+        </div>
+      </div>
 
-                <div class="row">
-                    <div class="col-md-1">1</div>
-                    <div class="col-md-2">libmmath</div>
-                    <div class="col-md-2">2, Eigen (optional)</div>
-                    <div class="col-md-7">mathematical operations and functions</div>
-                </div>
+      <div class="row">
+        <div class="col-1">11</div>
+        <div class="col-2">libconverters</div>
+        <div class="col-2">1, 9, 10</div>
+        <div class="col-7">
+          Set of functions to convert between the data types defined in different modules 
+          (e.g. between dynamical classes and chemobject classes).
+        </div>
+      </div>
 
-                <div class="row">
-                    <div class="col-md-1">2</div>
-                    <div class="col-md-2">libio</div>
-                    <div class="col-md-2">none</div>
-                    <div class="col-md-7">direct interface between Python objects and C/C++ code, XML data read/write</div>
-                </div>
+      <div class="row">
+        <div class="col-1">12</div>
+        <div class="col-2">libscripts</div>
+        <div class="col-2">1, 8, 9, 10</div>
+        <div class="col-7">
+          Higher-level protocol for some complex simulations, but with all the details hidden from users.
+          This is where the new methodologies tested in Python scripts can be collected before they are 
+          refactored across the entire library.
+        </div>
+      </div>
 
-                <div class="row">
-                    <div class="col-md-1">3</div>
-                    <div class="col-md-2">libcontext</div>
-                    <div class="col-md-2">1,2</div>
-                    <div class="col-md-7">XML read/write of arbitrary C/C++ and Python objects. Functionality of constructing XML structures from Python</div>
-                </div>
+    </div> <!-- container-fluid -->
 
-                <div class="row">
-                    <div class="col-md-1">4</div>
-                    <div class="col-md-2">libcell</div>
-                    <div class="col-md-2">1</div>
-                    <div class="col-md-7">handling simulation unit cell partitioning: creation of Verlet or neighbor list, PBC operations</div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-1">5</div>
-                    <div class="col-md-2">libpot</div>
-                    <div class="col-md-2">1,4</div>
-                    <div class="col-md-7">
-collection of interatomic interaction potentials, model potentials, etc.
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-1">6</div>
-                    <div class="col-md-2">libcalculators</div>
-                    <div class="col-md-2">1</div>
-                    <div class="col-md-7">
-general functions for computing properties such as Fermi energy, electronic energy, density matrix, 
-creation of electronic excitation objects, etc. Note, these functions are general enough so they rely only on the simplest data types
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-1">7</div>
-                    <div class="col-md-2">libqchem</div>
-                    <div class="col-md-2">1</div>
-                    <div class="col-md-7">
-low-level operations for quantum-chemical calculations: orbitals objects, basis creation, molecular integrals and their derivatives
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-1">8</div>
-                    <div class="col-md-2">libhamiltonian</div>
-                    <div class="col-md-2">1, 2, 4, 5, 6, 7</div>
-                    <div class="col-md-7">
-model and atomistic (quantum and classical MM) Hamiltonians – both types are unified to have a common interface
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-1">9</div>
-                    <div class="col-md-2">libdyn</div>
-                    <div class="col-md-2">1, 10</div>
-                    <div class="col-md-7">
-integrators for classical and quantum propagation, also includes thermostats and barostats, as well as ensembles of quantum-classical systems.
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-1">10</div>
-                    <div class="col-md-2">libchemobjects</div>
-                    <div class="col-md-2">1, 9</div>
-                    <div class="col-md-7">
-data types to represent chemical objects – atoms, fragments, molecules and to perform analysis and manipulations on them
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-1">11</div>
-                    <div class="col-md-2">libconverters</div>
-                    <div class="col-md-2">1, 9, 10</div>
-                    <div class="col-md-7">
-set of functions to convert between the data types defined in different modules (e.g. between dynamical classes and chemobject classes).
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-1">12</div>
-                    <div class="col-md-2">libscripts</div>
-                    <div class="col-md-2">1, 8, 9, 10</div>
-                    <div class="col-md-7">
-Higher-level protocol for some complex simulations, but with all the details hidden from users. This is where the new methodologies
-tested in Python scripts can be collected before they are refactored across the entire library.
-                    </div>
-                </div>
-
-            </div>  <!-- style: margin-left -->
-        </div> <!-- col-md-10 -->
-        <div class="col-md-1"></div>
-
-        </div> <!-- container -->
-
-    </body>
+  </body>
 </html>
