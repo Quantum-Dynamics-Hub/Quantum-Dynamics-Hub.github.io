@@ -1,51 +1,71 @@
 <!DOCTYPE HTML>
 
 <html>
-    <head>
-	
-        <script src="/bootstrap/js/jquery.js"></script>        
-        <script src="/bootstrap/js/bootstrap.min.js"></script>	
-        <link href="/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
-        <link href="/bootstrap/css/style.css" rel="stylesheet">
+  <head>
+    <title>Quantum Dynamics Hub</title>
 
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-	
-		
-        <title>Quantum Dynamics Hub</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117524895-1"></script>
-        <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-117524895-1');
-        </script>
-	
-    </head>
-	
-    <body>
-		
-        <div class="row">
-            <div class="col-md-11"><h1>Quantum Dynamics Hub</h1></div>
-        </div>
-				
-        <nav class="navbar navbar-inverse h5" style="margin-top:-2px;">
-            <div class="container-fluid">
-                <div>
-                <ul class="nav navbar-nav">
-                  <li class="active"><a href="index.html">Home</a></li>
-                  <li><a href="libra/index.html">Libra</a></li>
-                </ul>
-                </div>
-            </div>
-        </nav>
-				
-        <div class="container"></div>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
-    </body>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117524895-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-117524895-1');
+    </script>
+  </head>
+
+	
+  <body>
+
+    <!-- Title -->
+    <div class="row">
+      <div class="col-12"><h1>Quantum Dynamics Hub </h1></div>
+    </div>
+
+    <!-- Navigation bar" -->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <ul class="navbar-nav">
+        <li class="nav-item active"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            Software
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="libra/index.html">Libra</a>
+            <a class="dropdown-item" href="#">Libra-X</a>
+            <a class="dropdown-item" href="#">Pyxaid</a>
+            <a class="dropdown-item" href="#">Pyxaid2</a>
+          </div>
+        </li>
+      </ul>
+    </nav>
+
+
+    <!-- Content   -->
+    <div class="container-fluid margin-left">
+      <br><br>
+
+      <p>
+        Welcome the the Quantum Dynamics Hub!
+        This portal hosts a number of software for quantum dynamics simulaitons, including 
+        nonadiabatic molecular dynamics, exact wavepacket propagation, semi-classical methods for 
+        quantum nuclear dynamics, and so on.
+      </p>
+
+      <p>
+        This portal is relatively new, and therefore is under construction. So for, you should be 
+        able to navigate to the websites of some specialized programs (see the navigation bar menu).
+      </p>
+
+    </div>
+
+  </body>
 
 </html>
