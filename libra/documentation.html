@@ -1,76 +1,73 @@
 <!DOCTYPE HTML>
 
 <html>
-    <head>
 
-	<script src="../bootstrap/js/jquery.js"></script>        
-        <script src="../bootstrap/js/bootstrap.min.js"></script>
-	
-	<link href="../bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
-	<link href="../bootstrap/css/style.css" rel="stylesheet">
+  <head>
+    <title>Libra</title>
 
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-	
-	<title>Libra</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117524895-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-117524895-1');
+    </script>
+  </head>
 
-  ga('create', 'UA-70773721-1', 'auto');
-  ga('send', 'pageview');
+  <body>
 
-</script>
-
-	
-    </head>
-    <body>
-
-	
-	<div class="row">
-      <div class="col-md-12"><h1>Libra: An open-source "Methodology Discovery" Library</h1></div>
+    <!-- Title -->
+    <div class="row">
+      <div class="col-12"><h1>Libra: An open-source "Methodology Discovery" Library</h1></div>
     </div>
-	
-    <nav class="navbar navbar-inverse h5" style="margin-top:-2px;">
-      <div class="container-fluid">
-        <div>
-          <ul class="nav navbar-nav">
-            <li><a href="index.html">Home</a></li>            
-            <li><a href="capabilities.html">Overview</a></li>
-			<li><a href="downloads.html">Download</a></li>
-			<li><a href="installation.html">Installation</a></li>
-			<li><a href="tutorials.html">Tutorials</a></li>
-            <li class="active"><a href="documentation.html">Documentation</a></li>
-            <li><a href="soft_and_tuts.html">...</a></li>
-            <li><a href="contact.html">....</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-	
-	
-    <div class="container">
-      <div class="col-md-1"> </div>
-      <div class="col-md-10">
-        <div style="margin-left: 0px; margin-right: 0px"><br>
-		
-        <iframe src="documentation/html/index.html" name="frame_res" width="99%" height="450px"></iframe> 
 
-		  
-		  		  		  
-		  
-		</div>
-	  </div>
-	</div>
-	
- 
-	
-	</body>
+    <!-- Navigation bar  style="margin-top:-2px;" -->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="capabilities.html">Overview</a></li>
+        <li class="nav-item"><a class="nav-link" href="downloads.html">Download</a></li>
+        <li class="nav-item"><a class="nav-link" href="installation.html">Installation</a></li>
+         
+         <!--  Non-dropdown
+        <li class="nav-item"><a class="nav-link" href="tutorials.html">Tutorials</a></li>
+         -->
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            Tutorials
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="tutorials.html">Tutorials</a>
+            <a class="dropdown-item" href="tutorials/tutorial_md/tut.html">Molecular Dynamics</a>
+            <a class="dropdown-item" href="tutorials/tutorial_mc/tut.html">Monte Carlo</a>
+          </div>
+
+        </li>
+        <li class="nav-item active"><a class="nav-link" href="documentation.html">Documentation</a></li>
+        <li class="nav-item"><a class="nav-link" href="soft_and_tuts.html">...</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">....</a></li>
+      </ul>
+    </nav>
+
+
+    <!-- Content   -->
+    <div class="container-fluid margin-left">
+      <br><br>
+      <p>
+        The autogenerated documentation is located here:
+      </p>
+      <iframe src="https://quantum-dynamics-hub.github.io/libra-code/index.html" name="frame_res" width="99%" height="800px "></iframe> 
+    </div>
+
+  </body>
 
 </html>

@@ -1,272 +1,291 @@
 <!DOCTYPE HTML>
 
 <html>
-    <head>
 
-	<script src="../bootstrap/js/jquery.js"></script>        
-        <script src="../bootstrap/js/bootstrap.min.js"></script>
-	
-	<link href="../bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
-	<link href="../bootstrap/css/style.css" rel="stylesheet">
+  <head>
+    <title>Libra</title>
 
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-	
-	<title>Libra</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117524895-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-117524895-1');
+    </script>
+  </head>
 
-  ga('create', 'UA-70773721-1', 'auto');
-  ga('send', 'pageview');
-
-</script>
-
-	
-    </head>
-    <body>
-
-	
-	<div class="row">
-      <div class="col-md-12"><h1>Libra: An open-source "Methodology Discovery" Library</h1></div>
+  <body>
+    <!-- Title -->
+    <div class="row">
+      <div class="col-12"><h1>Libra: An open-source "Methodology Discovery" Library</h1></div>
     </div>
-	
-    <nav class="navbar navbar-inverse h5" style="margin-top:-2px;">
-      <div class="container-fluid">
-        <div>
-          <ul class="nav navbar-nav">
-            <li><a href="index.html">Home</a></li>            
-            <li><a href="capabilities.html">Overview</a></li>
-			<li><a href="downloads.html">Download</a></li>
-			<li class="active"><a href="installation.html">Installation</a></li>
-			<li><a href="tutorials.html">Tutorials</a></li>
-            <li><a href="documentation.html">Documentation</a></li>
-            <li><a href="soft_and_tuts.html">...</a></li>
-            <li><a href="contact.html">....</a></li>
-          </ul>
-        </div>
-      </div>
+
+    <!-- Navigation bar  style="margin-top:-2px;" -->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="capabilities.html">Overview</a></li>
+        <li class="nav-item"><a class="nav-link" href="downloads.html">Download</a></li>
+        <li class="nav-item active"><a class="nav-link" href="installation.html">Installation</a></li>
+         
+         <!--  Non-dropdown
+        <li class="nav-item"><a class="nav-link" href="tutorials.html">Tutorials</a></li>
+         -->
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            Tutorials
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="tutorials.html">Tutorials</a>
+            <a class="dropdown-item" href="tutorials/tutorial_md/tut.html">Molecular Dynamics</a>
+            <a class="dropdown-item" href="tutorials/tutorial_mc/tut.html">Monte Carlo</a>
+          </div>
+
+        </li>
+        <li class="nav-item"><a class="nav-link" href="documentation.html">Documentation</a></li>
+        <li class="nav-item"><a class="nav-link" href="soft_and_tuts.html">...</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">....</a></li>
+      </ul>
     </nav>
-	
-	
-    <div class="container">
-      <div class="col-md-1"> </div>
-      <div class="col-md-10">
-        <div style="margin-left: 12px; width: 741px;"><br>
-		
-		
-		  <h3 style="color:red">Installation: summary of changes to go from Cygwin (default) settings to Linux settings</h3><br>		  		 
-		  <p>We assume you are in the rood directory of the Libra code, so the reference to the files will be w.r.t. that path.
-		  Also, the examples below are specific to the group/system at UB - you need to use the corresponding counterparts specific to your system.
-		  </p>
-		  <ol>
-		    <li><b>CMakeLists.txt</b>
-			<pre>
-  Linux:
-  ADD_DEFINITIONS("-Wall")
-#  ADD_DEFINITIONS("-Wall -DCYGWIN")
 
-  Cygwin:
-#  ADD_DEFINITIONS("-Wall")
-  ADD_DEFINITIONS("-Wall -DCYGWIN")
-			</pre>
-			</li>
-			<li><b>CMakeLists.txt</b>
-			<pre>
-  Linux:
-#FIND_PACKAGE(PythonLibs 2.6.8 EXACT REQUIRED)
-FIND_PACKAGE(PythonLibs 2.7.0 REQUIRED)
+    <!-- Content  <div style="margin-left: 12px; width: 741px;"><br>  -->
+    <div class="container-fluid margin-left">
+      <br><br>      
 
+      <h3>General installation instructions</h3>
+      <p>
+        These instructions are developed on my (AVA) system and may not work in all other cases, but the hope is 
+        that they will stay valid most of the time (provided one can suitably customize them). These instructions are now
+        working on the WSL, but can be ported to other systems, like Linux.
+      </p>
+      <ol>
 
-  Cygwin:
-FIND_PACKAGE(PythonLibs 2.6.8 EXACT REQUIRED)
-#FIND_PACKAGE(PythonLibs 2.6.8 REQUIRED)
+        <li>Get a miniconda installer and install the miniconda. In the home directory (/home/alexey) do the following
+          <pre>
+mkdir Conda
+cd Conda/
+wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh .
+sh ./Miniconda2-latest-Linux-x86_64.sh
+          </pre>
+          The miniconda will be installed into "/home/alexey/miniconda2". You will be prompted to add this path to the
+          .bashrc file. If you do this, you don't need the do the next step.
+        </li>
 
-			</pre>
-			</li>
-			
-			<li><b>src/CMakeLists.txt</b>
-			<pre>
-  Linux:
-SET( ext_libs ${Boost_LIBRARIES} ${PYTHON_LIBRARIES}) #/libpython2.6.dll )
-#SET( ext_libs ${Boost_LIBRARIES} ${PYTHON_LIBRARIES}/libpython2.6.dll )
+        <li>
+          If you select not to include the conda path to your PATH variable, you can create an alias which you'll need to
+          invoke before you call conda. In the .bashrc file, you'l add:
+<pre>
+alias c='export PATH=${HOME}/miniconda2/bin:$PATH'
+</pre>
+         You'll have to reload the terminal for the changes to take effect, or you could simply:
+<pre>source .bashrc 
+</pre>
+        After you've added the alias
+        </li>
 
-  Cygwin:
-#SET( ext_libs ${Boost_LIBRARIES} ${PYTHON_LIBRARIES}) #/libpython2.6.dll )
-SET( ext_libs ${Boost_LIBRARIES} ${PYTHON_LIBRARIES}/libpython2.6.dll )
+        <li>Create conda environment (name it "libra") and activate it
+          <pre>
+c
+conda create -n libra
+source activate libra
+          </pre>
 
-			</pre>
-			</li>
-			<li><b>src/mmath/meigen/CMakeLists.txt</b>
-			<pre>
-  Linux:
-#set(EIGEN_INCLUDE /home/Alexey_2/Soft/eigen-eigen-2249f9c22fe8/)
-set(EIGEN_INCLUDE /projects/academic/alexeyak/Software/Eigen/eigen-eigen-bdd17ee3b1b3)
+          In this example, the environment will be created at: "/home/alexey/miniconda2/envs/libra". In the following steps,
+          we'll need to know it.
+        </li>
 
-  Cygwin:
-set(EIGEN_INCLUDE /home/Alexey_2/Soft/eigen-eigen-2249f9c22fe8/)
-#set(EIGEN_INCLUDE /projects/academic/alexeyak/Software/Eigen/eigen-eigen-bdd17ee3b1b3)
+        <li>Install all the dependencies into the presently active conda environment ("libra" in this example)
+          <pre>
+conda install python=2.7
+conda install conda-build
+conda install gcc-lunux-64
+conda install gxx-lunux-64
+conda install make
+conda install boost
+conda install cmake
+          </pre>
+        </li>
 
-			</pre>
-			</li>
-			
-			<li><b>src/solvers/CMakeLists.txt</b>
-			<pre>
-  Linux:
-#SET( EIGEN_INCLUDE /home/Alexey_2/Soft/eigen-eigen-2249f9c22fe8/ )
-set(EIGEN_INCLUDE /projects/academic/alexeyak/Software/Eigen/eigen-eigen-bdd17ee3b1b3/)
+        <li>Navigate to the root of the Libra code (the one with the folders like: src, tests, and so on), create the folder 
+          for binary files (results of compilation and linking). Prepare the make files (it is important to pass two variables
+          to cmake: DCMAKE_PREFIX_PATH, which should point to the correspondingly used prefix, and the other one, DCMAKE_AR, which 
+          should be set to the presently used archiver (needed for creating static libraries))
+          <pre>
+cd /mnt/c/cygwin/home/Alexey-user/Programming/Project_libra
+mkdir _build 
+cd _build
+cmake -DCMAKE_PREFIX_PATH=/home/alexey/miniconda2/envs/libra -DCMAKE_AR=${AR} ../
+make 
+          </pre>
+        </li>
 
-  Cygwin:
-SET( EIGEN_INCLUDE /home/Alexey_2/Soft/eigen-eigen-2249f9c22fe8/ )
-#set(EIGEN_INCLUDE /projects/academic/alexeyak/Software/Eigen/eigen-eigen-bdd17ee3b1b3/)
-			</pre>
-			</li>
-			
-			<li>Copy Python files included in Libra to the binary (build) directory. From <b>_build</b> directory
-			<pre>make copy-libra-py</pre>			
-			</li>
-			
-			<li>In <b>.bash_profile</b> file
-			<pre># Libra
-export PYTHONPATH=/home/Alexey_2/Programming/Project_libra/_build/src:$PYTHONPATH
-export LD_LIBRARY_PATH=/home/Alexey_2/Programming/Project_libra/_build/src:$LD_LIBRARY_PATH
-		   </pre>
-		   Here, we assume that the binary (build) directory is <a>/home/Alexey_2/Programming/Project_libra/_build/src</a>
-		   <p>Restart your terminal for the changes to PYTHONPATH and LD_LIBRARY_PATH to take effect</p>
-			</li>
-			
-		  </ol>
-		  
-          <h3>Installation</h3><br>
-		  		  
-		  <ol>
-		  
-		  <li>Download the package from the GitHub repository (<a href="https://github.com/alexvakimov/libra-code">link</a>)
-		  Older code is also available at SourceForge repository (<a href="https://sourceforge.net/p/libracode/code/ci/master/tree/">link</a>). 
-          Note, however, that the SourceForge is now considered a "backup" location, so may be updated less frequently than the GitHub.
-		  <br>
-		  
-		  Lets say your top-level directory will be "libracode". In this directory you will find the following items:
-		  <ul>
-			<li><b>src</b> - this is the directory containing the source code to be compiled</li>
-			<li><b>tests</b> - this directory contains a collections of what i call test-tutorials. Each test-tutorial both helps the developer to verify and
-			validate the implementation, so it is usually created along the way of implementing some new feature of the Libra code. Once finished by the
-developer, the resulting testing script becomes a tutorial script - showing a new user the new implemented feature and how to use it. Along the way,
-other features of the Libra package maybe showcased, contributing to the wider learning of the new user. We will come back to this directory shortly - 
-when we will be ready </li>
-			<li><b>doc</b> - the directory containing some documentation and theory regarding the methods implemented in Libra</li>
-			<li><b>cmake</b> - the cmake scripts for finding some necessary packages - not yet fully functional, will be taken care of later</li>
-			<li><b>.gitignore</b> - we use GIT tool to control versioning of the code and keep track the history of development. This file simply excludes 
-			some types of the files we may have in the development directory (here and in all deeper levels). Usually, these are object files or other 
-large and temporary files (e.g. output of test calculations, etc.). The dot in the beginning of the filename makes this file "invisible" (hides it) on
-Unix-type systems. This minimizes chances you delete it unintentionally.</li>
-			<li><b>CMakeLists.txt</b> - this is the main file that defines how to build the Libra code using cmake utility. It defines all external packages,
-			setups, options, etc. You need to customize it for your particular environment. This is the file we will have to deal with in the next steps
-			of installation.</li>
-		  </ul>
-		  
-		  </li>
-		  <li>Install <a href="http://www.boost.org/" target="_new">Boost C/C++ library</a>, Python, and the 
-		  <a href="http://eigen.tuxfamily.org/index.php?title=Main_Page" target="_new">Eigen 3</a> package. Usually, both Boost and Python are installed
-		  on most Unix-type systems, in which case you only need to find out where those packages are. Note, that we assume Python 2.* version is in use. 
-		  Python 3.* family is not tested. Also, refer to <a href="https://sites.google.com/site/alexeyvakimov/mini-tutorials/programming-boost-python-c" 
-		  target="_new">this page</a>, to find out more on how to build Boost.Python and other Boost libraries from the source code.
-		  </li>
-		  
-		  <li>
-		  Edit your <b>CMakeLists.txt</b> file. Below, we refer to <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/CMakeLists.txt" target=
-		  "_new">this</a> particular example: 
-		  <ul>
-			<li>Set your version of Boost: e.g. lines 35 and 42 request the 1.50.0 version of Boost</li>
-			<li>Set your version of Python: e.g. line 53 requests the 2.6.8 version of Python. Also note that "EXACT" keyword is supplied in the 
-			FIND_PACKAGE function. Normally, you wouldn't want that option (so delete it). This is mostly for the cmake to find the correct version
-			of Python installed on my cygwin system. Well, as you can guess from the lines 51-52 and 58-59, I had a difficulty cmake finding the
-			correct packages. In that case you would need to use "dirty" manual way of defining environment variables before you can compile Libra.
-			Namely, in my case the libraries (python.2.6.exe and libpython.2.6.dll) are located in /home/Alexey_2/Soft/python2.6/bin , whereas the include files
-			(such as Python.h ans bunch of other files) are located in /home/Alexey_2/Soft/python2.6/include/python2.6  So, for the cmake to generate a 
-			proper Makefile, i would need to call cmake with the corresponding arguments:<br>
-			cmake -DPYTHON_INCLUDE_DIR=/home/Alexey_2/Soft/python2.6/include/python2.6 -DPYTHON_LIBRARY=/home/Alexey_2/Soft/python2.6/bin ../
-			(see about this below). The same situation applies to Boost libraries and include files.</li>
-			<li>Make the selection of definitions, depending on your platform (lines 68-69). The default choice is good for cygwin. That is why
-			the line 68 is commented, and the line 69 defines the CYGWIN variable via ADD_DEFINITIONS. If you are on the Unix machine - comment this
-			line and uncomment the line 68. In later versions, i'll try to make this determination automatic.</li>
-			<li>Setup the include dir for Eigen library. I know, that is not very convenient, and i hope to fix this at some point, but here is how it is 
-			done now. The Eigen3 package is nice in the sense that it is fully template-based. So, one doesn't need to compile it - nice, isn't it? Thus,
-			the installation of Eigen3 reduces to unpacking the distibutive and setting up the environment variable. Eigen 3 is needed for compiling 
-			libmeigen library, so we need to edit one of the internal CMakeLists.txt files - <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/mmath/meigen/CMakeLists.txt"
-			target="_new">here</a>. In this script this is done via set(EIGEN_INCLUDE /home/Alexey_2/Soft/eigen-eigen-2249f9c22fe8/) (line 6). The include 
-			directory is the one that contains the "Eigen" directory. In my case that is the /home/Alexey_2/Soft/eigen-eigen-2249f9c22fe8/ 
-			</li>			
-		  </ul>		  
-		  </li>
-		  <li>
-		  Now, we are ready to configure the package. But first, lets create the folder that will contain all the compiled object files and binaries, as well
-		  as final libraries. In case you screw up something, you can just delete the whole directory, create a new one, and rebuild the code again. Well,
-		  this is pretty standard practice when working with cmake.
-		  In my case, i create the folder "_build", in the package directory (the outermost folder "libracode"), so that "libracode/src", "libracode/tests", and
-		  "libracode/_build" are all siblings. Creating:
-		  <code>[alexeyak@ccr...]mkdir _build</code>
-		  <br>
-		  Once the directory is created, switch to that directory:
-		  <code>[alexeyak@ccr...]cd _build</code>
-		  <br>
-		  From there, run the cmake, to create and configure the Makefile file:
-		  <code>[alexeyak@ccr...]cmake ../</code>
-		  <br>Here we refer to the upper level directory that contains "CMakeLists.txt" file. Also, recall that if you need to manually specify the location
-		  of include and library files for Python or Boost, you can do it at this point - see the example above.
-		  </li>
-		  
-		  <li>Compile the code.
-		  Once the configuration and build are done, we can compile and build the Libra package. If the configuration is successfull, the Makefile will be 
-		  created in the "_build" directory. So, we are good to:
-		  <code>[alexeyak@ccr...]make</code>
-		  </li>
-		  
-		  <li><p>Copy Python files included in the Libra code. These files are located in the "src/libra_py" directory of the source code.
-		  The files are not copied when the code is compiled and build. Well, for sure this doesn't happen when no updates of the core components made, but
-		  may happen when the components are built for the first time. So, to be safe (and absolutely necessary when you update Python scripts in
-		  the "src/libra_py"!!!) one needs to build a specific target. Assuming you are still in the "_build" directory, do:</p>		  
-		  <pre>cmake ../
+        <li>Add the following environment variables in .bash_profile
+          <pre>
+export PYTHONPATH=/mnt/c/cygwin/home/Alexey-user/Programming/Project_libra/_build/src:$PYTHONPATH
+export LD_LIBRARY_PATH=/mnt/c/cygwin/home/Alexey-user/Programming/Project_libra/_build/src:$LD_LIBRARY_PATH
+          </pre>         
+          Load the settings so the changes take effect
+          <pre>source .bash_profile</pre>
+        </li>
+
+        <li>Activate the environment and use the code
+          <pre>
+c
+conda activate libra
+          </pre>
+        </li>
+
+        <li>
+          If you have updated your Libra installation and the only changes made to the code concern Python
+          files (e.g. in the libra_py folder), the only build instructions that are needed are (from within
+          the _build directory)
+<pre>
+cmake ../
 make copy-libra-py
-		  </pre>
-		  <p>This will simply copy the Python scripts from the source directory to the build directory. So, eventually, one would need to
-		  add only the latter to the PYTHONPATH and LD_LIBRARY_PATH</p>
-		  </li>
-		  
-		  <li>Formal installation. Once the binary libraries are created, they together with the include files must be placed into a special place. This is
-		  what cmake installer does. But at this point, i haven't get to this point yet. So, we can consider our installation finished. The only effect of this
-		  will be in the need to add the location of the called libraries to the Python path, but this can be easily done in the Python scripts, as will be
-		  shown later.
-		  <p style="color:red">Update (as of 4/10/2016):</p>
-		  <p>The libra package is now updated to produce a single module called "libra_core", which can be called by
-		  <pre>import liblibra_core</pre> on Linux OS and
-		  <pre>import cyglibra_core</pre> on Cygwin
-		  </p>
-		  <p>This will enable utilization of all exported C++ functionality without the need to import each individual module. In order for the above
-		  import functions work, we, of course, need to add the path to the folder containing liblibra_core or cyglibra_core binaries to the PYTHONPATH and
-		  LD_LIBRARY_PATH:</p>
-		  <pre>export PYTHONPATH=/home/Alexey_2/Programming/Project_libra/_build/src:$PYTHONPATH
-export LD_LIBRARY_PATH=/home/Alexey_2/Programming/Project_libra/_build/src:$LD_LIBRARY_PATH
-		  </pre>
-		  </li>
-		  
-		 		  				
-		  </ol>
-		  
-		  
-		  
-		</div>
-	  </div>
-	</div>
-	
- 
-	
-	</body>
+<pre>
+          Which will merely copy the Python files from the /src directory in the root to the /src in the build folder.
+        </li>
 
+      </ol>
+      
+ 
+      <h3>Operation system specific instructions</h3><br>
+
+      <h4>Linux</h4><br>
+      <p>
+        Pretty much as written above
+      </p>
+
+
+      <h4>Windows (via WSL)</h4><br>
+      <p>
+        The most straightforward way to install Libra on Window is via the
+        <a href="https://blogs.msdn.microsoft.com/commandline/learn-about-windows-console-and-windows-subsystem-for-linux-wsl/" target="_new">
+        Windows Subsystem for Linux (WSL)
+        </a>
+        which is now available on Windows 10. 
+        To install the WSL, follow
+        <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10" target="_new"> these instructions</a>       
+      </p>
+      <p> 
+        Then follow the instructions above
+      </p>
+
+      <h4>Windows (via Cygwin)</h4><br>
+      <p>
+        I haven't yet figured out how to install Libra on Cygwin with the conda support
+        You can build Libra without conda, in which case the instructions will look like:
+      </p>
+      <ol>
+        <li>
+          <p>Edit the CMakeLists.txt in the Libra rood directory as:</p>
+          <pre>
+#  ADD_DEFINITIONS("-Wall")       # comment this line
+ADD_DEFINITIONS("-Wall -DCYGWIN") # uncomment this line
+          </pre> 
+        </li>
+        <li>
+          <p>
+            Assuming you are in the Libra root directory, create the "_build" folder (can be named otherwise),
+            switch into it and run cmake and make
+          </p>
+          <pre>
+mkdir _build
+cd _build
+cmake ../
+make          
+          </pre>
+          <p>
+            Occasionally, you may need to tell cmake where to look for the Boost and Python include and library files.
+            For Python, this is taken care of by the -DPYTHON_INCLUDE_DIR and -DPYTHON_LIBRARY options to cmake. For
+            instance, on my (AVA) system the libraries (python.2.6.exe and libpython.2.6.dll) are located in 
+            /home/Alexey_2/Soft/python2.6/bin , whereas the include files (such as Python.h ans bunch of other files) 
+            are located in /home/Alexey_2/Soft/python2.6/include/python2.6 So, for the cmake to generate a 
+            proper Makefile, I would call the cmake with the corresponding arguments:
+          </p>
+          <pre>
+cmake -DPYTHON_INCLUDE_DIR=/home/Alexey_2/Soft/python2.6/include/python2.6 -DPYTHON_LIBRARY=/home/Alexey_2/Soft/python2.6/bin ../
+          </pre>
+          The same situation applies to Boost libraries and include files.
+        </li>
+
+        <li>Add the following environment variables in the (Cygwin) .bash_profile 
+          <pre>
+export PYTHONPATH=/home/Alexey-user/Programming/Project_libra/_build/src:$PYTHONPATH
+export LD_LIBRARY_PATH=/home/Alexey-user/Programming/Project_libra/_build/src:$LD_LIBRARY_PATH
+          </pre>         
+          Load the settings so the changes take effect
+          <pre>source .bash_profile</pre>
+          You are ready to use the code
+        </li>
+
+      </ol><br>
+
+
+      <h3>Content of the root directory</h3>
+      <p>
+        The root directory contains the following items:
+      </p>
+      <ul>
+        <li>
+          <p>
+            <b>src</b> - this is the directory containing the source code to be compiled
+          </p>
+        </li>
+
+        <li>
+          <p>
+            <b>tests</b> - this directory contains a collections of what I call test-tutorials. 
+            Each test-tutorial both helps the developer to verify and validate the implementation, 
+            so it is usually created along the way of implementing the new feature of the Libra code. 
+            Once finished by the developer, the resulting testing script becomes a tutorial script - showing
+            a new user the implemented features and how to use them. Along the way, other features of the Libra
+            package maybe showcased, contributing to further learning of the new user. 
+          </p>
+        </li>
+
+        <li>
+          <p>
+            <b>doc</b> - the directory containing some documentation and theory regarding the methods implemented in Libra
+          </p>
+        </li>
+
+        <li>
+          <p>
+            <b>cmake</b> - the cmake scripts for finding some necessary packages - not yet fully functional, 
+            will be taken care of later
+          </p>
+        </li>
+      
+        <li>
+          <p>
+            <b>.gitignore</b> - we use GIT tool to control the versioning of the code and keep track the history of 
+            the development. This file simply excludes some types of the files we may have in the development 
+            directory (here and in all deeper levels). Usually, these are object files or other large and temporary
+            files (e.g. output of test calculations, etc.). By listing these types of files in the .gitignore, we 
+            are telling th git system to not worry about tracking of the changes of these files. The dot in the beginning
+            of the filename makes this file "invisible" (hides it) on the Unix-type systems. This minimizes the chances 
+            you delete it unintentionally.
+          </p>
+        </li>
+
+        <li>
+          <p>
+            <b>CMakeLists.txt</b> - this is the main file that defines how to build the Libra code using the cmake utility.
+            It defines all external packages, setups, options, etc. You need to customize it for your particular environment.
+          </p>
+        </li>
+      </ul>
+    </div>  <!-- container-fluid -->
+
+  </body>
 </html>
