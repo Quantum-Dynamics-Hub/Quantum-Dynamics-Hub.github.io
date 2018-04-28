@@ -1,201 +1,236 @@
 <!DOCTYPE HTML>
 
 <html>
-    <head>
 
-	<script src="../../../bootstrap/js/jquery.js"></script>        
-        <script src="../../../bootstrap/js/bootstrap.min.js"></script>
-	
-	<link href="../../../bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
-	<link href="../../../bootstrap/css/style.css" rel="stylesheet">
+  <head>
+    <title>Libra</title>
 
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-	
-	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
-	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shBrushPython.js"></script>
-	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shBrushBash.js"></script>
-	<link type="text/css" rel="stylesheet" href="../../../../pyxaid/syntaxhighlighter_3.0.83/styles/shCoreDefault.css"/>
-	<script type="text/javascript">SyntaxHighlighter.all();</script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" async  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
-	<script type="text/javascript" async  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-	
-	<title>Libra</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117524895-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-117524895-1');
+    </script>
+  </head>
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  <body>
 
-  ga('create', 'UA-70773721-1', 'auto');
-  ga('send', 'pageview');
 
-</script>
-
-	
-    </head>
-    <body>
-
-	
-	<div class="row">
-      <div class="col-md-12"><h1>Libra: An open-source "Methodology Discovery" Library</h1></div>
+    <!-- Title -->
+    <div class="row">
+      <div class="col-12"><h1>Libra: An open-source "Methodology Discovery" Library</h1></div>
     </div>
-	
-    <nav class="navbar navbar-inverse h5" style="margin-top:-2px;">
-      <div class="container-fluid">
-        <div>
-          <ul class="nav navbar-nav">
-			<li><a href="index.html">Home</a></li>            
-            <li><a href="capabilities.html">Overview</a></li>
-			<li><a href="downloads.html">Download</a></li>
-			<li><a href="installation.html">Installation</a></li>
-            <li class="active"><a href="tutorials.html">Tutorials</a></li>
-            <li><a href="documentation.html">Documentation</a></li>
-            <li><a href="soft_and_tuts.html">...</a></li>
-            <li><a href="contact.html">....</a></li>
-          </ul>
-        </div>
-      </div>
+
+    <!-- Navigation bar  style="margin-top:-2px;" -->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="../../index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../capabilities.html">Overview</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../downloads.html">Download</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../installation.html">Installation</a></li>
+         
+         <!--  Non-dropdown
+        <li class="nav-item"><a class="nav-link" href="tutorials.html">Tutorials</a></li>
+         -->
+
+        <li class="nav-item dropdown active">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            Tutorials
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="../../tutorials.html">Tutorials</a>
+            <a class="dropdown-item" href="../../tutorials/tutorial_md/tut.html">Molecular Dynamics</a>
+            <a class="dropdown-item" href="../../tutorials/tutorial_mc/tut.html">Monte Carlo</a>
+          </div>
+
+        </li>
+        <li class="nav-item"><a class="nav-link" href="../../documentation.html">Documentation</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../soft_and_tuts.html">...</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../contact.html">....</a></li>
+      </ul>
     </nav>
-	
-	
+
     <div class="container">
-      <div class="col-md-12">        
-		
-          <h1>Lattice Monte Carlo Tutorial</h1><br>
-		  
-		  <p>
-		  This tutorial shows how to utilize the Metropolis algorithm for Monte Carlo (MC) search of a minimal energy structure. In 
-		  particutlar, we will consider 1D, 2D, and 3D cubic lattices composed of species of a given type. We then consider a certain
-		  percentage of doping of the lattice with species of another type. We then define the effective interaction Hamiltonian
-		  (lattice Hamiltonian) that relies on local coordination of each atom (site) of the lattice. 
-		  </p>
-		  <p> It is easy to realize that there are combinatorially-many configurations one could have. Thus, there is a multitude of
-		  configurations with local minium of energy, separated by high potential energy barrier. Direct optimization or even the MD-based
-		  sampling for minimal energy configurations (e.g. via annealing) would be computationally expensive and is not guaranteed to convergence
-		  to a minimal energy structure. Thus, the MC-based search for the minimal energy structure is the most optimal strategy, since it
-		  both has a potential of converging to the "global" minimum and may be made computationally inexpensive. 
-		  </p>		 
-		  <br><br>
-		  <b>The working files can be found: 
-		  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/tests/example_7_lattice_MC" target="_new">here</a>
-		  </b>
-		  <br><br>
-		  <b>To execute the tutorial do:</b>		  
-		  <ol>
-			<li>Create the folder where the snapshots of the configurations will be saved. E.g. <pre>mkdir 1D</pre></li>
-			<li>Edit the input file with the unit cell composing the lattice, presently "ar.xyz"</li>
-			<li>Edit the file "model.py" according to the problem you solve</li>		
-			<li>Execute the python script: <pre>python model.py</pre></li>						
-			<li>Edit the "make_pics.tcl" script, if necessary. E.g. to change the number of pictures to create</li>
-			<li>Switch to the created "1D" directory. <pre>cd 1D</pre></li>
-			<li>In the VMD Tcl command line switch to the "1D" directory, e.g. <pre>cd "path-to-your-1D-directory/1D"</pre></li>
-			<li>In the VMD Tcl terminal run the "make_pics.tcl" script by <pre>source ../make_pics.tcl</pre></li>
-		  </ol>
-		  
-		  <br><br>
-		  <h2>Script workflow overview</h2>
-		  <p>Lets look at the "model.py" script and explain the steps it is doing</p>
-		  
-		  
-		  <p>First, we read a file containing the unit cell composition. The file is in the .xyz format. 
-		  The assumption is the the coordinates are in Angstrom, but when we read it, they are converted to 
-		  atomic units (Bohr) by the script. Notice that we use the "build" module of the "libra_py" module.
-		  </p>
-		  <pre class="brush: python;">L0, R0 = build.read_xyz(prefix+".xyz")</pre>
-		  <br>
-		  
-		  <p>Next, we define the lattice translation vectors and the number of translations in each direction
-		  and then create a supercell of a desired size. Vary the combination of Nx, Ny, and Nz to construct
-		  1D, 2D, or 3D lattice. The example below shows how to construct a 2D lattice.
-		  </p>
-		  <pre class="brush: python;">Nx, Ny, Nz = 30, 30, 1
+    <!--div class="container-fluid margin-left"-->
+      <h1>Lattice Monte Carlo Tutorial</h1><br>
+      <p>
+        This tutorial shows how to utilize the Metropolis algorithm for Monte Carlo (MC) search of a minimal energy structure. In 
+        particutlar, we will consider 1D, 2D, and 3D cubic lattices composed of species of a given type. We then consider a certain
+        percentage of doping of the lattice with species of another type. We then define the effective interaction Hamiltonian
+        (lattice Hamiltonian) that relies on local coordination of each atom (site) of the lattice. 
+      </p>
+      <p>
+        It is easy to realize that there are combinatorially-many configurations one could have. Thus, there is a multitude of
+        configurations with local minium of energy, separated by high potential energy barrier. Direct optimization or even the MD-based
+        sampling for minimal energy configurations (e.g. via annealing) would be computationally expensive and is not guaranteed to convergence
+        to a minimal energy structure. Thus, the MC-based search for the minimal energy structure is the most optimal strategy, since it
+        both has a potential of converging to the "global" minimum and may be made computationally inexpensive. 
+      </p>		 
+      <br><br>
+      <b>The working files can be found: 
+        <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/tests/example_7_lattice_MC" target="_new">here</a>
+      </b>
+      <br><br>
+      <b>To execute the tutorial do:</b>		  
+      <ol>
+        <li>Create the folder where the snapshots of the configurations will be saved. E.g. <kbd>mkdir 1D</kbd></li>
+        <li>Edit the input file with the unit cell composing the lattice, presently "ar.xyz"</li>
+        <li>Edit the file "model.py" according to the problem you solve</li>		
+        <li>Execute the python script: <kbd>python model.py</kbd></li>						
+        <li>Edit the "make_pics.tcl" script, if necessary. E.g. to change the number of pictures to create</li>
+        <li>Switch to the created "1D" directory. <kbd>cd 1D</kbd></li>
+        <li>In the VMD Tcl command line switch to the "1D" directory, e.g. <kbd>cd "path-to-your-1D-directory/1D"</kbd></li>
+        <li>In the VMD Tcl terminal run the "make_pics.tcl" script by <kbd>source ../make_pics.tcl</kbd></li>
+      </ol>
+      <br><br>
+      <h2>Script workflow overview</h2>
+      <p>
+        Lets look at the "model.py" script and explain the steps it is doing
+      </p>
+      <p>
+        First, we read a file containing the unit cell composition. The file is in the .xyz format. 
+        The assumption is the the coordinates are in Angstrom, but when we read it, they are converted to 
+        atomic units (Bohr) by the script. Notice that we use the "build" module of the "libra_py" module.
+      </p>
+
+<code><pre>
+L0, R0 = build.read_xyz(prefix+".xyz")
+</pre></code>
+
+      <p>
+        Next, we define the lattice translation vectors and the number of translations in each direction
+        and then create a supercell of a desired size. Vary the combination of Nx, Ny, and Nz to construct
+        1D, 2D, or 3D lattice. The example below shows how to construct a 2D lattice.
+      </p>
+
+<code><pre>
+Nx, Ny, Nz = 30, 30, 1
 a = VECTOR(1.0,   0.0,   0.0) * Angst # convert to a.u.
 b = VECTOR(0.0,   1.0,   0.0) * Angst # convert to a.u.
 c = VECTOR(0.0,   0.0,   1.0) * Angst # convert to a.u.
-L1, R1 = build.generate_replicas_xyz2(L0, R0, a, b, c, Nx, Ny, Nz)</pre>
-		  <br>
-		  
-		  <p>We define auxiliary variables - e.g. the masses and the maximal coordination number for all atoms.
-		  The masses are irrelevant for these calculations, so we set them just to 1.0. The MaxCoord variable is 
-		  more important, because it will determine to how many nearby atoms (withing a specified radius) each 
-		  atom of the lattice can be connected. The determined connectivities will later affect the calculations of 
-		  the lattice energy. Note that the atoms (or rather the lattice sites) can be connected to fewer other sites,
-		  if there are not enough of them withing the bonding distance.
-		  </p>		  
-		  <pre class="brush: python;">masses = []
+L1, R1 = build.generate_replicas_xyz2(L0, R0, a, b, c, Nx, Ny, Nz)
+</pre></code>
+
+      <p>
+        We define auxiliary variables - e.g. the masses and the maximal coordination number for all atoms.
+        The masses are irrelevant for these calculations, so we set them just to 1.0. The MaxCoord variable is 
+        more important, because it will determine to how many nearby atoms (withing a specified radius) each 
+        atom of the lattice can be connected. The determined connectivities will later affect the calculations of 
+        the lattice energy. Note that the atoms (or rather the lattice sites) can be connected to fewer other sites,
+        if there are not enough of them withing the bonding distance.
+      </p>		  
+
+<code><pre>
+masses = []
 MaxCoord = []
 for i in xrange(len(L1)):
     masses.append(1.0)
     MaxCoord.append(6)
-		  </pre>
-		  <br>
+</pre></code>
 
-		  <p>We are now ready to define the connectivities among the lattice sites. This is done with the help of the 
-		  "autoconnect_pbc" function of the "autoconnect" module of the "libra_py" module. The autoconnect_pbc function
-		  takes as the arguments: 1) the positions of all sites (R1); 2) the maximal coordination number of each site (MaxCoord);
-		  3) the bonding dinstance (Rcut) - if two lattice sites are separated less than this distance, they will be declared connected
-		  unless the maximal coordination number of any of the two sites is reached. In the latter situation, only the closest sites 
-		  within the Rcut radius will be connected; 4) the translation vectors of the supercell (tv1, tv2, tv3) and the option for handling
-		  periodic connectivities (pbc_opt). These parameters are needed if we want to treat the lattice as periodic in any of the direction
-		  or in any combination of the periodic directions. In paricular, if one sets pbc_opt to "a", then the lattice will be treated 
-		  as periodic in 1 dimension (a direction defined by the vector tv1). In that case, two lattice sites may be separated by more than
-		  Rcut, whereas if one of the sites is translated by tv1 (or -tv1), the translated site may end up being withing the Rcut radius from
-		  the other one. In this case, the two sites may be declared connected.
-		  </p>
-		  <p>One can impose the peridicity in any of the 3 directions, by setting pbc_opt to either "a", "b", or "c".
-		  If you want to create a 2D lattice, you have 3 options for pbc_opt variable: "ab", "ac", or "bc"
-		  If you treat the system as periodic in 3D, use pbc_opt = "abc".
-		  Finally, if you don't want impose any periodicity, use pbc_opt = "none"		 
-		  </p>
-		  <p>The autoconnect_pbc function will generate a connectivity list (connect). Each element of this list represent
-		  the connectivity of each atom of the lattice. It is composed of the 2 elements: the index of the considered lattice atom 
-		  and the list of the indiced of the lattice atoms connected to the present one. 
-		  </p>
-		  <p>
-		  This procedure may be computationally quite demanding, especially for large lattices, but it needs to be executed only onces, since
-		  the connectivities in the lattice are assumed to be presented during the optimization algorithm execution. Note, however, that 
-		  we are talking about the connectivities of the lattice sites, whereas the sites can be occupied by different atom types.
-		  </p>
-		  <pre class="brush: python;"># Compute the connectivities   
+      <p>
+        We are now ready to define the connectivities among the lattice sites. This is done with the help of the 
+        "autoconnect_pbc" function of the "autoconnect" module of the "libra_py" module. The autoconnect_pbc function
+        takes as the arguments: 1) the positions of all sites (R1); 2) the maximal coordination number of each site (MaxCoord);
+        3) the bonding dinstance (Rcut) - if two lattice sites are separated less than this distance, they will be declared connected
+        unless the maximal coordination number of any of the two sites is reached. In the latter situation, only the closest sites 
+        within the Rcut radius will be connected; 4) the translation vectors of the supercell (tv1, tv2, tv3) and the option for handling
+        periodic connectivities (pbc_opt). These parameters are needed if we want to treat the lattice as periodic in any of the direction
+        or in any combination of the periodic directions. In paricular, if one sets <var>pbc_opt</var> to "a", then the lattice will be treated 
+        as periodic in 1 dimension (a direction defined by the vector tv1). In that case, two lattice sites may be separated by more than
+        Rcut, whereas if one of the sites is translated by tv1 (or -tv1), the translated site may end up being withing the Rcut radius from
+        the other one. In this case, the two sites may be declared connected.
+      </p>
+      <p>
+        One can impose the peridicity in any of the 3 directions, by setting pbc_opt to either "a", "b", or "c".
+        If you want to create a 2D lattice, you have 3 options for <var>pbc_opt</var> variable: "ab", "ac", or "bc"
+        If you treat the system as periodic in 3D, use <code>pbc_opt = "abc"</code>.
+        Finally, if you don't want impose any periodicity, use <code>pbc_opt = "none"</code>
+      </p>
+      <p>
+        The autoconnect_pbc function will generate a connectivity list (connect). Each element of this list represent
+        the connectivity of each atom of the lattice. It is composed of the 2 elements: the index of the considered lattice atom 
+        and the list of the indiced of the lattice atoms connected to the present one. 
+      </p>
+      <p>
+        This procedure may be computationally quite demanding, especially for large lattices, but it needs to be executed only onces, since
+        the connectivities in the lattice are assumed to be presented during the optimization algorithm execution. Note, however, that 
+        we are talking about the connectivities of the lattice sites, whereas the sites can be occupied by different atom types.
+      </p>
+
+<code><pre class="brush: python;">
+# Compute the connectivities   
 Rcut = 1.1 * Angst
 tv1 = a * Nx
 tv2 = b * Ny
 tv3 = c * Ny
 pbc_opt = "a"
-connect, line, unsorted_pairs_out = autoconnect.autoconnect_pbc(R1, MaxCoord, Rcut, tv1, tv2, tv3, pbc_opt)</pre>
-		  <br>
-		  
-		  
-		  <p>For the purposes of producing the snapshots of different geometries, we create a chemical system (System)
-		  object (syst) and populate it with the atoms of the created super-cell (lattice). This is where we need the 
-		  masses variable defined above - but this is more of a dummy variable, to comply with the function signature. 		  
-		  </p>
-		  <pre class="brush: python;">syst = System()
-build.add_atoms_to_system(syst, L1, R1, VECTOR(1.0, 1.0, 1.0), masses, "elements.dat")</pre>
-		  <br>
+connect, line, unsorted_pairs_out = autoconnect.autoconnect_pbc(R1, MaxCoord, Rcut, tv1, tv2, tv3, pbc_opt)
+</pre></code>
 
-		  <p>We are now ready to setup variable that will control our simulation:
-		  1) nsnaps - how many configuration snapshots we want to produce (for visualizing); 2) nsteps - how many MC move we
-		  are going to perform between each output; 3) kT - an effective temperature of simulation. Setting a larger temperature
-		  may help accelerate the convergence, but at the same time it may allow higher fraction of the accepted higher-energy configurations.
-		  4) fract - a fraction of the lattice sites to be substituted by a dopant; 5) dopant_indx - the index of the lattice species that
-		  corresponds to the dopant atoms; 6) n_move_at - how many pairs of lattice sites we are going to swap at every MC (attempted) move.
-		  When swapping, we ensure to only exchange the lattice atom identities between the sites occupied by different types of species.
-		  Setting this value to large number may help accelerate the convergence in the beginning of the run, but is not good for final optimization.
-		  Setting it to 1 will ensure the steady convergence, although it may be slowed sometimes. 7) mapping - we associate each type of lattice 
-		  species with a chemical element. This is needed only for printing out the molecular structure files, and does not affect the calculations 
-		  themselves. 8) H1 and H2 - these are, perhaps, the most important inputs for each lattice model. They determine the energetics of 
-		  the lattice. The i-th diagonal elements of H1 define the energy of occupying a lattice site with the species of type i. The i-j element of 
-		  the matrix H2 defines the interaction energy between to connected sites occupied by species of types i and j. The present example
-		  aims to produce energy gain when the species of the type 1 (Br) are next to each other. This parameter should favor clustering of the 
-		  species of type 1. 
-		  </p>
-		  <pre class="brush: python;">
+      <p>
+        For the purposes of producing the snapshots of different geometries, we create a chemical system (System)
+        object <var>syst</var> and populate it with the atoms of the created super-cell (lattice). This is where we need the 
+        masses variable defined above - but this is more of a dummy variable, to comply with the function signature. 		  
+      </p>
+
+<code><pre class="brush: python;">
+syst = System()
+build.add_atoms_to_system(syst, L1, R1, VECTOR(1.0, 1.0, 1.0), masses, "elements.dat")
+</pre></code>
+
+      <p>
+        We are now ready to setup variable that will control our simulation:
+        <ol>
+          <li>
+            <var>nsnaps</var> - how many configuration snapshots we want to produce (for visualizing);
+          </li>
+          <li>
+            <var>nsteps</var> - how many MC move we are going to perform between each output;
+          </li>
+          <li>
+            <var>kT</var> - an effective temperature of simulation. Setting a larger temperature may help accelerate the
+             convergence, but at the same time it may allow higher fraction of the accepted higher-energy configurations.
+          </li>
+          <li>
+            <var>fract</var> - a fraction of the lattice sites to be substituted by a dopant;
+          </li>
+          <li>
+            <var>dopant_indx</var> - the index of the lattice species that corresponds to the dopant atoms;
+          </li>
+          <li>
+            <var>n_move_at</var> - how many pairs of lattice sites we are going to swap at every MC (attempted) move.
+            When swapping, we ensure to only exchange the lattice atom identities between the sites occupied by different
+            types of species. Setting this value to large number may help accelerate the convergence in the beginning of
+            the run, but is not good for final optimization. Setting it to 1 will ensure the steady convergence, although 
+            it may be slowed sometimes.
+          </li> 
+          <li>
+            <var>mapping</var> - we associate each type of lattice species with a chemical element. This is needed only
+            for printing out the molecular structure files, and does not affect the calculations themselves;
+          </li> 
+          <li>
+            <var>H1</var> and <var>H2</var> - these are, perhaps, the most important inputs for each lattice model. 
+            They determine the energetics of the lattice. The i-th diagonal elements of H1 define the energy of occupying
+            a lattice site with the species of type i. The i-j element of the matrix H2 defines the interaction energy 
+            between the connected sites occupied by species of types i and j. The present example aims to produce energy
+            gain when the species of the type 1 (Br) are next to each other. This parameter should favor clustering of the 
+            species of type 1. 
+          </li>
+        </ol>
+      </p>
+
+<code><pre class="brush: python;">
 nsnaps = 100
 nsteps = 500
 kT = 0.01    
@@ -211,210 +246,279 @@ H1.set(1,1, 0.0)
 H2 = MATRIX(2,2)
 H2.set(0,0,  0.00);  H2.set(0,1, -0.05)
 H2.set(1,0, -0.05);  H2.set(1,1, -0.20)
-	      </pre>
-		  <br>
-		  
-		  
-		  <p>We now create the lattice for simulations. In principle,one won't need to create a chemical system object
-		  to do this as well as one won't need many of the previous steps. Yet, the previous steps were needed to define
-		  the connectivities and for printing out the configurations. The "make_doped" function creates a lattice doped with
-		  the species of a certain type to a specified doping level. The resulting "sites" variable is a list of integers 
-		  corresponding to the type if the species occupying each of the lattice sites.
-		  </p>
-		  <pre class="brush: python;"># Create the dopped lattice
-sites = make_doped(nat, fract, 0, dopant_indx)  </pre>
-		  <br>
-		  
-		  <p>The following functions compute the energy of a lattice for the sites occupied according to the variable "sites",
-		  as well as doing the MC move (whether successful or not) to evolve the lattice sites occupations.
-		  </p>
-		  <pre class="brush: python;">en = energy(connect, sites, H1, H2) 
-		 sites, en = mc_move(connect, sites, dopant_indx, n_move_at, H1, H2, en, kT, rnd)
-		  </pre>
-		  <br>
-		  
-		  <p>In the actual MC calculations we only operate with integers (representation for the lattice site occupations).
-		  This makes the calculations more efficient (e.g. as opposed to dealing with strings), general (1,2,3 could represent
-		  any abstract entity), and conveninent (we can access the matrix elements of the lattice Hamiltonians H1 and H2).
-		  However, when it comes to printing out the configurations, we need to convert the integers to something more chemically-
-		  relevant, like element names. This is conveniently done using the variable "mapping" we have defined above.
-		  </p>
-		  <pre class="brush: python;">syst.Atoms[i].Atom_element = mapping[ sites[i] ]</pre>
-		  <br>
-		  
-		  <p>Finally, onece we have updates the syst object, we can print out it to the files. The function "print_ent"
-		  allows printing files in the PDB format recognized by the VMD software. In this example, we assume we have a folder
-		  named "mc_run" created. This is where all the files will be printed out. In our other examples, we will change this 
-		  variable accordingly. 
-		  </p>
-		  <pre class="brush: python;">syst.print_ent("2D/step%i" % snap)</pre>
-		  <br>
-		  
-		  
-		  <br><br>
-		  <h2>Overview of the Tcl script</h2>
-		  
-		  <p>We iterate over a given number of files. Change if different. In this case, it is 100 </p>
-		  <pre class="brush: python;">for {set i 0} { $i < 100 } {incr i } {  </pre>
-		  <br>
-		  
-		  
-		  <p>We load the file step$i into a molecule. It is expected that te file is of PDB format. We then
-		  set obtain the index of the molecule we have just created (automatically the top one). This is needed for
-		  further access to the molecule and manipulating it.
-		  </p>
-		  <pre class="brush: python;">mol load pdb step$i
-set indx [ molinfo top ]  </pre>
-		  <br>
-		  		  
-		  <p>For the presently loaded molecule we create a representation and change it to "cpk" style, so that
-		  our lattice looks nice when rendering is done. </p>
-		  <pre class="brush: python;">mol addrep $indx
-mol modstyle 1 $indx cpk  </pre>
-		  <br>
-		  
-		  
-		  <p>Render the molecule to create a picture</p>
-		  <pre class="brush: python;">render snapshot pic$i.png  </pre>
-		  <br>
-		  		  
-		  <p>Delete representation and the molecule. </p>
-		  <pre class="brush: python;">mol delrep 1 $indx
-mol delete $indx  </pre>
-		  <br>
-		  
-		  
-		  <br><br>
-		  <h2>1D example</h2>
+</pre></code>
 
-		  <p>The variables that need be changed for this simulation are:</p>
-		  <pre class="brush: python;">Nx, Ny, Nz = 50, 1, 1
+      <p>
+        We now create the lattice for simulations. In principle,one won't need to create a chemical system object
+        to do this as well as one won't need many of the previous steps. Yet, the previous steps were needed to define
+        the connectivities and for printing out the configurations. The "make_doped" function creates a lattice doped with
+        the species of a certain type to a specified doping level. The resulting <var>sites</var> variable is a list of integers 
+        corresponding to the type if the species occupying each of the lattice sites.
+      </p>
+
+<code><pre class="brush: python;">
+# Create the dopped lattice
+sites = make_doped(nat, fract, 0, dopant_indx)  
+</pre></code>
+
+      <p>
+        The following functions compute the energy of a lattice for the sites occupied according to the variable <var>sites</var>,
+        as well as doing the MC move (whether successful or not) to evolve the lattice sites occupations.
+      </p>
+
+<code><pre class="brush: python;">
+en = energy(connect, sites, H1, H2) 
+sites, en = mc_move(connect, sites, dopant_indx, n_move_at, H1, H2, en, kT, rnd)
+</pre></code>
+
+      <p>
+        In the actual MC calculations we only operate with integers (representation for the lattice site occupations).
+        This makes the calculations more efficient (e.g. as opposed to dealing with strings), general (1,2,3 could represent
+        any abstract entity), and conveninent (we can access the matrix elements of the lattice Hamiltonians H1 and H2).
+        However, when it comes to printing out the configurations, we need to convert the integers to something more chemically-
+        relevant, like element names. This is conveniently done using the variable <var>mapping</var> we have defined above.
+      </p>
+
+<code><pre class="brush: python;">
+syst.Atoms[i].Atom_element = mapping[ sites[i] ]
+</pre></code>
+
+      <p>
+        Finally, onece we have updates the syst object, we can print out it to the files. The function "print_ent"
+        allows printing files in the PDB format recognized by the VMD software. In this example, we assume we have a folder
+        named "mc_run" created. This is where all the files will be printed out. In our other examples, we will change this 
+        variable accordingly. 
+      </p>
+
+<code><pre class="brush: python;">syst.print_ent("2D/step%i" % snap)</pre></code>
+
+
+      <br><br>
+
+      <h2>Overview of the Tcl script</h2>
+      <p>
+        We iterate over a given number of files. Change if different. In this case, it is 100 
+      </p>
+
+<code><pre class="brush: python;">for {set i 0} { $i < 100 } {incr i } {  </pre></code>
+
+      <p>
+        We load the file step$i into a molecule. It is expected that te file is of PDB format. We then
+        set obtain the index of the molecule we have just created (automatically the top one). This is needed for
+        further access to the molecule and manipulating it.
+      </p>
+
+<code><pre class="brush: python;">
+mol load pdb step$i
+set indx [ molinfo top ]
+</pre></code>
+
+      <p>
+        For the presently loaded molecule we create a representation and change it to "cpk" style, so that
+        our lattice looks nice when rendering is done. 
+      </p>
+      
+<code><pre class="brush: python;">
+mol addrep $indx
+mol modstyle 1 $indx cpk
+</pre></code>
+
+      <p>
+        Render the molecule to create a picture
+      </p>
+
+<code><pre class="brush: python;">render snapshot pic$i.png</pre></code>
+
+      <p>
+        Delete representation and the molecule.
+      </p>
+
+<code><pre class="brush: python;">
+mol delrep 1 $indx
+mol delete $indx
+</pre></code>
+
+      <br><br>
+      <h2>1D example</h2>
+      <p>
+        The variables that need be changed for this simulation are:
+      </p>
+
+<code><pre class="brush: python;">
+Nx, Ny, Nz = 50, 1, 1
 pbc_opt = "a"
 nsteps = 20
 f = open("1D/energy.txt", "w")
 syst.print_ent("1D/step%i" % snap)  # two places
 f = open("1D/energy.txt", "a")
-		  </pre>
-		  <br>
-		  
-		  <div class="container">
-		  <div class="row">
-		  <div class="col-md-4"><img width="100%" src="data/1D/pic0.png"></img></div>
-		  <div class="col-md-4"><img width="100%" src="data/1D/pic10.png"></img></div>		  		  
-		  </div>
-		  <div class="row">		  
-		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
-		  </div>
-		  
-		  <div class="row">
-		  <div class="col-md-4"><img width="100%" src="data/1D/pic99.png"></img></div>
-		  <div class="col-md-4"><img width="100%" src="data/1D/energy.png"></img></div>		  
-		  </div>
-		  <div class="row">		  
-		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
-		  </div>
-		  
-		  <div class="row">
-		  <div class="col-md-8"><b>Figure 1.</b>Illustration of the MC lattice energy minimization.
-		  (a) Lattice configuration at t=0; (b) lattice configuration after 20x10 = 200 steps; (c) lattice configurations after 2000 steps; 
-		  (d) Evolution of the lattice energy as a function of the snapshot index.		  
-		  </div>
-		  </div>
-		  </div> <!-- Figure 1 -->
-		  		  
-		  
-		  
-		  <br><br>
-		  <h2>2D example</h2>
-		  
-		  <p>The variables that need be changed for this simulation are:</p>
-		  <pre class="brush: python;">Nx, Ny, Nz = 20, 20, 1
+</pre></code>
+
+      <!-- Figure 1 begins -->
+      <div class="row">
+        <div class="col-4">
+          <img width="100%" src="data/1D/pic0.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/1D/pic10.png"></img>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <p class="text-center">a</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">b</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+          <img width="100%" src="data/1D/pic99.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/1D/energy.png"></img>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <p class="text-center">c</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">d</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-8">
+          <b>Figure 1.</b>Illustration of the MC lattice energy minimization. (a) Lattice configuration at t=0; 
+          (b) lattice configuration after 20x10 = 200 steps; (c) lattice configurations after 2000 steps;
+          (d) Evolution of the lattice energy as a function of the snapshot index.
+        </div>
+      </div>
+      <!-- Figure 1 ends -->
+
+      <br><br>
+      <h2>2D example</h2>
+      <p>
+        The variables that need be changed for this simulation are:
+      </p>
+
+<code><pre class="brush: python;">
+Nx, Ny, Nz = 20, 20, 1
 pbc_opt = "ab"
 nsteps = 500
 f = open("2D/energy.txt", "w")
 syst.print_ent("2D/step%i" % snap)  # two places
 f = open("2D/energy.txt", "a")
-		  </pre>
-		  <br>
-		  
-		  <div class="container">
-		  <div class="row">
-		  <div class="col-md-4"><img width="100%" src="data/2D/pic0.png"></img></div>
-		  <div class="col-md-4"><img width="100%" src="data/2D/pic10.png"></img></div>		  		  
-		  </div>
-		  <div class="row">		  
-		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
-		  </div>
-		  
-		  <div class="row">
-		  <div class="col-md-4"><img width="100%" src="data/2D/pic99.png"></img></div>
-		  <div class="col-md-4"><img width="100%" src="data/2D/energy.png"></img></div>		  
-		  </div>
-		  <div class="row">		  
-		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
-		  </div>
-		  
-		  <div class="row">
-		  <div class="col-md-8"><b>Figure 2.</b>Illustration of the MC lattice energy minimization.
-		  (a) Lattice configuration at t=0; (b) lattice configuration after 500x10 = 5000 steps; (c) lattice configurations after 50000 steps; 
-		  (d) Evolution of the lattice energy as a function of the snapshot index.		  
-		  </div>
-		  </div>
-		  </div> <!-- Figure 2 -->
-		  
-		  
-		  
-		  <br><br>
-		  <h2>3D example</h2>
-		  
+</pre></code>
 
-		  <p>The variables that need be changed for this simulation are:</p>
-		  <pre class="brush: python;">Nx, Ny, Nz = 10, 10, 10
+
+      <!-- Figure 2 begins -->
+      <div class="row">
+        <div class="col-4">
+          <img width="100%" src="data/2D/pic0.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/2D/pic10.png"></img>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <p class="text-center">a</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">b</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+          <img width="100%" src="data/2D/pic99.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/2D/energy.png"></img>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <p class="text-center">c</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">d</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-8">
+          <b>Figure 2.</b>Illustration of the MC lattice energy minimization. (a) Lattice configuration at t=0;
+          (b) lattice configuration after 500x10 = 5000 steps; (c) lattice configurations after 50000 steps; 
+          (d) Evolution of the lattice energy as a function of the snapshot index.
+        </div>
+      </div>
+      <!-- Figure 2 ends -->
+
+      <br><br>
+      <h2>3D example</h2>
+      <p>
+        The variables that need be changed for this simulation are:
+      </p>
+
+<code><pre class="brush: python;">Nx, Ny, Nz = 10, 10, 10
 pbc_opt = "abc"
 nsteps = 100
 f = open("3D/energy.txt", "w")
 syst.print_ent("3D/step%i" % snap)  # two places
 f = open("3D/energy.txt", "a")
-		  </pre>
-		  <br>
-		  
-		  <div class="container">
-		  <div class="row">
-		  <div class="col-md-4"><img width="100%" src="data/3D/pic0.png"></img></div>
-		  <div class="col-md-4"><img width="100%" src="data/3D/pic10.png"></img></div>		  		  
-		  </div>
-		  <div class="row">		  
-		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
-		  </div>
-		  
-		  <div class="row">
-		  <div class="col-md-4"><img width="100%" src="data/3D/pic99.png"></img></div>
-		  <div class="col-md-4"><img width="100%" src="data/3D/energy.png"></img></div>		  
-		  </div>
-		  <div class="row">		  
-		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
-		  </div>
-		  
-		  <div class="row">
-		  <div class="col-md-8"><b>Figure 3.</b>Illustration of the MC lattice energy minimization.
-		  (a) Lattice configuration at t=0; (b) lattice configuration after 100x10 = 1000 steps; (c) lattice configurations after 10000 steps; 
-		  (d) Evolution of the lattice energy as a function of the snapshot index.		  
-		  </div>
-		  </div>
-		  </div> <!-- Figure 3 -->		  
-		  
-		  <br>
-		  
-		  
-		  
-		  
-		  <br><br>
+</pre></code>
 
-	
- 	  </div>
-	</div>  <!-- Container -->
-	
-	
-	</body>
-	
-	</html>
+
+      <!-- Figure 3 begins -->
+      <div class="row">
+        <div class="col-4">
+          <img width="100%" src="data/3D/pic0.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/3D/pic10.png"></img>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <p class="text-center">a</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">b</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+          <img width="100%" src="data/3D/pic99.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/3D/energy.png"></img>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <p class="text-center">c</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">d</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-8">
+          <b>Figure 3.</b>Illustration of the MC lattice energy minimization. (a) Lattice configuration at t=0;
+          (b) lattice configuration after 100x10 = 1000 steps; (c) lattice configurations after 10000 steps; 
+          (d) Evolution of the lattice energy as a function of the snapshot index.		  
+        </div>
+      </div>
+      <!-- Figure 3 ends -->
+
+
+      <br><br>
+    </div>  <!-- Container -->
+  </body>
+
+</html>
