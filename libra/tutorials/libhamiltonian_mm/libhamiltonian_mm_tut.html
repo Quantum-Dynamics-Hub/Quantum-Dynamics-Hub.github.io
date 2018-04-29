@@ -1,317 +1,78 @@
 <!DOCTYPE HTML>
 
 <html>
-    <head>
 
-	<script src="../../../bootstrap/js/jquery.js"></script>        
-        <script src="../../../bootstrap/js/bootstrap.min.js"></script>
-	
-	<link href="../../../pyxaid/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
-	<link href="../../../pyxaid/bootstrap/css/style.css" rel="stylesheet">
+  <head>
+    <title>Libra</title>
 
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-	
-	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
-	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shBrushPython.js"></script>
-	<script type="text/javascript" src="../../../../pyxaid/syntaxhighlighter_3.0.83/scripts/shBrushBash.js"></script>
-	<link type="text/css" rel="stylesheet" href="../../../../pyxaid/syntaxhighlighter_3.0.83/styles/shCoreDefault.css"/>
-	<script type="text/javascript">SyntaxHighlighter.all();</script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" async  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
-	
-	<title>Libra</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117524895-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-117524895-1');
+    </script>
+  </head>
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  <body>
 
-  ga('create', 'UA-70773721-1', 'auto');
-  ga('send', 'pageview');
 
-</script>
-
-	
-    </head>
-    <body>
-
-	
-	<div class="row">
-      <div class="col-md-12"><h1>Libra: An open-source "Methodology Discovery" Library</h1></div>
+    <!-- Title -->
+    <div class="row">
+      <div class="col-12"><h1>Libra: An open-source "Methodology Discovery" Library</h1></div>
     </div>
-	
-    <nav class="navbar navbar-inverse h5" style="margin-top:-2px;">
-      <div class="container-fluid">
-        <div>
-          <ul class="nav navbar-nav">
-            <li><a href="../../index.html">Home</a></li>
-            <li><a href="../../installation.html">Installation</a></li>
-            <li><a href="../../capabilities.html">Overview</a></li>
-            <li class="active"><a href="../../tutorials.html">Tutorials</a></li>
-            <li><a href="../../teaching.html">...</a></li>
-            <li><a href="../../soft_and_tuts.html">...</a></li>
-            <li><a href="../../contact.html">....</a></li>
-          </ul>
-        </div>
-      </div>
+
+    <!-- Navigation bar  style="margin-top:-2px;" -->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="../../index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../capabilities.html">Overview</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../downloads.html">Download</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../installation.html">Installation</a></li>
+         
+         <!--  Non-dropdown
+        <li class="nav-item"><a class="nav-link" href="tutorials.html">Tutorials</a></li>
+         -->
+
+        <li class="nav-item dropdown active">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            Tutorials
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="../../tutorials.html">Tutorials</a>
+            <a class="dropdown-item" href="../../tutorials/tutorial_md/tut.html">Molecular Dynamics</a>
+            <a class="dropdown-item" href="../../tutorials/tutorial_mc/tut.html">Monte Carlo</a>
+          </div>
+
+        </li>
+        <li class="nav-item"><a class="nav-link" href="../../documentation.html">Documentation</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../soft_and_tuts.html">...</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../contact.html">....</a></li>
+      </ul>
     </nav>
-	
-	
-    <div class="container">
-      <div class="col-md-1"> </div>
-      <div class="col-md-10">
-        <div style="margin-left: 12px; width: 741px;"><br>
-		
-          <h3>Libhamiltonian_mm Tutorials</h3><br>
-		  <p>
-		  The "libhamiltonian_mm" is a module that implements molecular mechanics (MM) methods for computing interactions
-          in atomistic systems. The working files showing how to use different objects are located in the /tests/test_hamiltonian_mm directory of
-		  the Libra package. Most of the tutorials are almost completely self-explanatory. Here, we only focus on most interesting/less straightforward
-		  conventions and articulate some of our actions.
-		  </p>		
-		  <br><br>
-		  
-		  <p>Before we actually start the tutorials, we should first discuss the following 3 auxiliary files:		  
-		  </p>
-		  <ul>
-			<li><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/LoadMolecule.py" target="_new">LoadMolecule.py</a></li>
-			<li><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/LoadPT.py" target="_new">LoadPT.py</a></li>
-			<li><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/LoadUFF.py" target="_new">LoadUFF.py</a></li>
-		  </ul>
-		  <p style="color:red"><b>Important:</b> The examples below are designed for Cygwin. If you are working on Unix system, you would need to change the prefixes "cyg"
-		  to "lib" in the import lines of the Load*.py modules ( from cygmmath import *, from cygchemobjects import *, from cyghamiltonian import *)
-		  </p>
-		  <p>They all have a similar structure and are developed to perform similar actions - to load some data from specifically-formatter files to different
-		  data structures. The loading is based on the concept of regular expressions. First, we define some building blocks for constructing more complex 
-		  regular expressions. These building blocks essentially define the basic data types, such as int, float, string, etc.:
-		  <pre class="brush: python;">#------- Here are some basic patterns -------------
-INT    = '([1-9]([0-9]*))'
-NINT   = '([0-9]+)'
-SP     = '\s+'    
-DOUBLE = '([-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?)'
-WORD   = '([a-zA-Z]+)'
-ID     = '(([a-zA-Z]+)([a-zA-Z]+|\d+)*)'
-PHRASE = '"((\w|\W)+)"'
-compINT = re.compile(INT)
-		  </pre>
-		  Read more details on how to define regular expressions and how to work with them <a href="https://docs.python.org/2/library/re.html" target="_new">here</a>
-		  and <a href="http://www.tutorialspoint.com/python/python_reg_expressions.htm" target="_new">here</a>. 
-		  
-		  </p>
-		  <p>Next, we define named patterns:
-		  <pre class="brush: python;">#------- Here we define a format of file ----------
-# p - means 'Pattern'
-    pAtom_keyword = '(?P&ltAtom_keyword&gt'+'HETATM'+')'+SP
-    pAtom_id      = '(?P&ltAtom_id&gt'+DOUBLE+')'+SP    
-    pAtom_element = '(?P&ltAtom_element&gt'+WORD+')'+SP
-    pAtom_chain   = '(?P&ltAtom_chain&gt'+WORD+')'+SP
-    pAtom_id1     = '(?P&ltAtom_id1&gt'+DOUBLE+')'+SP
-    pAtom_x_coord = '(?P&ltAtom_x_coord&gt'+DOUBLE+')'+SP
-    pAtom_y_coord = '(?P&ltAtom_y_coord&gt'+DOUBLE+')'+SP
-    pAtom_z_coord = '(?P&ltAtom_z_coord&gt'+DOUBLE+')'+SP
-    pAtom_type    = '(?P&ltAtom_type&gt'+INT+')'+SP
-    pAtom_charge  = '(?P&ltAtom_charge&gt'+DOUBLE+')'+SP
-		   </pre>
-			Note, that we simply wrap the basic patterns (using their names) in the extended construction, in which we also define the identifyer of the 
-			given pattern. The identifyer is the given in the angle brackets and will later be used to access the value of the specific pattern of given type.
-			You may have noticed that the same basic pattern (e.g. DOUBLE or WORD in our example) may have different identifyers associated with it. The identifyers
-			hence serve the purpose of differentiating between patterns of the same type. For instance, lets say, the analysis suggested that you have 3 patterns
-			of DOUBLE type in your string. So, how are you going to say which DOUBLE contains which meaning? The identifyers do just that. In other words,
-			the identifyers add semantics (meaning) to the basic general patterns. This way we define meaningfull (carrying some semantics) patterns to be used
-			in our analysis: pAtom_keyword, pAtom_id, pAtom_x_coord, pAtom_y_coord, etc.		  
-		  </p>
-		  <p>But how we know which of the found patterns should be assigned to which pattern identifyer? Well, the most straightforward way is of course
-		  by the position of the patterns in some sequence of patterns. This is, basically, a format. To specify the format, we define the whole sequence of
-		  expected patterns in given order. For instance, the lines:
-		  <pre class="brush: python;">if format=="pdb":
-    Atom_Record = pAtom_keyword + pAtom_id + pAtom_element + pAtom_id1 + pAtom_x_coord + pAtom_y_coord + pAtom_z_coord + pAtom_charge 
-elif format=="pdb_1":
-    Atom_Record = pAtom_keyword + pAtom_id + pAtom_element + pAtom_id1 + pAtom_x_coord + pAtom_y_coord + pAtom_z_coord + pAtom_chain
-elif format=="true_pdb":
-    Atom_Record = pAtom_keyword + pAtom_id + pAtom_element + pAtom_mol + pAtom_chain + pAtom_id1 + pAtom_x_coord + pAtom_y_coord + pAtom_z_coord + pAtom_occ + pAtom_charge 
-		  </pre>
-		  define 3 formats for the Atom_Record lines in a files containing some structural information about system. Note that these format lines are the minimal
-		  sets needed for the program to find such records. If the input line contains anything beyond the pattern, it will still be discovered. For instance,in the
-		  first format "pdb", we can put any comments or any additional information about the atom, right after final pAtom_charge entry. This will still be a valid
-		  input.		  
-		  </p>
-		  <p>Similarly to Atom_Record format line we also define the Bond_Record and Fragment_Record formats, to search for different elements of input
-		  (connections between atoms, and grouping of the atoms in the rigid bodies, respectively).
-		  </p>
-		  <p>Once all the format lines are defined, we are ready to analyze our test and try to find any matches that correspond to any of those defined
-		  format lines (extended patterns). This is done in:
-		  <pre class="brush: python;">A = f.readlines()    
-#---------- Create atoms ----------------
-for a in A:        
-    m1 = re.search(Atom_Record,a)
-    if m1!=None:           
-        ...
-		  </pre>
-		  Here, we first read all lines of the input file, to store them as a list of lines in A. Then in each line (for a in A), we search for the Atom_Record
-		  patterns (and in the rest of the script for Bond_Record and Fragment_Record as well) - this is done with "re.search(Atom_Record, a)". The return
-		  result is the match object m1. It is equal to "None", if no pattern Atom_Record was found in the line a. Otherwise, the match object will contain 
-		  all the information we need.
-		  </p>
-		  <p>To access the information we need in a controlled way, we use the elementary pattern identifiers, together with "start()" and "end()" functions
-		  of the match object type:
-		  <pre class="brush: python;">atom_dict = {}
-atom_dict["Atom_element"] = a[m1.start('Atom_element'):m1.end('Atom_element')]
-atom_dict["Atom_cm_x"] = float(a[m1.start('Atom_x_coord'):m1.end('Atom_x_coord')]) * Angst_to_Bohr
-atom_dict["Atom_cm_y"] = float(a[m1.start('Atom_y_coord'):m1.end('Atom_y_coord')]) * Angst_to_Bohr
-atom_dict["Atom_cm_z"] = float(a[m1.start('Atom_z_coord'):m1.end('Atom_z_coord')]) * Angst_to_Bohr
 
-		  </pre>
-		  This way we create a Python dictionary with specially designed keywords. The keywords: Atom_element, Atom_cm_x, etc. will be importnat on next
-		  stage, namely, in the constructor of the Atom object of the "libchemobjects" library.
-		  </p>
-		  <p>In passing, we should emphasize the method for inputting lists of integers (can be adapted to different data types). We need this in Bond_Record
-		  and in Fragment_Record. For instance, the bond record contains the list of integers such that the first one is the identifier of the given atom,
-		  and the rest are the ids of all atoms that are connected covalently to the given one. In Fragment_Record we simply input a list of the ids for the
-		  atoms that are grouped together to form a fragment.
-		  </p>
-		  <p>For the case of Fragment_Record, the corresponding code to handle such lists will look like:
-		  <pre class="brush: python;">lst = compINT.findall(m3.group())
-gr_atoms = []
-i = 0
-while i &lt len(lst):
-    gr_atoms.append(int(float(lst[i][0])))
-    i = i + 1
-	      </pre>
-          Here, we use "findall()" function of the regular expression object compINT. We also use the "group()" function of the match object to customize
-		  the "findall" function (other options would produce different level of patterning). The output is the list of entries. The first element of each
-		  entry is the integer we wanted to read. This is then used to simplify the list "lst" to a normal list of integers "gr_atoms". 
-		  </p>
-		  
-		  <br><br>
-		  <p>The main difference between the 3 modules listed above comes in the types of Libra objects they are using. This also affect the specific way
-		  they are interfaced with Python script. Below we briefly describe the main mechanisms and object types.
-		  <ul>
-			<li><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/LoadMolecule.py" target="_new">LoadMolecule.py</a>
-				<p> The Python objects we construct in the above pattern analysis are used in the functions of the "libchemobjects" lirary:
-				<pre class="brush: python;">syst.CREATE_ATOM( Atom(univ,atom_dict)  ) 
-syst.LINK_ATOMS(int(float(lst[0][0])),int(float(lst[i][0])))
-syst.GROUP_ATOMS(gr_atoms,j)
-				</pre>
-				The first function, CREATE_ATOM simply creates an Atom object, using the dictionary "atom_dict". The keys of the dictionary should be properly chosen
-				so that the extraction of their values to the internal C++ variables would be meaningfull. See the constructor of objects of "Atom" type 
-				<a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/chemobjects/mol/Atom.cpp" target="_new">here</a> for the full list
-				of supported keys. The created atom becomes an element of Atoms array of the "syst" object.				
-				</p>
-				<p>The second function, links to atoms that belong to "syst" object (already created within it!). The linking actually updates the entire topology
-				of the system, creating all bonds, angles, dihedrals, and improper dihedrals records, all stored inside the "syst" object. As we can see, the 
-				LINK_ATOM funciton takes only 2 parameters - the ids of the two atoms we want to link (note, ids start with 1: 1,2,3, ..., not with 0!). 
-				</p>
-				<p>Finally, the GROUP_ATOMS function groups the atoms that are already in "syst" object to create an element of "Fragments" array of the "syst" 
-				object. The arguments to the function are simply the Python list of integers, containing the ids (not indices!) of the atoms to group, and the
-				integer that will become the Fragment id. 
-				</p>
-				<p>All 3 functions are defined in <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/chemobjects/chemsys/System_methods2.cpp" target="_new">
-				System_methods2.cpp</a> file.
-				</p>
-			</li>
-			<li>
-			<a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/LoadPT.py" target="_new">LoadPT.py</a>
-				<p>This file implements a procedure to load data into the Periodic Table object defined within the "Universe" object (passed by reference as
-				variable U). The "Universe" class is designed to contain all general-purpose information about chemical species and physical parameters.
-				It is used as a general database that contains such information. This database can be modified at every stage. It also used when creating 
-				different objects. So far, the main usage of the "Universe" class has been the storage of "PeriodicTable" variable. For details, see 
-				<a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/chemobjects/universe/Universe.h" target="_new"> here</a>. The "PeriodicTable"
-				is essentially a map between the symbolic element name and the structure (of "Element" type) containing essential information about the element.
-				Although, the database may be hard-coded, we prefer its loading from the corresponding 
-				<a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/elements.dat" target="_new">data file</a>. This way,
-				user may easily tune the properties of elements, to set them to even non-physical values (e.g. set some effective masses). As such, we need a 
-				way to load those data into the instances of the "Universe" class. This is exactly what "LoadPT.py" script does.
-				</p>
-				<p>Although the pattern recognition part is exactly the same as in LoadMolecule.py, the LoadPT.py script uses a different way to interface
-				Python and C++ objects. Namely, we first create an object of any arbitrary Python class:
-				<pre class="brush: python;"># First, declare the class (class name does not matter)
-class element:
-    pass
-# Now, create an object
-elem = element()
-	</pre>
-				As you can see, the class is empty - no data-members have been declared so far. However, one of the very interesting features of Python is 
-				the ability to define data members at later time - when they are first initialized with some value. In our example, this is done in the
-				following lines:
-				<pre class="brush: python;">elem.Elt_name        = a[m1.start('Element_name'):m1.end('Element_name')]
-elem.Elt_id          = int(float(a[m1.start('Element_atomic_number'):m1.end('Element_atomic_number')]))
-elem.Elt_number      = elem.Elt_id
-elem.Elt_nucleus_charge = elem.Elt_id
-elem.Elt_mass        = float(a[m1.start('Element_atomic_mass'):m1.end('Element_atomic_mass')]) * Mass_conv
-				</pre>
-				We now create an instance of the "Element" class. This is the Libra class, which is exposed to Python. This is done in:
-				<pre class="brush: python;">elt_record = Element()</pre>
-				Once the member-variables of the auxiliary Python class are defined and initialized, the Python object can be used as an input argument of 
-				the method of the "Element" class:
-				<pre class="brush: python;">elt_record.set(elem)</pre>
-				This instruction will extract the existing variables of the "elem" object and assign corresponding elements of the "elt_record" object.
-				In some sense, the procedure is similar to extracting values of the map by the names of the corresponding keys. The difference is that
-				we know use another feature of Python (also available at the C++ level with Boost.Python) - the verification of the presece of some
-				specifically-named attributes (variables) of the class. Thus, the names of fields of the auxiliary object "elem" should be properly
-				selected. For the full list of available attribute names, see the "set()" function in
-				<a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/chemobjects/universe/Element.cpp" target="_new">Element.cpp</a>.
-				</p>
-				<p>Finally, once the properties of the instance "elt_record" of the class "Element" are setup, we can add this record to the 
-				"PeriodicTable" variable of the "Universe" class. 
-				<pre class="brush: python;">U.Add_Element_To_Periodic_Table(elt_record)</pre>
-				The record object can also be printed via
-				<pre class="brush: python;">elt_record.show_info()</pre>
-				And, as you can see, the elements of the "elt_record" object can be accessed directly, e.g.
-				<pre class="brush: python;">print "load element", elem.Elt_name</pre>
-				To see the full list of exported data members and methods of the "Element" class, refer to the export file
-				<a href="http://sourceforge.net/p/libracode/code/ci/master/tree/src/chemobjects/universe/libuniverse.cpp" target="_new">libuniverse.cpp</a>.
-				</p>
-				<p style="color:red">The convention of Libra is put all exported data and function members of exported classes into the ".cpp" file with "lib" prefix.
-				</p>
-			</li>
-			<li>
-			<a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/LoadUFF.py" target="_new">LoadUFF.py</a>
-				<p>This script implements methods to load the parameters of the UFF force field. Since UFF is rather generic, one only needs atomic data.
-				The data are stored in the <a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/uff.dat" target="_new">uff.dat</a> file.
-				Hence, we only look for the Atom_Record patterns, as well as for the force-field-wide settings. The outcome of the function is the object
-				of the "ForceField" class - "force_field". The object contains the lists (arrays) of records of different types. In this case we 
-				only set up the records of the "Atom_Record" type. The Python/C++ interface for the data of these variables is realized via an auxiliary 
-				class "atomrecord", like in the LoadPT example:
-				<pre class="brush: python;">class atomrecord:
-    pass
-	
-ff = atomrecord()
-ff.Atom_ff_int_type = int(float(a[m1.start('Atom_ff_int_type'):m1.end('Atom_ff_int_type')]))
-ff.Atom_radius      = float(a[m1.start('Atom_radius'):m1.end('Atom_radius')])
-ff.Atom_theta       = float(a[m1.start('Atom_theta'):m1.end('Atom_theta')])
-...
+    <!--div class="container"-->
+    <div class="container-fluid margin-left">
+      <h3>Molecular Mechanics and Molecular Dynamics Tutorial</h3>
+      <br>
+      <p>
+        The "libhamiltonian_mm" is a module that implements molecular mechanics (MM) methods for computing interactions
+        in atomistic systems. The working files showing how to use different objects are located in the /tests/test_hamiltonian_mm directory of
+        the Libra package. Most of the tutorials are almost completely self-explanatory. Here, we only focus on most interesting/less straightforward
+        conventions and articulate some of our actions.
+      </p>		
+      <br><br>
 
-for a in A:
-    m1 = re.search(UFF_Atom_Type_Record,a)
-
-    atom_record = Atom_Record()
-    atom_record.set(ff)
-    res = force_field.Add_Atom_Record(atom_record)
-				</pre>
-				The force-field-wide parameters are set up via the dictionary, like we did in LoadMolecule example:
-				<pre class="brush: python;">ff_par = {}
-for a in A:
-	m2 = re.search(FF_sigma_rule_record,a)
-    m3 = re.search(FF_epsil_rule_record,a)
-    ...
-		
-    if m2!=None:
-        ff_par["sigma_comb_rule"] = a[m2.start('FF_sigma_rule_value'):m2.end('FF_sigma_rule_value')]
-    if m3!=None:
-        ff_par["epsilon_comb_rule"] = a[m3.start('FF_epsil_rule_value'):m3.end('FF_epsil_rule_value')]
-	...
-			
-force_field.set(ff_par)
-				</pre>
-				</p>
-			</li>
-		  </ul>
-		  </p>
-		  
+	  
 		  
 		  <br><br>
 		  <br><br>
@@ -596,7 +357,7 @@ syst.extract_atomic_mass(mol.mass)
 		<div class="container">
 		
 		  <div class="row">
-		  <div class="col-md-4"><img src="test_mm5a/_en_traj.png"></div><div class="col-md-4"><img src="test_mm5a/_mol_traj.jpg"></div>
+		  <div class="col-md-4"><img src="test_mm5a/en_traj.png"></div><div class="col-md-4"><img src="test_mm5a/mol_traj.jpg"></div>
 		  </div>
 		  <div class="row">
 		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
@@ -725,7 +486,7 @@ elif integrator=="DLML":
 		<div class="container">
 		
 		  <div class="row">
-		  <div class="col-md-4"><img src="test_mm6/_en_traj.png"></div><div class="col-md-4"><img src="test_mm6/_mol_traj.jpg"></div>
+		  <div class="col-md-4"><img src="test_mm6/en_traj.png"></div><div class="col-md-4"><img src="test_mm6/mol_traj.jpg"></div>
 		  </div>
 		  <div class="row">
 		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
@@ -778,14 +539,14 @@ elif integrator=="DLML":
 		<div class="container">
 		
 		  <div class="row">
-		  <div class="col-md-4"><img src="test_mm6a/_en_cooling.png"></div><div class="col-md-4"><img src="test_mm6a/_mol_cooling.jpg"></div>
+		  <div class="col-md-4"><img src="test_mm6a/en_cooling.png"></div><div class="col-md-4"><img src="test_mm6a/mol_cooling.jpg"></div>
 		  </div>
 		  <div class="row">
 		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
 		  </div>			  
 		  
 		  <div class="row">
-		  <div class="col-md-4"><img src="test_mm6a/_en_md.png"></div><div class="col-md-4"><img src="test_mm6a/_mol_md.jpg"></div>
+		  <div class="col-md-4"><img src="test_mm6a/en_md.png"></div><div class="col-md-4"><img src="test_mm6a/mol_md.jpg"></div>
 		  </div>
 		  <div class="row">
 		  <div class="col-md-4"><p class="text-center">c</p></div><div class="col-md-4"><p class="text-center">d</p></div>
@@ -814,7 +575,7 @@ elif integrator=="DLML":
 		<div class="container">
 		
 		  <div class="row">
-		  <div class="col-md-4"><img src="test_mm6b/_mol_free_px_1_lx_1.jpg"></div><div class="col-md-4"><img src="test_mm6b/_mol_free_px_1_lz_1.jpg"></div>
+		  <div class="col-md-4"><img src="test_mm6b/mol_free_px_1_lx_1.jpg"></div><div class="col-md-4"><img src="test_mm6b/mol_free_px_1_lz_1.jpg"></div>
 		  </div>
 		  <div class="row">
 		  <div class="col-md-4"><p class="text-center">a</p></div><div class="col-md-4"><p class="text-center">b</p></div>
@@ -834,15 +595,9 @@ elif integrator=="DLML":
 		this axis lead to formation of spiral many-particle trajectories (several molecules' motion creates such spirals). In the second case, one obtains
 		more of a ball, although one can recognize several molecules movig around the z axis, of the ball - like the sattelites around a palnet. 
 		</p>
-		
-		<br><br>
- 		<b><a href="http://sourceforge.net/p/libracode/code/ci/master/tree/tests/test_hamiltonian_mm/test_mm7.py" target="_new">test_mm7.py</a></b><br><br>
-		<p> This file is not yet working... 
-		</p>
-		
+				
 		<pre class="brush: python;"></pre>
 
-	</div>
 	</div>
 	</div>
 	</body>
