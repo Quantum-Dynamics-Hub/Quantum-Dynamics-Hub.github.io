@@ -1,0 +1,426 @@
+<!DOCTYPE HTML>
+
+<html>
+
+  <head>
+    <title>Libra</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" async  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117524895-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-117524895-1');
+    </script>
+  </head>
+
+  <body>
+
+
+    <!-- Title -->
+    <div class="row">
+      <div class="col-12"><h1>Libra: An open-source "Methodology Discovery" Library</h1></div>
+    </div>
+
+    <!-- Navigation bar  style="margin-top:-2px;" -->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="../../index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../capabilities.html">Overview</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../downloads.html">Download</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../installation.html">Installation</a></li>
+         
+         <!--  Non-dropdown
+        <li class="nav-item"><a class="nav-link" href="tutorials.html">Tutorials</a></li>
+         -->
+
+        <li class="nav-item dropdown active">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            Tutorials
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="../../tutorials.html">Tutorials</a>
+            <a class="dropdown-item" href="../../tutorials/tutorial_md/tut.html">Molecular Dynamics</a>
+            <a class="dropdown-item" href="../../tutorials/tutorial_mc/tut.html">Monte Carlo</a>
+          </div>
+
+        </li>
+        <li class="nav-item"><a class="nav-link" href="../../documentation.html">Documentation</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../soft_and_tuts.html">...</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../contact.html">....</a></li>
+      </ul>
+    </nav>
+
+    <div class="container">
+    <!--div class="container-fluid margin-left"-->
+      <h3>Metropolis Monte Carlo Sampling</h3><br>
+      <p>
+        This tutorial shows how to utilize the Metropolis algorithm to sample data points from an arbitrary distribution  
+        defined by the user via Python script. 
+      </p>
+      <b>The working files can be found: 
+        <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/tests/example_10_metropolis_mc" target="_new">here</a>
+      </b>
+      <br><br>
+
+      <h4>Theory and implementation</h4>
+      <p>
+        The method is implemented in 
+        <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/src/montecarlo" target="_new">the montecarlo library</a>.
+        In Particular, we will be using the <code>metropolis_gau</code> function, which implements the Metropolis scheme with the
+        Gaussian random walk. The function accepts a multidimensional coordinate (of the MATRIX type), `q`, that defines the probability
+        distribution function, `P(q)`. The Metropolis sampling algorithm starts with some guess point of the variable `q(n=0) = q_0`. The
+        point `q_0` does not have to be included in the final sampling. 
+        Then the following sequence of actions is executed repeatedly:
+        <ul>
+          <li>
+            A random vector, `xi = (xi_0, xi_1, ... , xi_N)`, is generated such that each of its component is sampled from the Gaussian
+            distribution with the mean of 0.0 and variance of 1.0, `xi_i in G(0.0, 1.0)`. This vector is scaled by the desired 
+            variance magnitude, `sigma`, to define a proposed displacement vector, `sigma * xi`.
+          </li>
+          <li>
+            A trial point is computed by displacing the vector, `q(n)`, by the amount of the proposed displacement vector:
+            `q_{trial}(n+1) = q(n) + sigma * xi`
+          </li>
+          <li>
+            The probability density defined by the user (the one, from which the points are being sampled) is evaluated at the new point:
+            `P_{n ew} = P(q_{trial}(n+1))` and is compared to the present (to be old) probability density `P_{old} = P(q(n))`. 
+          </li>
+          <li>
+            If the instantaneous acceptance ratio is computed `a c c = (P_{n ew}) / P_{old}` is larger than 1.0, the proposed move is accepted
+            with `100%` probability. Otherwise, the move is accpeted with the probability given by the `a c c`. 
+            The accepted moves update the coordinate, `q(n+1) = q_{trial}(n+1)`. The rejected moves do not change the coordinate,
+            `q(n+1) = q(n)`. If the move is rejected, no new configuration is added to the results list.
+          </li>
+        </ul>
+        The algorithm described above generates an array of the points of an actual sample size, `As`:
+        `q(0), q(1), q(2), ..., q(As-1)`. 
+        This value of `As` is generally smaller than the maximal number of trials `Ss` = <var>sampling_size</var>, defined by the user. 
+        The deviation of the `As` from the `Ss` can be used as a measure of the sampling efficiency. If `As < < Ss`, one may need to reconsider
+        the property being sampled. The transformation of the property changes the distribution function from which it is sampled. Such transformation
+        may be favorable (bringing `As` closer to `Ss`), which may improve the efficiency of the algorithm. The idea of the transformation is 
+        the cornerstone of the more advanced importance sampling algorithms.
+      </p>
+      <p>
+        In order to remove the potential dependence of the sampling on the starting point,
+        the inital `Ns` = <var>start_sampling</var> points in the above sequence (we can even call it a trajectory) may be discarded. The resulting array
+        of points `q(Ns), q(Ns+1), q(Ns+2), ..., q(Ss-1)` constitutes the returned result - the points sampled from the user-defined distribution.
+      </p>
+      <p>
+        One should be careful to choose the parameters of the <code>metropolis_gau</code> such that the best distribution is achieved
+        with minimal computational efforts. In particular: starting away from the maximum of the distribution, with the need for transitioninig
+        over the regions with low probability density may require prolonged simulation times (large sampling and large starting point), 
+        now discarding enough initial points (especially if the total sampling size is small) may deteriorate the quality of the sample (non-
+        equilibrium effect), using very small Gaussian variance (step size) may slow down the convergence of sampling procedure. On the contrary,
+        using very large step size may lead to inaccurate sampling. 
+      </p>
+      <p>
+        Below, we will consider several examples (motivated by the quantum mechanics course) of generating samplings drawn from complicated 
+        distributions. We will illustrate how the choice of the parameters affect the quality of the sampling.
+      </p>
+
+      <div class="row">
+        <div class="col-6">
+          <p> 
+          The general scheme of the implementation of the sampling algorithm is demonstrated in Figure 1. The idea of the approach is to 
+          hide unnecessary details of the Metropolis algorithm implementation from the user, but yet allow the user to define an input
+          function. Both the definition of the sampling distribution function and the call of the metropolis algorithm (together with the
+          definition of other control variables) is performed at the Python level, easily accessible to the user. The computationally-
+          intensive details of the algorithm are hidden in the C++ implemntation. The C++ function is also exposed to the Python level in
+          order to be used by the user.
+          </p>
+        </div>
+
+        <!-- Figure 1 begins -->
+        <div class="col-6">
+          <img width="100%" src="scheme1.png"></img>
+          <b>Figure 1.</b>The schematic showing the oranization of the computations with the user-defined (in Python)
+          probability distribution function passed as an argument of the <code>metropolis_gau</code> function.
+        </div>
+        <!-- Figure 1 ends -->
+      </div>
+
+      <br>
+      <h4>Examples 1: Particle in a 1D box</h4>
+      <p>
+        The probability distribution function for a 1D particle in a box is defined by `P_n(x) = (2/L) sin^2({pi  n  x} / L)`.
+      </p>
+      <p>
+        In particular, we are interested in the 
+        <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/tests/example_10_metropolis_mc/test_piab.py" target="_new">
+        test_piab.py
+        </a> file. The
+        <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/tests/example_10_metropolis_mc/plot_piab.plt" target="_new">
+        plot_piab.plt</a> file can be used to generate the plots of the computed distributions.
+      </p>
+ 
+      <p> 
+        First, lets consider how the variation of the input parameters affects the quality of the computed distributions. The results
+        are summarized in Figure 2:
+      </p>
+
+
+      <!-- Figure 2 begins -->
+      <div class="row">
+        <div class="col-4">
+          <img width="100%" src="data/piab/test1/distrib-1.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/piab/test1/distrib-2.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/piab/test1/distrib-3.png"></img>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+          <p class="text-center">a</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">b</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">c</p>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+          <img width="100%" src="data/piab/test1/distrib-4.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/piab/test1/distrib-5.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/piab/test1/distrib-6.png"></img>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+          <p class="text-center">d</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">e</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">f</p>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <b>Figure 2.</b>Distributions sampled from the `P_1(x) = (2/L) sin^2({pi  x} / L)` function using various
+          combinations of the parameters: 
+          (a) `Ss = 1100`, `Ns = 10`, `sigma_{Gau} = 0.05`;    (b) `Ss = 10100`, `Ns = 100`, `sigma_{Gau} = 0.05`;
+          (c) `Ss = 12500`, `Ns = 2500`, `sigma_{Gau} = 0.05`; (d) `Ss = 125000`, `Ns = 2500`, `sigma_{Gau} = 0.05`;
+          (e) `Ss = 12500`, `Ns = 2500`, `sigma_{Gau} = 0.5`;  (f) `Ss = 12500`, `Ns = 2500`, `sigma_{Gau} = 0.01`
+        </div>
+      </div>
+      <!-- Figure 2 ends -->
+
+      <p> 
+        One can clearly observe how the version (d) (Case 4) shows the best distribution of all the tested ones.  
+        Please, take a look at how the variation of parameters changes the computed distributions and make your conclusions.  
+      </p>
+
+
+      <p>
+        We can now go further and compute the distributions `P_n(x) = (2/L) sin^2({pi  n  x} / L)` for various n values, as 
+        implemented in the function <code>test_2</code> of the same module. The results are shown in Figure 3.
+      </p>
+
+      <!-- Figure 3 begins -->
+      <div class="row">
+        <div class="col-4">
+          <img width="100%" src="data/piab/test2/distrib-1.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/piab/test2/distrib-2.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/piab/test2/distrib-3.png"></img>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+          <p class="text-center">a</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">b</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">c</p>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+          <img width="100%" src="data/piab/test2/distrib-4.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/piab/test2/distrib-5.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/piab/test2/distrib-6.png"></img>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+          <p class="text-center">d</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">e</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">f</p>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <b>Figure 3.</b>Distributions sampled from the `P_n(x) = (2/L) sin^2({pi  x} / L)` function using various
+          combinations of the parameters: 
+          (a) `n = 1, Ss = 125000`, `Ns = 2500`, `sigma_{Gau} = 0.05`;   (b) `n = 1, Ss = 1250000`, `Ns = 2500`, `sigma_{Gau} = 0.05`;
+          For all (c,d,e, and f) the `Ss`, `Ns`, and `sigma_{Gau}` parameters as in (b) are used. The difference is only in the value of n:
+          (c) n = 2; (d) n = 3; (e) n = 4; (f) n = 10.
+        </div>
+      </div>
+      <!-- Figure 3 ends -->
+
+
+      <br>
+      <h4>Examples 2: Probability Density of Harmonic Oscillator Superposition</h4>
+      <p>
+        In this exercise, we will consider sample points from the distributions that are given by the `|Psi(q,t)|^2`, where
+        `Psi(q,t)` is a user-defined superposition of the Harmonic Oscillator (HO) eigenstates:
+        `Psi(q,t) = sum_n{ c_n * |n(q) \> * exp(-{i E_n t} / {\hbar} ) }`. The HO eigenstates are given by:
+        `|n(q) \> = N_n * H_n (q * \sqrt(alpha)) * exp(- {alpha q^2} / 2)`. Here, `H_n(x)` is a Hermite polynomial,
+        `N_n = 1/\sqrt(2^n * n!) (alpha/pi)^(1/4)` is the normalization coefficient. The coefficient `alpha` is defined as
+        `alpha = {m omega} / {\hbar}`, where `omega = \sqrt(k/m)`. Here, `k` is the harmonic force constant and `m` is the mass of the
+        particle. The HO Hamiltonian to which this solution corresponds is 
+        `\hat H = \hat p^2 / {2 m} + k/2 * q^2`.
+      </p>
+      <p>
+        This tutorial is implemented in the
+        <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/tests/example_10_metropolis_mc/test_ho.py" target="_new">
+        test_ho.py
+        </a> file in the tutorial directory. The
+        <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/tests/example_10_metropolis_mc/plot_ho.plt" target="_new">
+        plot_piab.plt</a> file can be used to generate the plots of the computed distributions.
+      </p>
+
+      <p>
+        Lets start with a simple case: `t = 0` and the superposition coefficients `c_n` are the constants given by the user. The 
+        points sampled from a number of superositions are shown in Figure 4.
+      </p>
+
+
+      <!-- Figure 4 begins -->
+      <div class="row">
+        <div class="col-4">
+          <img width="100%" src="data/ho/test1/distrib-1.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/ho/test1/distrib-2.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/ho/test1/distrib-3.png"></img>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+          <p class="text-center">a</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">b</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">c</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+          <img width="100%" src="data/ho/test1/distrib-4.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/ho/test1/distrib-5.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/ho/test1/distrib-6.png"></img>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+          <p class="text-center">d</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">e</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">f</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+          <img width="100%" src="data/ho/test1/distrib-7.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/ho/test1/distrib-8.png"></img>
+        </div>
+        <div class="col-4">
+          <img width="100%" src="data/ho/test1/distrib-9.png"></img>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+          <p class="text-center">g</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">h</p>
+        </div>
+        <div class="col-4">
+          <p class="text-center">i</p>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-12">
+          <b>Figure 4.</b>Distributions sampled from the distributions of HO states as described above. For all 
+          cases, the parameters of the Metropolis algorithm are: Ss = 1000000`, `Ns = 50000`, `sigma_{Gau} = 0.05` .
+          (a) `Psi = |0 \>`; (b) `Psi = |1 \>`; (c) `Psi = |2 \>`;
+          (d) `Psi = |5 \>`; (e) `Psi = |10 \>`; (f) `Psi = |25 \>`;
+          (g) `Psi = |0 \> + |1 \> `; (h) `Psi = |0 \> - |1 \> `; (i) `Psi = |0 \> + |1 \> + |2 \>`.          
+        </div>
+      </div>
+      <!-- Figure 4 ends -->
+
+
+
+      <br><br>
+    </div>  <!-- Container -->
+  </body>
+
+</html>
