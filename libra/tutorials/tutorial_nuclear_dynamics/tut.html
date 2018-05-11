@@ -63,7 +63,7 @@
     <div class="container">
     <!--div class="container-fluid margin-left"-->
       <h1><b>Nuclear Dynamics</b></h1>
-         Authored by Brendan A. Smith, Alexey V. Akimov <br>
+        Authored by Brendan A. Smith, Alexey V. Akimov <br>
       <p>
        <h3><b>General Workflow of Nuclear Dynamics Module</b></h3>
       <b>The working files for all examples presented in this tutorial can be found: 
@@ -72,28 +72,28 @@
       </p>
 
       The general workflow for all nuclear dynamics testing scripts is the following:
-        <ul>
-          <li>
-            The user will begin by defing how many electronic dof, nuclear dof, and number of trajectories they wish to use in their simulation.  
-          </li>
-          <li>
-            The user sets up model specific parameters, such as the force constant for a harmonic potential, etc.
-            An important parameter here is the selection of which model the user would like to use. For example, setting params["model"] = 1, may
-            select a harmonic potetnial, etc. The integration time step, dt is also set by the user here. 
-          </li>
-          <li>
-            The user now initilizes the dynamical variables q, and p. They are of type MATRIX, and are of dimensions (ndof x ntraj). Currently, the 
-            variables p and q are set by sampling from a normal distribution, via the sample() function.              
-          </li>
-          <li>
-            The hamiltonian object, ham, which stores all of the essential simulation details, such as the potential energy and forces, in various
-            represetnations, diabatic, adiabtic, etc., needs to now be updated based on the dynamical variables initiated by the user. This is done
-            by making the following function calls: ham.compute_diabatic(), ham.compute_adiabatic().
-          </li>                                                                                  
-          <li>
-            The simulation can now begin by calling the function run_test().
-          </li>
-        </ul>
+      <ul>
+        <li>
+          The user will begin by defing how many electronic dof, nuclear dof, and number of trajectories they wish to use in their simulation.  
+        </li>
+        <li>
+          The user sets up model specific parameters, such as the force constant for a harmonic potential, etc.
+          An important parameter here is the selection of which model the user would like to use. For example, setting params["model"] = 1, may
+          select a harmonic potetnial, etc. The integration time step, dt is also set by the user here. 
+        </li>
+        <li>
+          The user now initilizes the dynamical variables q, and p. They are of type MATRIX, and are of dimensions (ndof x ntraj). Currently, the 
+          variables p and q are set by sampling from a normal distribution, via the sample() function.              
+        </li>
+        <li>
+          The hamiltonian object, ham, which stores all of the essential simulation details, such as the potential energy and forces, in various
+          represetnations, diabatic, adiabtic, etc., needs to now be updated based on the dynamical variables initiated by the user. This is done
+          by making the following function calls: ham.compute_diabatic(), ham.compute_adiabatic().
+        </li>                                                                                  
+        <li>
+          The simulation can now begin by calling the function run_test().
+        </li>
+      </ul>
 
       <h3><b>Verlet Dynamics</b></h3>
       <p>
@@ -113,11 +113,13 @@
         In this script, we will be passing the variable model as a parameter in our run_test() function. Setting model = 1 will set the potential
         energy to be the harmonic potential. For this model, we will also need to initiate various other parameters. The following parameters to
         be set are:
-        <br>
-        <br>
-        params["x0"] = 1.0,  params["k"] = 0.1,  params["D"] = -0.1,  params["omega"] = 0.25
-        </br>
-        </br>
+      </p>
+
+<code><pre>
+params["x0"] = 1.0,  params["k"] = 0.1,  params["D"] = -0.1,  params["omega"] = 0.25
+</pre></code>
+
+       <p>
         Since we will be propagating only a single nuclear degree of freedom, please set the last parameter in the following functions equal to
         zero.
         ham.compute_diabatic(), and ham.compute_adiabatic().
@@ -321,48 +323,48 @@
            target="_new"> here</a>.
 
       <p align="justify">
-         The workflow just defined serves as a skeleton for the various ETHD implimentations in Libra. In the following examples, any additional 
-       features of a particular simulation will occur in between any of the bulleted points above. For example, binning functions are often called
-       in the 2D testing scripts which print distributions for the dyanamical variables of the trajectory ensemble, and occur between bullets
-       number 3 and 4, which bullet 3 is the initilization of such variables.   
+        The workflow just defined serves as a skeleton for the various ETHD implimentations in Libra. In the following examples, any additional 
+        features of a particular simulation will occur in between any of the bulleted points above. For example, binning functions are often called
+        in the 2D testing scripts which print distributions for the dyanamical variables of the trajectory ensemble, and occur between bullets
+        number 3 and 4, which bullet 3 is the initilization of such variables.   
       </p>
 
 
       <p align="justify">
-      The potential energy function for the 1D symmetric double well potential is: $$V(q) = \frac{q^4}{4} - \frac {q^2}{2}$$
-      The potential energy profile over the position coordinate interval [-2:2] is shown in Figure 1.  
-      In this tutorial, we will run the function run_test2(). Since we will be propagating nuclear dof on only one
-      electronic potential energy surface, we will set the variables ndia and nadi to be equal to 1. Given that this is a 
-      1D example, we will also ste the variable nnucl equal to 1. That is, we are going to propagate only 1 nuclear dof.
+        The potential energy function for the 1D symmetric double well potential is: $$V(q) = \frac{q^4}{4} - \frac {q^2}{2}$$
+        The potential energy profile over the position coordinate interval [-2:2] is shown in Figure 1.  
+        In this tutorial, we will run the function run_test2(). Since we will be propagating nuclear dof on only one
+        electronic potential energy surface, we will set the variables ndia and nadi to be equal to 1. Given that this is a 
+        1D example, we will also ste the variable nnucl equal to 1. That is, we are going to propagate only 1 nuclear dof.
       
-      We will represent this single nuclear dof with 100 trajectories by setting the variable ntraj equal to 100.
+        We will represent this single nuclear dof with 100 trajectories by setting the variable ntraj equal to 100.
       </p>                                                                                           
 
       <p align="justify">
-      We select "model":2 to choose the 1D symmetric double well potential, as is defined in the model2() function of the code. The 
-      1D symmetric double well potential has two local minima, one located at q = -1.0 (a.u) and another at q = 1.0 (a.u). In the original
-      ETHD paper, we initiated out trajectory ensemble slightly displaced from the leftmost local minima. Therefore, if not done already, please
-      set the following variable: mean_q.set(0,0, -1.1). This sets the average position of our trajectory ensemble to be located at 
-      q = -1.0 (a.u) The idea behind this simulation was to highlight a case where an initial trajectory ensemble, whose physics is governed
-      by a classcial Hamiltonian, will not tunnel to the adjacent well. This was realized by selecting a small distribution uncertainty for 
-      the initial trajectory ensemble, so if not done already, please set sigma_q.set(0,0, 0.04). Initial mean momenta and its variance are 
-      set equal to 0.  
+        We select "model":2 to choose the 1D symmetric double well potential, as is defined in the model2() function of the code. The 
+        1D symmetric double well potential has two local minima, one located at q = -1.0 (a.u) and another at q = 1.0 (a.u). In the original
+        ETHD paper, we initiated out trajectory ensemble slightly displaced from the leftmost local minima. Therefore, if not done already, please
+        set the following variable: mean_q.set(0,0, -1.1). This sets the average position of our trajectory ensemble to be located at 
+        q = -1.0 (a.u) The idea behind this simulation was to highlight a case where an initial trajectory ensemble, whose physics is governed
+        by a classcial Hamiltonian, will not tunnel to the adjacent well. This was realized by selecting a small distribution uncertainty for 
+        the initial trajectory ensemble, so if not done already, please set sigma_q.set(0,0, 0.04). Initial mean momenta and its variance are 
+        set equal to 0.  
       </p>                                                                                           
 
       <p align="justify">
-       After initiaing the dynamical variables q and p, please uncomment the function sample(q, mean_q, sigma_q, rnd), as this tutorial will
-       already provide you with an ensemble distribution for the position coordinates. The code will now automatically assemble these position
-       coordinates into the dynamical variable q, which you just defined. Following this, the mass variable is ititilized, and we are ready to do dynaimcs!
-       If you would like to run dynamics using the ETHD algorithm, please make sure that the line "ham.add_ethd_adi(q, iM, 1)" is uncommented, and 
-       that the last argument in the fucniton "Verlet1(dt, q, p, iM, ham, compute_model, params, 1)" is set equal to 1. To run dynamics using the 
-       classcial Hamiltonian, make sure to comment out "ham.add_ethd_adi(q, iM, 1)", and that the last argument in the Verlet1() fucntion is set
-       equal to zero.      
+        After initiaing the dynamical variables q and p, please uncomment the function sample(q, mean_q, sigma_q, rnd), as this tutorial will
+        already provide you with an ensemble distribution for the position coordinates. The code will now automatically assemble these position
+        coordinates into the dynamical variable q, which you just defined. Following this, the mass variable is ititilized, and we are ready to do dynaimcs!
+        If you would like to run dynamics using the ETHD algorithm, please make sure that the line "ham.add_ethd_adi(q, iM, 1)" is uncommented, and 
+        that the last argument in the fucniton "Verlet1(dt, q, p, iM, ham, compute_model, params, 1)" is set equal to 1. To run dynamics using the 
+        classcial Hamiltonian, make sure to comment out "ham.add_ethd_adi(q, iM, 1)", and that the last argument in the Verlet1() fucntion is set
+        equal to zero.      
       </p>                                                                                           
 
       <p align="justify">
-       To run the calculations, please scroll down to the bottom of the page, and make sure the following function call is ready: 
-       run_test2(). If it is, please save the script, exit, and executing the following command: "python test_ethd.py". After the 
-       code has finished running, you can view plot your results by executing the following command: gnuplot test_ethd_1D.plt. 
+        To run the calculations, please scroll down to the bottom of the page, and make sure the following function call is ready: 
+        run_test2(). If it is, please save the script, exit, and executing the following command: "python test_ethd.py". After the 
+        code has finished running, you can view plot your results by executing the following command: gnuplot test_ethd_1D.plt. 
       </p>                                                                                           
 
       <!-- Figure 4 begins -->
@@ -441,6 +443,9 @@
         </div>
       </div>
       <!-- Figure 4 ends -->
+
+    </div> <!-- container-->
+  </body>
 
 </html>
 
