@@ -104,7 +104,7 @@
         Classical nuclear propagation in Libra is done using the Velocity Verlet algorithm. The file we will be using in this section of the tutorial
         can be found <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/tests/example_9_nuclear_dynamics/test_verlet.py" target="_new">here</a>.
         In this example, we will be using the Velocity Verlet algorithm to perform dynamcs for a singular nuclear degree of freedom (dof)
-        in a harmonic potential. The espression for the potential is: $$ V(q) = \frac {k}{2}q  $$ Where  k is the harmonic force constant, 							
+        in a harmonic potential. The espression for the potential is: $$ V(q) = \frac {k}{2}q^2  $$ Where  k is the harmonic force constant, 							
         and q represents our single nuclear dof. 
       </p>
 
@@ -269,7 +269,7 @@ params["x0"] = 1.0,  params["k"] = 0.1,  params["D"] = -0.1,  params["omega"] = 
         The method is implemented 
         <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/hamiltonian/nHamiltonian_Generic/nHamiltonian_compute_ETHD.cpp"
          target="_new">here</a>. The ETHD Hamiltonian is defined as follows:
-        $$ H_{ETHD} = \frac{1}{N} \sum_{i=1}^N \frac{p_i}{2m} + \frac{1}{N} \sum_{i=1}^N V(q_i) + \frac{\hbar^2}{8ms^2({q})}$$
+        $$ H_{ETHD} = \frac{1}{N} \sum_{i=1}^N \frac{p_i^2}{2m} + \frac{1}{N} \sum_{i=1}^N V(q_i) + \frac{\hbar^2}{8ms^2({q})}$$
 
         Where `N` represents the number of trajectories in a given simulation, `p_i` being the momenta of trajectory i, `q_i` being the position 
         of trajectory i, and `s^2(q)`, being the variance of the trajectory ensemble, expressed in terms fo the position corrdinates of all 
