@@ -63,120 +63,573 @@
       <br><br>
 
       <div class="row">
-        <h3>Overview of the code</h3><br>
+        <h3>List of the code's capabilities</h3>
+        <br>
+        <p>
+           (not yet a complete one)
+        </p>
       </div>
 
-      <div class="row">
-        <div class="col-1"><b>Number</b></div>
-        <div class="col-2"><b>Library name</b></div>
-        <div class="col-2"><b>Dependencies</b></div>
-        <div class="col-7"><b>Intent</b></div>
-      </div>
+      <br> 
 
-      <div class="row">
-        <div class="col-1">1</div>
-        <div class="col-2">libmmath</div>
-        <div class="col-2">2, Eigen (optional)</div>
-        <div class="col-7">mathematical operations and functions</div>
-      </div>
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#TSH_methods">Trajectory Surface Hopping (TSH) methods</a>
+            </h4>
+          </div>
 
-      <div class="row">
-        <div class="col-1">2</div>
-        <div class="col-2">libio</div>
-        <div class="col-2">none</div>
-        <div class="col-7">direct interface between Python objects and C/C++ code, XML data read/write</div>
-      </div>
+          <div id="TSH_methods" class="panel-collapse collapse">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <p>
+                  <b>Fewest Switches Surface Hopping (FSSH)</b>
+                </p>
+                <p>
+                  Tully, J. C. Molecular Dynamics with Electronic Transitions. J. Chem. Phys. 1990, 93, 1061–1071.
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn/tsh_prob_fssh.cpp" target="_new">dyn/tsh_prob_fssh.cpp</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn/methods_tsh.cpp" target="_new">dyn/methods_tsh.cpp</a>
+                </p>
+              </li>
 
-      <div class="row">
-        <div class="col-1">3</div>
-        <div class="col-2">libcontext</div>
-        <div class="col-2">1,2</div>
-        <div class="col-7">XML read/write of arbitrary C/C++ and Python objects. Functionality of constructing XML structures from Python</div>
-      </div>
+              <li class="list-group-item">
+                <p>
+                  <b>Global Flux Surface Hopping (GFSH)</b>
+                </p>
+                <p>
+                  Wang, L.; Trivedi, D.; Prezhdo, O. V. Global Flux Surface Hopping Approach for Mixed Quantum-Classical Dynamics.
+                  J. Chem. Theory Comput. 2014, 10, 3598–3605.
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn/tsh_prob_gfsh.cpp" target="_new">dyn/tsh_prob_gfsh.cpp</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn/methods_tsh.cpp" target="_new">dyn/methods_tsh.cpp</a>
+                </p>
+              </li>
 
-      <div class="row">
-        <div class="col-1">4</div>
-        <div class="col-2">libcell</div>
-        <div class="col-2">1</div>
-        <div class="col-7">handling simulation unit cell partitioning: creation of Verlet or neighbor list, PBC operations</div>
-      </div>
+              <li class="list-group-item">
+                <p>
+                  <b>Markov State Surface Hopping (MSSH)</b>
+                </p>
+                <p>
+                  Tully, J. C.; Preston, R. K. Trajectory Surface Hopping Approach to Nonadiabatic Molecular Collisions: 
+                  The Reaction of H+ with D2. J. Chem. Phys. 1971, 55, 562–572.
+                </p>
+                <p>
+                  Akimov, A. V.; Trivedi, D.; Wang, L.; Prezhdo, O. V. Analysis of the Trajectory Surface Hopping Method
+                  from the Markov State Model Perspective. J. Phys. Soc. Jpn. 2015, 84, 094002. 
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn/tsh_prob_mssh.cpp" target="_new">dyn/tsh_prob_mssh.cpp</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn/methods_tsh.cpp" target="_new">dyn/methods_tsh.cpp</a>
+                </p>
+              </li>
 
-      <div class="row">
-        <div class="col-1">5</div>
-        <div class="col-2">libpot</div>
-        <div class="col-2">1,4</div>
-        <div class="col-7">Collection of interatomic interaction potentials, model potentials, etc.</div>
-      </div>
+              <li class="list-group-item">
+              </li>
 
-      <div class="row">
-        <div class="col-1">6</div>
-        <div class="col-2">libcalculators</div>
-        <div class="col-2">1</div>
-        <div class="col-7">
-          General functions for computing properties such as Fermi energy, electronic energy, density matrix, 
-          creation of electronic excitation objects, etc. Note, these functions are general enough so they rely
-          only on the simplest data types
+
+            </ul>
+            <div class="panel-footer"></div>
+          </div>
         </div>
-      </div>
+      </div>  <!-- TSH methods -->
 
-      <div class="row">
-        <div class="col-1">7</div>
-        <div class="col-2">libqchem</div>
-        <div class="col-2">1</div>
-        <div class="col-7">
-          Low-level operations for quantum-chemical calculations: orbitals objects, basis creation, 
-          molecular integrals and their derivatives
-        </div>
-      </div>
+      <br>
+        
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#dynamics">Classical, quantum-classical, and quantum dynamics </a>
+            </h4>
+          </div>
 
-      <div class="row">
-        <div class="col-1">8</div>
-        <div class="col-2">libhamiltonian</div>
-        <div class="col-2">1, 2, 4, 5, 6, 7</div>
-        <div class="col-7">
-          Model and atomistic (quantum and classical MM) Hamiltonians – both types are unified to have a common interface
-        </div>
-      </div>
+          <div id="dynamics" class="panel-collapse collapse">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <p>
+                  <b>Nuclear dynamics: Verlet (velocity form) algorithm</b>
+                </p>
+                <p>
+                  Verlet, L. Computer “Experiments” on Classical Fluids. I. Thermodynamical Properties of 
+                  Lennard-Jones Molecules. Phys. Rev. 1967, 159, 98–103.
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn/Verlet.cpp" target="_new">dyn/Verlet.cpp</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn/Verlet_nvt.cpp" target="_new">dyn/Verlet_nvt.cpp</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn/Dynamics_Nuclear.cpp" 
+                  target="_new">dyn/Dynamics_Nuclear.cpp</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn/nuclear/Nuclear.cpp" 
+                  target="_new">dyn/nuclear/Nuclear.cpp</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/scripts/state/State_methods2.cpp" 
+                  target="_new">scripts/state/State_methods1.cpp</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/scripts/state/State_methods2.cpp" 
+                  target="_new">scripts/state/State_methods2.cpp</a>
+                </p>
+              </li>
 
-      <div class="row">
-        <div class="col-1">9</div>
-        <div class="col-2">libdyn</div>
-        <div class="col-2">1, 10</div>
-        <div class="col-7">
-          Integrators for classical and quantum propagation, also includes thermostats and barostats, 
-          as well as ensembles of quantum-classical systems.
-        </div>
-      </div>
+              <li class="list-group-item">
+                <p>
+                  <b>Nuclear dynamics: Entangled Trajectories Hamiltonian Dynamics (ETHD)</b>
+                </p>
+                <p>
+                  Smith, B.; Akimov, A. V. Entangled Trajectories Hamiltonian Dynamics for Treating Quantum 
+                  Nuclear Effects. The Journal of Chemical Physics 2018, 148 (14), 144106.
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn/Verlet.cpp" target="_new">dyn/Verlet.cpp</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn/Verlet_nvt.cpp" target="_new">dyn/Verlet_nvt.cpp</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/hamiltonian/nHamiltonian_Generic/
+                  nHamiltonian_compute_ETHD.cpp" target="_new">hamiltonian/nHamiltonian_Generic/nHamiltonian_compute_ETHD.cpp</a>
+                </p>
+              </li>
 
-      <div class="row">
-        <div class="col-1">10</div>
-        <div class="col-2">libchemobjects</div>
-        <div class="col-2">1, 9</div>
-        <div class="col-7">
-          Data types to represent chemical objects – atoms, fragments, molecules and to perform analysis and manipulations on them
-        </div>
-      </div>
+              <li class="list-group-item">
+                <p>
+                  <b>Electron-Nuclear dynamics: Ehrenfest Dynamics</b>
+                </p>
+                <p> 
+                  Akimov, A. V. Libra: An Open-Source “Methodology Discovery” Library for Quantum and Classical 
+                  Dynamics Simulations. J. Comput. Chem. 2016, 37, 1626–1649.
+                </p>
+                <p>                  
+                  Theory and derivations: 
+                  <a href="https://github.com/alexvakimov/Derivatory/blob/master/Ehrenfest.pdf" target="_new">Ehrenfest.pdf</a>
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn/Ehrenfest.cpp" target="_new">dyn/Ehrenfest.cpp</a>
+                </p>
+              </li>
 
-      <div class="row">
-        <div class="col-1">11</div>
-        <div class="col-2">libconverters</div>
-        <div class="col-2">1, 9, 10</div>
-        <div class="col-7">
-          Set of functions to convert between the data types defined in different modules 
-          (e.g. between dynamical classes and chemobject classes).
-        </div>
-      </div>
 
-      <div class="row">
-        <div class="col-1">12</div>
-        <div class="col-2">libscripts</div>
-        <div class="col-2">1, 8, 9, 10</div>
-        <div class="col-7">
-          Higher-level protocol for some complex simulations, but with all the details hidden from users.
-          This is where the new methodologies tested in Python scripts can be collected before they are 
-          refactored across the entire library.
+              <li class="list-group-item">
+              </li>
+
+
+            </ul>
+            <div class="panel-footer"></div>
+          </div>
         </div>
-      </div>
+      </div>  <!-- Dynamics -->
+
+      <br>
+
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#rigid_body">Rigid body dynamics integrators</a>
+            </h4>
+          </div>
+
+          <div id="rigid_body" class="panel-collapse collapse">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <p>
+                  <b>Rigid body dynamics: Numerically exact integration algorithm</b>
+                </p>
+                <p> 
+                  Hernandez de la Pena, L.; van Zon, R.; Schofield, J.; Opps, S. B. "Discontinuous molecular dynamics 
+                  for semiflexible and rigid bodies" J. Chem. Phys. 2007, 126, 074105
+                </p>
+                <p>
+                  van Zon, R.; Schofield, J. "Numerical implementation of the exact dynamics of free rigid bodies" 
+                  J. Comp. Phys. 2007, 225, 145-164
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn_rigidbody/RigidBody_methods5_1.cpp"
+                  target="_new">dyn_rigidbody/RigidBody_methods5_1.cpp</a>
+                </p>
+              </li>
+
+              <li class="list-group-item">
+                <p>
+                  <b>Rigid body dynamics: DLML (Dullweber-Leimkuhler-McLahlan) algorithm</b>
+                </p>
+                <p> 
+                  Dullweber, A.; Leimkuhler, B.; McLachlan, R."Symplectic splitting methods for rigid body molecular dynamics"
+                  J. Chem. Phys. 1997, 107, 5840-5851
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn_rigidbody/RigidBody_methods5_2.cpp"
+                  target="_new">dyn_rigidbody/RigidBody_methods5_2.cpp</a>
+                </p>
+              </li>
+
+              <li class="list-group-item">
+                <p>
+                  <b>Rigid body dynamics: NO_SQUISH algorithm</b>
+                </p>
+                <p> 
+                  Miller, T. F.; Eleftheriou, M.; Pattnaik, P.; Ndirango, A.; Newns, D.; Martyna, G. J.
+                  Symplectic Quaternion Scheme for Biophysical Molecular Dynamics. J. Chem. Phys. 2002, 116, 8649–8659.
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn_rigidbody/RigidBody_methods5_3.cpp"
+                  target="_new">dyn_rigidbody/RigidBody_methods5_3.cpp</a>
+                </p>
+              </li>
+
+              <li class="list-group-item">
+                <p>
+                  <b>Rigid body dynamics: KLN algorithm</b>
+                </p>
+                <p> 
+                  Kamberaj, H.; Low, R. J; Neal, M. P. "Time reversible and symplectic integrators for molecular dynamics 
+                  simulations of rigid molecules" J. Chem. Phys. 2005, 122, 224114-1 - 224114-30
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn_rigidbody/RigidBody_methods5_4.cpp"
+                  target="_new">dyn_rigidbody/RigidBody_methods5_4.cpp</a>
+                </p>
+              </li>
+
+              <li class="list-group-item">
+                <p>
+                  <b>Rigid body dynamics: Terec and qTerec algorithm</b>
+                </p>
+                <p> 
+                  Akimov, A. V.; Kolomeisky, A. B. Recursive Taylor Series Expansion Method for Rigid-Body Molecular Dynamics.
+                  J. Chem. Theory Comput. 2011, 7, 3062–3071.
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn_rigidbody/RigidBody_methods5_5.cpp"
+                  target="_new">dyn_rigidbody/RigidBody_methods5_5.cpp</a>
+                </p>
+              </li>
+
+              <li class="list-group-item">
+                <p>
+                  <b>Rigid body dynamics: Algorithm of Omelyan</b>
+                </p>
+                <p> 
+                  Omelyan I. P. "Algorithm for numerical integration of the rigid-body equations of motion" Phys. Rev. E. 1998, 58, 1169-1172
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn_rigidbody/RigidBody_methods5_6.cpp"
+                  target="_new">dyn_rigidbody/RigidBody_methods5_6.cpp</a>
+                </p>
+              </li>
+
+              <li class="list-group-item">
+              </li>
+
+            </ul>
+            <div class="panel-footer"></div>
+          </div>
+        </div>
+      </div>  <!-- Rigid body dynamics integrators -->
+
+      <br>
+
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#bath">Bath models (Thermostats, Barostats, etc.) </a>
+            </h4>
+          </div>
+
+          <div id="bath" class="panel-collapse collapse">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <p>
+                  <b>Barostat: KLN algorithm (for rigid bodies or all-atomic dynamics)</b>
+                </p>
+                <p> Both isotropic dilation/contraction and anisotropic (flexible cell) modes are possible
+                </p>
+                <p> 
+                  Kamberaj, H.; Low, R. J; Neal, M. P. "Time reversible and symplectic integrators for molecular dynamics 
+                  simulations of rigid molecules" J. Chem. Phys. 2005, 122, 224114-1 - 224114-30
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn/barostat/Barostat_methods.cpp"
+                  target="_new">dyn/barostat/Barostat_methods.cpp</a>
+                </p>
+              </li>
+
+              <li class="list-group-item">
+                <p>
+                  <b>Thermostat: Nose-Hoover thermostat according to the KLN algorithm (for rigid bodies or all-atomic dynamics)</b>
+                </p>
+                <p>
+                  Hoover, W. G. Nose-Hoover Nonequilibrium Dynamics and Statistical Mechanics. Mol. Simul. 2007, 33, 13–19.
+                </p>
+                <p> 
+                  Kamberaj, H.; Low, R. J; Neal, M. P. "Time reversible and symplectic integrators for molecular dynamics 
+                  simulations of rigid molecules" J. Chem. Phys. 2005, 122, 224114-1 - 224114-30
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn/thermostat/Thermostat_methods.cpp"
+                  target="_new">dyn/thermostat/Thermostat_methods.cpp</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/scripts/state/State_methods2.cpp" 
+                  target="_new">scripts/state/State_methods1.cpp</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/scripts/state/State_methods2.cpp" 
+                  target="_new">scripts/state/State_methods2.cpp</a>
+                </p>
+              </li>
+
+              <li class="list-group-item">
+                <p>
+                  <b>Thermostat: Nose-Poincare thermostat</b>
+                </p>
+                <p>
+                  Nose, S. An Improved Symplectic Integrator for Nose-Poincare Thermostat. J. Phys. Soc. Jpn. 2001, 70, 75–77.
+                </p>
+                <p>
+                  Bond, S. D.; Leimkuhler, B. J.; Laird, B. B. The Nosé-Poincaré Method for Constant Temperature Molecular Dynamics.
+                  J. Comput. Phys. 1999, 151, 114–134.
+                </p>
+                <p> 
+                  Kleinerman, D. S.; Czaplewski, C.; Liwo, A.; Scheraga, H. A. Implementations of Nosé–Hoover and Nosé–Poincaré 
+                  Thermostats in Mesoscopic Dynamic Simulations with the United-Residue Model of a Polypeptide Chain. J. Chem. Phys. 2008, 128, 245103.
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/dyn/thermostat/Thermostat_methods.cpp"
+                  target="_new">dyn/thermostat/Thermostat_methods.cpp</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/scripts/state/State_methods2.cpp" 
+                  target="_new">scripts/state/State_methods1.cpp</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/blob/devel/src/scripts/state/State_methods2.cpp" 
+                  target="_new">scripts/state/State_methods2.cpp</a>
+                </p>
+              </li>
+
+              <li class="list-group-item">
+              </li>
+
+
+            </ul>
+            <div class="panel-footer"></div>
+          </div>
+        </div>
+      </div>  <!-- Bath model methods -->
+
+      <br>
+
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#force_fields">Force Fields and Molecular Mechanics</a>
+            </h4>
+          </div>
+
+          <div id="force_fields" class="panel-collapse collapse">
+            <ul class="list-group">
+
+              <li class="list-group-item">
+                <p>
+                  <b>Basic Molecular Mechanics Potentials</b>
+                </p>
+                <p>
+                  Re-usable functions that can be utilized on their own or within a given force field
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/src/hamiltonian/Hamiltonian_Atomistic/Hamiltonian_MM"
+                  target="_new">hamiltonian/Hamiltonian_Atomistic/Hamiltonian_MM</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/src/pot"
+                  target="_new">pot</a>
+                </p>
+              </li>
+
+              <li class="list-group-item">
+                <p>
+                  <b>Ewald-type lattice sums for electrostatic (1/R) and dispersion (1/R^6) interactions</b>
+                </p>
+                <p>
+                  Karasawa, N.; Goddard III, W. A. Acceleration of Convergence for Lattice Sums. J. Phys. Chem. 1989, 93, 7320–7327.
+                </p>
+                <p>
+                  Procacci, P.; Marchi, M. "Taming the Ewald sum in molecular dynamics simulations of solvated proteins via a multiple 
+                  time step algorithm" J.Chem.Phys. 1996, 104, 3003-3012
+                </p>
+                <p>
+                  Komeiji, Y. "Ewald summation and multiple time step methods for molecular dynamics simulation of biological molecules"
+                  J. Mol. Struct. (Theochem) 2000, 530, 237-243
+                </p>
+
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/src/pot/Potentials_mb_elec.cpp"
+                  target="_new">pot/Potentials_mb_elec.cpp</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/src/pot/Potentials_mb_vdw.cpp"
+                  target="_new">pot/Potentials_mb_vdw.cpp</a>
+                </p>
+              </li>
+
+              <li class="list-group-item">
+                <p>
+                  <b>Charge Equilibration approach (qEQ)</b>
+                </p>
+                <p>
+                  Rappe, A. K.; Goddard, W. A. Charge Equilibration for Molecular Dynamics Simulations. J. Phys. Chem. 1991, 95, 3358–3363.
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/src/solvers/qeq"
+                  target="_new">solvers/qeq</a>
+                </p>
+              </li>
+
+
+              <li class="list-group-item">
+                <p>
+                  <b>Verlet and Neighbor Cell Lists. Simulation cell variables</b>
+                </p>
+                <p>
+                  Needed to execute efficient MM calculations in periodic systems. 
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/src/cell"
+                  target="_new">cell</a>
+                </p>
+              </li>
+
+              <li class="list-group-item">
+                <p>
+                  <b>Force Field: DREIDING force field</b>
+                </p>
+                <p>
+                  Mayo, S. L.; Olafson, B. D.; Goddard, W. A. DREIDING: A Generic Force Field for Molecular Simulations. 
+                  Journal of Physical Chemistry 1990, 94, 8897–8909.
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/src/forcefield"
+                  target="_new">forcefield</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/src/hamiltonian/Hamiltonian_Atomistic/Hamiltonian_MM"
+                  target="_new">hamiltonian/Hamiltonian_Atomistic/Hamiltonian_MM</a>
+                </p>
+              </li>
+
+              <li class="list-group-item">
+                <p>
+                  <b>Force Field: Tripos 5.2 force field</b>
+                </p>
+                <p>
+                  Clark, M.; Cramer III, R. D.; Van Opdenbosch, N. Validation of the General Purpose Tripos 5.2 Force Field. 
+                  J. Comput. Chem. 1989, 10, 982–1012.
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/src/forcefield"
+                  target="_new">forcefield</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/src/hamiltonian/Hamiltonian_Atomistic/Hamiltonian_MM"
+                  target="_new">hamiltonian/Hamiltonian_Atomistic/Hamiltonian_MM</a>
+                </p>
+              </li>
+
+              <li class="list-group-item">
+                <p>
+                  <b>Force Field: UFF (Universal Force Field)</b>
+                </p>
+                <p>
+                  Rappe, A. K.; Casewit, C. J.; Colwell, K. S.; Goddard III, W. A.; Skiff, W. M. 
+                  UFF, a Full Periodic Table Force Field for Molecular Mechanics and Molecular Dynamics Simulations. 
+                  J. Am. Chem. Soc. 1992, 114, 10024–10035.
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/src/forcefield"
+                  target="_new">forcefield</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/src/hamiltonian/Hamiltonian_Atomistic/Hamiltonian_MM"
+                  target="_new">hamiltonian/Hamiltonian_Atomistic/Hamiltonian_MM</a>
+                </p>
+              </li>
+
+              <li class="list-group-item">
+                <p>
+                  <b>Force Field: GAFF (General Amber Force Field)</b>
+                </p>
+                <p>
+                  Wang, J.; Wolf, R. M.; Caldwell, J. W.; Kollman, P. A.; Case, D. A. Development and Testing of a General 
+                  Amber Force Field. J. Comput. Chem. 2004, 25, 1157–1174.
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/src/forcefield"
+                  target="_new">forcefield</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/src/hamiltonian/Hamiltonian_Atomistic/Hamiltonian_MM"
+                  target="_new">hamiltonian/Hamiltonian_Atomistic/Hamiltonian_MM</a>
+                </p>
+              </li>
+
+              <li class="list-group-item">
+                <p>
+                  <b>Force Field: MMFF94 (Merck Force Field)</b>
+                </p>
+                <p>
+                  Halgren, T. A. Merck Molecular Force Field. I. Basis, Form, Scope, Parameterization, and Performance of MMFF94.
+                  J. Comput. Chem. 1996, 17, 490–519.
+                </p>
+                <p>
+                  Halgren, T. A. Merck Molecular Force Field. II. MMFF94 van Der Waals and Electrostatic Parameters for
+                  Intermolecular Interactions. J. Comput. Chem. 1996, 17, 520–552.
+                </p>
+                <p>
+                  Src: 
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/src/forcefield"
+                  target="_new">forcefield</a>
+                  <a href="https://github.com/Quantum-Dynamics-Hub/libra-code/tree/devel/src/hamiltonian/Hamiltonian_Atomistic/Hamiltonian_MM"
+                  target="_new">hamiltonian/Hamiltonian_Atomistic/Hamiltonian_MM</a>
+                </p>
+              </li>
+
+              <li class="list-group-item">
+              </li>
+
+            </ul>
+            <div class="panel-footer"></div>
+          </div>
+        </div>
+      </div>  <!-- Force Fields and Molecular Mechanics -->
+
+
+
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#id1"></a>
+            </h4>
+          </div>
+
+          <div id="id1" class="panel-collapse collapse">
+            <ul class="list-group">
+              <li class="list-group-item">
+              </li>
+              <li class="list-group-item">
+              </li>
+              <li class="list-group-item">
+              </li>
+            </ul>
+            <div class="panel-footer"></div>
+          </div>
+        </div>
+      </div>  <!-- TSH methods -->
+
+
+
 
     </div> <!-- container-fluid -->
 
