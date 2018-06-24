@@ -1,0 +1,306 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+
+	<script src="bootstrap/js/jquery.js"></script>        
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+	
+	<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+	<link href="bootstrap/css/style.css" rel="stylesheet">
+	
+	<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
+	<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushPython.js"></script>
+	<link type="text/css" rel="stylesheet" href="syntaxhighlighter_3.0.83/styles/shCoreDefault.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+
+	
+	<title>PYXAID</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+	
+    </head>
+    <body style="margin-left:10px">
+	
+	
+
+	<h2>Documentation</h2><br>
+	<h3><a id="doc1">Module list</a></h3>
+	<p>PYXAID distribution is a collection of the module written in either python or C/C++. The language the module is written in defines the hierarchical 
+	level of such module - the lower level corresponds to the code written in C/C++ while the higher-level code is mostly written in python.
+	The lower-level code implements the basic or performance-critical functions and data types, while the higher-level code is build on the functions and
+	classes provided by the lower-level modules. The overall structure of the PYXAID distribution with the classification of the modules according to the
+	code level is summarized below.
+	</p><br>
+	<p><b>pyxaid</b></p>
+	<ul>
+		<li><b>Level 1 modules</b></li>
+		<ul>
+			<li><a href="#pyxaid_core_mod">pyxaid_core</a></li>
+		</ul><br>
+		<li><b>Level 2 modules</b><br>
+		<p>modules that depend on Level 1 modules</p>
+		<ul>
+			<li><a href="#runMD_mod">runMD</a></li>
+		</ul><br>
+		
+		<p id="pure_pyth_mod">modules that do not depend on Level 1 modules</p>
+		<ul>
+			<li><a href="#aux_mod">aux</a></li>
+			<li><a href="#average_mod">average</a></li>
+			<li><a href="#distribute_mod">distribute</a></li>
+			<li><a href="#exc_spec_mod">excitation_spectrum</a></li>
+			<li><a href="#lazy_mod">lazy</a></li>
+			<li><a href="#out2inp_mod">out2inp</a></li>
+			<li><a href="#out2pdb_mod">out2pdb</a></li>
+			<li><a href="#out2xyz_mod">out2xyz</a></li>
+			<li><a href="#pdos_mod">pdos</a></li>
+			<li><a href="#td-map_mod">td-map</a></li>
+			<li><a href="#spectrum_mod">spectrum</a> (requires numpy)</li>			
+		</ul><br>
+		</li><br>
+		<li><b>Level 3 scripts</b><br>
+		<p>These are the input files customized for specific problem. They make use of the functions defined in other modules (Levels 1 and 2) and are 
+		executed as normal python scripts. In addition, the files of this level can include templates for running some claculations and written in other 
+		languages than python (e.g. PBS/shell scripts). The collection of examples showing typical types of usage of other modules is coming with the
+		PYXAID distribution, but is not its integral part. It only gives the user predefined templates of the execution scripts that may need to be 
+		customized for particular project. We advise you to start learning the PYXAID package by checking these examples and proceeding through tutorials.
+		</p>
+		</li>
+	</ul>
+	<br>
+	<h3><a id="doc2">Documentation by module</a></h3>
+	<p> Below we present an overwiev of each module: its content, purpose, functionality, etc.</p>
+	
+	<a><h4 id="pyxaid_core_mod">Module pyxaid_core</h4></a>
+	<p>This module implements the basic functionality of the PYXAID package. This includes, all the time-consuming calculations (matrix operations, integrators,
+	operations with the wavefunction, NA-MD algorithm, basic and advanced math) and the most important data types (matrix, vectors, wavefunctions). 
+	Therefore, it is written in a mix of C/C++ languages to achieve high performance. The classes and the methods are exposed to Python interface
+	via Boost.Python library. The list of such function and classes implemented in pyxaid_core module is described below.
+	</p><br>
+		<p><b>Module functions:</b></p>
+		<div class="accordion" id="acc_pyxaid_core">
+		
+			<div class="accordion-group">			
+				<div class="accordion-heading">
+					<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc_pyxaid_core" href="#fn_namd">
+					namd(params)
+					</a>
+				</div>
+				<div id="fn_namd" class="accordion-body collapse">
+					<div class="accordion-inner">
+					<ul>
+						<li><b>Purpose:</b><br>
+						One of the main function of the distribution - in computes NA-MD in a variety of ways, as specified by artument params.
+						</li><br>
+						<li><b>Arguments:</b><br>
+						<p><b>params</b> - dictionary, containing a set of the key - value pairs</p>
+						<p>Because the function delivers the main NA-MD functionaliy of the PYXAID, the parameters will be discussed in a bit more details
+						than for other functions of the distribution, on a <a href="namd_parameters.html" target="frame_res">separate page</a>.</p>						
+						</li><br>
+						<li><b>Used in:</b><br>
+						Directly in user-defined script. See, for example, "py-scr3.py" - one of the level-3 codes coming with this distribution.
+						</li><br>
+						<li><b>Uses:</b><br>
+						It is of level-1, so it uses C/C++ functions and classes.
+						</li><br>
+					</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+	
+	<a><h4 id="runMD_mod">Module runMD</h4></a>
+		<p> This module implements the basic functionality for pre-computing electronic Hamiltonian matrices along a single MD trajectory. Depending on the 
+		parameters this can be done in a variety of ways.</p><br>
+
+		<p><b>Module functions:</b></p>
+		<div class="accordion" id="acc1">
+		
+			<div class="accordion-group">			
+				<div class="accordion-heading">
+					<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc1" href="#fn_get_value">
+					get_value(params,key,default,typ)
+					</a>
+				</div>
+				<div id="fn_get_value" class="accordion-body collapse">
+					<div class="accordion-inner">
+					<ul>
+						<li><b>Purpose:</b><br>
+						Auxiliary function that extracts value of given type from the dictionary
+						</li><br>
+						<li><b>Parameters:</b><br>
+						<p> <b>params</b> - dictionary, containing a set of the key - value pairs</p>
+						<p> <b>key</b> - a string defining the key the value of which we want to extract from the dictionary</p>
+						<p> <b>default</b> - the default value corresponding to the key given, in the case if dictionary does not define it</p>
+						<p> <b>typ</b> - a string defining the data type of value corresponding to given key. The parameter 'default' must be of this type.
+						<br>Allowed values:<br>
+							<ul>
+								<li>"i" - for extracting integer values</li>
+								<li>"s" - for extracting string values</li>
+								<li>"f" - for extracting floating-point values</li>
+							</ul>
+						</p>
+						</li><br>
+						<li><b>Used in:</b><br>
+						<p> runMD.runMD(...)</p>
+						</li><br>
+						<li><b>Uses:</b>
+						<p>...</p>
+						</li><br>
+						<li><b>Example:</b><br>
+							<pre class="brush: python;">
+							params = {"EXE_EXPORT":"path_to_my_exe", dt:1.0, minband:1, maxband:10 } # define dictionary of parameters<br>
+							dt = get_value(params,"dt","1.0","f") # extract the value of variable params["dt"] and convert it to floating point type
+							</pre>
+						</li>
+					</ul>
+					</div>
+				</div>
+			</div>
+
+
+
+		</div>
+
+		<div class="accordion" id="acc2">
+		
+			<div class="accordion-group">			
+				<div class="accordion-heading">
+					<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc2" href="#fn_runMD">
+					runMD(params)
+					</a>
+				</div>
+				<div id="fn_runMD" class="accordion-body collapse">
+					<div class="accordion-inner">
+					<ul>
+						<li><b>Purpose:</b><br>
+						Runs a serial job - organizes a series of the single-point electronic structure calculations for the configurations
+						sampled along the MD trajectory. This allows one to compute the electronic Hamiltonian matrix elements (non-adiabatic couplings
+						and energies of the basis states) for the TD-SE. This is done numerically using the wavefunction for adjacent time steps. 
+						This is the heart of the Step 2 (as defined in our paper).
+						</li><br>
+						<li><b>Parameters:</b><br>
+						<p> <b>params</b> - dictionary, containing a set of the key - value pairs determining the details of calculations</p>
+						<br>Allowed key values (with the explanation of the value meaning):<br>
+							<ul>
+								<li>"NP" - integer, specifying on how many CPUs to run the electronic structure calculations (with the QE code). Default value = 1</li>
+								<li>"EXE" - string, specifying the path the quantum-mechanical driver (pw program of QE package). Default value = ""</li>
+								<li>"EXE_EXPORT" - string, specifying the path of the post-processing utility to transform the wavefunction to the
+								text format (pw_export program of QE package). Default value = ""</li>
+								<li>"start_indx" - integer, specifying the index of the starting MD trajectory point used for electronic Hamiltonian computations.
+								Default value = 0</li>
+								<li>"stop_indx" - integer, specifying the index of the final MD trajectory point used for electronic Hamiltonian computations.
+								Default value = 1</li>
+								<li>"dt" - real number, specifying the nuclear time step (in fs) used to produce MD trajectory. Default value = 1.0</li>
+								<li>"pp_type" - string, specifying the type of the pseudo-potential(PP) to be employed in electronic structure calculations.
+								Default value = "NC" - norm-conserving PP. Currently is not actually used.</li>
+								<li>"wd" - string, specifying the path (relatively to the directory from which the function is called) to the directory
+								where all calculations will be performed (working directory). This directory will be created, if it does not exist yet. Default value = "wd"</li>
+								<li>"rd" - string, specifying the path (absolute!!!) to the directory where all results (Ham_ files, Hprime_ files, etc.) will
+								be collected (results directory). This directory must already be created by the user. Default value = same as for "wd"</li>
+								<li>"minband" - integer, specifying the index (starting from 1, not to exceed the number of bands used in scf calculations) 
+								of the minimal KS orbital to be included in the basis set of adiabatic KS (one-electron) states for which the Ham_ and Hprime_ 
+								files to be computed, including it. Default value = 1</li>
+								<li>"maxband" - integer, specifying the index (starting from 1, not to exceed the number of bands used in scf calculations)
+								of the maximal KS orbital to be included in the basis set of adiabatic KS (one-electron) states for which the Ham_ and Hprime_
+								files to be computed, including it. Default value = 2. 
+								Together with "minband" defines the dimensionality of the one-electron (KS basis) Hamiltonian matrix: maxband - minband + 1.
+								Thus, for the default values of maxband = 2 and minband = 1 the electronic Hamiltonian is a 2 x 2 matrix, computed using the
+								KS wavefunctions for the bands numbered 1 and 2, where 1 - is the first band (MO) given by QE code.	</li>
+								<li>"nocc" - integer, specifying the index (starting from 1, not to exceed the number of bands used in scf calculations) of 
+								the occupied KS orbital. Default value = 1. Together with default values for "minband" and "maxband" this corresponds to 
+								one occupied orbital (index 1) and one virtual orbital (index 2).</li>
+								<li>"nac_method" - integer, specifying the type of an ad hoc NAC correction method. <br>
+								Available values:<br>
+									<ul>
+									<li>0 - no correction, NAC is computed as prescribed by Hammess-Schiffer and Tully[1]. See details in the PYXAIS paper.</li>
+									<li>1 - use the NAC and band gap correction as described in our work (to be published).</li>
+									</ul>
+								Default value = 0.
+								</li>
+								<li>"prefix0" - string, specifying the prefix for the files containing the input files for the electronic structure calculations
+								used in this step. This is for the case when params["nac_method"] = 0 or params["nac_method"] = 1. Default value = "x0.scf". The
+								prefix only defines the part of the input file, the full name of the input file also contains the integer that enumerates the
+								MD trajectory point and the suffix - ".in". In other words, for the MD configuration 10 (this value must be between "start_indx"
+								and "stop_indx" defined above) the input file will look like "x0.scf.10.in". Note that this file must be present in the directory
+								from which the runMD2() function is called (current working directory).</li>
+								<li>"prefix1" - similarly to "prefix0", but is used only if params["nac_method"] = 1. Default value = "x1.scf".</li>
+								<li>"wfc_preprocess" - string, specifying how to process (transform) the wavefunction read from the raw wavefunction file 
+								(e.g. in "../curr0/x0.export/wfc.1") before using it to compute non-adiabatic couplings. <br>
+								Available values:<br>
+									<ul>
+									<li>"normalize" - normalize all KS orbitals read from wfc. file to unity. Because such wfc is only pseudized one (unless this
+									was excplicitly performed by the pw_export program), the KS orbitals will neither be orthogonal to each other nor they will
+									be normalized. With this preprocessing option we help to make sure that they are at least normalized (this condition is
+									used in derivation of the numeriacal expression for the NAC given by Hammess-Schiffer and Tully[1]). Still, KS orbitals may be
+									non-orthogonal (but for the relatively large systems such non-orthogonality is relatively small)</li>
+									<li>"complete" - needed if the calculations are performed at the gamma-point. In this case only a half or the wavefunction is
+									stored to save space. The other half (except for one point at the origin g = (0,0,0)) is obtained by complex conjugation of the
+									first part due to symmetry: c(g) = c*(-g). So with this option we restore the full wavefunction before it is used to compute
+									Hamiltonian matrix elements in the KS basis (Ham_ files) and other related quantities (such as Hprime_ files).</li>
+									<li>"restore" - as it has already be mentioned above, the originally produced (pseudized) KS orbitals are not orthogonal. 
+									With this option we "uproject" the pseudized wavefunctions to produce the true, "all-electron" wavefunctions (see out NAC correction
+									paper for details). This ensures that the wavefunctions are orthogonal and normalized before we compute NACs and other related
+									properties</li>
+									</ul>
+								Default value = "restore".
+								</li>
+								<li>"do_complete" - integer, specifying if the wavefunction must be completed (see "complete" option to "wfc_preprocess" key) before
+								it is restored (see "restore" option to "wfc_preprocess" key).<br>
+								Available values:<br>
+									<ul>
+									<li>0 - do not complete, restore the wavefunction straight ahead from what has been read</li>
+									<li>1 - complete the wavefunction first, then restore the all-electron wavefunction from the restored pseudized one. This is needed
+									if the gamma-trick is used, otherwise there may be problems in diagonalization procedures</li>
+									</ul>
+								Default value = 1.
+								</li>
+								<li>"compute_Hprime" - integer, specifying if the transition dipole moments (Hprime_ files) are to be computed (along 3 directions) 
+								in addition to the Hamiltonian matrix elements (Ham_ files). <br>
+								Available values:<br>
+									<ul>
+									<li>0 - do not compute Hprime_ files</li>
+									<li>1 - compute Hprime_ files</li>
+									</ul>
+								Default value = 0.
+								</li>
+							</ul>
+						</p>
+						</li><br>
+						<li><b>Used in:</b><br>
+						<p>level 3 codes</p>
+						</li><br>
+						<li><b>Uses:</b><br>
+						<p>runMD.get_value(...)</p>
+						<p>pyxaid_core.wfc - class</p>
+						<p>pyxaid_core.wfc.QE_read_acsii_index(...)</p>
+						<p>pyxaid_core.wfc.QE_read_acsii_wfc(...)</p>
+						<p>pyxaid_core.wfc.normalize()</p>
+						<p>pyxaid_core.wfc.complete()</p>
+						<p>pyxaid_core.wfc.restore(...)</p>
+						<p>pyxaid_core.wfc.QE_read_acsii_grid(...)</p>
+						<p>pyxaid_core.wfc.compute_Hprime(...)</p>
+						<p>pyxaid_core.ham(...)</p>
+						<p></p>
+						<p>...</p>
+						</li><br>
+						<li><b>Example:</b><br>
+							See <a href="#">this tutorial</a>
+						</li>
+					</ul>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+
+	<a><h4 id="aux_mod">Module aux</h4></a>
+	<a><h4 id="average_mod">Module average</h4></a>
+	
+	
+
+	
+	</body>

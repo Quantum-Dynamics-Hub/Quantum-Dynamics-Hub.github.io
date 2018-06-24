@@ -1,0 +1,101 @@
+
+/* Custom container */
+.container {
+    margin: 0 auto;
+    max-width: 1000px;
+}
+     
+/* Customize the navbar links to be fill the entire space of the .navbar */
+.navbar .navbar-inner {
+    padding: 0;
+}
+
+.navbar .nav {
+    margin: 0;
+    display: table;
+    width: 50%;
+}
+
+.navbar .nav li {
+    display: table-cell;
+    width: 20%;
+    float: none;
+}
+
+.navbar .nav li a {
+    font-weight: bold;
+    text-align: center;
+    border-left: 1px solid rgba(255,255,255,.75);
+	/*border-left: 1px solid rgba(0,0,255,0.75);*/
+    border-right: 1px solid rgba(0,0,0,.1);
+}
+
+.navbar .nav li:first-child a {
+    border-left: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.navbar .nav li:last-child a {
+    border-right: 0;
+    border-radius: 0 3px 3px 0;
+}
+
+.hero-unit{
+
+	padding: 10px;
+	margin: 1px 1px;
+}
+
+/*
+.nav-tabs .active{
+	background-color:"red";
+	color:"green";
+}
+*/
+
+
+.nav-tabs {
+  border-bottom: 1px solid #ddd;
+}
+
+
+.nav-tabs > .active > a,
+.nav-tabs > .active > a:hover,
+.nav-tabs > .active > a:focus {
+  color: #000000;
+  cursor: default;
+  background-color: #eeeeee;
+  border: 1px solid #ddd;
+  border-bottom-color: transparent;
+}
+
+.hero-unit{
+  margin-left: -30px;
+  margin-right: -30px;
+/*  padding: 0px;*/
+  
+}
+
+.codeblock {
+    color: "green";
+    font-family: arial,sans-serif;
+    font-size: 16px;
+    background-color: rgb(239, 239, 239);
+    border: 1px solid rgb(211, 211, 211);
+    display: block;
+    padding: 0.5em 0px 0.5em 1em;
+    line-height: 1;
+
+}
+
+#bg{
+/* background: url(../../pyxaid_logo.png) no-repeat center center fixed;*/
+ min-height:10%;
+ min-width: 10%;
+ height:100px;
+ width:auto; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}

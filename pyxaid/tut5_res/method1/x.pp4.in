@@ -1,0 +1,14 @@
+ &inputpp
+ /
+
+ &plot
+    nfile = 2
+    filepp(1) = 'tmp_up.dat'
+    filepp(2) = 'tmp_dn.dat'
+    weight(1) = 1.0
+    weight(2) = -1.0
+    iflag = 3
+    output_format = 6
+    fileout = 'x-KS_120a-b.cube'
+ /
+

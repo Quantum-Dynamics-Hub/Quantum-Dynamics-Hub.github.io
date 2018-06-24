@@ -1,0 +1,98 @@
+<html>
+    <head>
+    
+	<script src="bootstrap/js/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap.js"></script>	    	
+    <script>
+      !function ($) {
+        $(function(){
+          // carousel demo
+          $('#myCarousel').carousel()
+        })
+      }(window.jQuery)
+    </script>
+    <script src="bootstrap/js/holder/holder.js"></script>
+
+	
+	
+	<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+	<link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet" media="screen">
+	<link href="bootstrap/css/style.css" rel="stylesheet">
+	
+	<title>PYXAID</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="content of the home(welcome) page">
+    <meta name="author" content="Alexey V. Akimov">
+
+    
+	
+    </head>
+    <body style="margin-left:10px">
+	
+	<div id="myCarousel" class="carousel slide">
+      <div class="carousel-inner">
+
+        <div class="item active" style="height:600px;">
+          <img src="pyxaid_logo.png" style="height:550px;" alt="">
+          <div class="container">
+            <div class="carousel-caption" style="height:150px;">
+              <h1 style="color:white;">What is PYXAID?</h1>
+              <p class="lead">PYXAID is a Python extension for the ab initio real-time electronic and nuclear dynamics simulations. 
+		Its main focus is on the non-adiabatic MD in condensed matter systems. In addition, a number of
+		pre- and post-processing utilities are included that help to analyze the results of quantum-mechanical simulations. </p>              
+            </div>
+          </div>
+        </div>
+		
+        <div class="item" style="height:600px;">		  
+          <img src="home_pics/sh_map_relax.gif" style="width:100%;" alt="">
+          <div class="container">
+            <div class="carousel-caption" style="height:150px;">
+              <h1 style="color:white;">Excited state dynamics</h1>
+              <p class="lead">Study the relaxation kinetics of the excited states (e.g. hot electrons) in condensed matter systems and nanoscale materials. 			  
+			  With the help of the classical path approximation (CPA) combined with the fewest switched surface hopping (FSSH) method accelerate the computations
+			  making them possible for large systems.</p>              
+            </div>
+          </div>
+        </div>
+
+        <div class="item" style="height:600px;">		  
+          <img src="home_pics/decoherence.gif" style="width:100%;" alt="">
+          <div class="container">
+            <div class="carousel-caption" style="height:150px;">
+              <h1 style="color:white;">Decoherence effects</h1>
+              <p class="lead">Include the decoherence effects to obtain more accurate estimates for the relaxation and charge transfer processes in realistic
+			  systems. </p>              
+            </div>
+          </div>
+        </div>
+
+        <div class="item" style="height:600px;">
+          <img src="home_pics/field_meg.gif" style="width:100%" alt="">
+          <div class="container">
+            <div class="carousel-caption" style="height:150px;">
+              <h1 style="color:white;">Explicit light-matter interaction and multi-excitonic states</h1>
+              <p class="lead">Study photoexcitation dynamics by inclusion of the direct field-matter interaction Hamiltonian. Start with the ground state and
+			  apply laser pulse. Include multi-excitonic configurations to study the dynamics of their generation (MEG) and relaxation (MER).</p>
+            </div>
+          </div>
+        </div>
+		
+        <div class="item" style="height:600px;">
+          <img src="home_pics/dephasing_influence.gif" style="width:100%" alt="">
+          <div class="container">
+            <div class="carousel-caption" style="height:150px;">
+              <h1 style="color:white;">Dephasing times and influence spectra</h1>
+              <p class="lead">Compute decoherence (pure dephasing) times. For relaxation to the ground state this time gives the fluorescence homogeneous linewidths.
+			  Compute the influence spectra - which modes drive the energy transfer and dissipation processes.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+      <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    </div><!-- /.carousel -->
+
+
+	</body>

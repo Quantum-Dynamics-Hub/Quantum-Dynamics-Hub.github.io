@@ -1,0 +1,47 @@
+<html>
+    <head>
+
+	<script src="bootstrap/js/jquery.js"></script>        
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+	
+	<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+	<link href="bootstrap/css/style.css" rel="stylesheet">
+	
+	<title>PYXAID</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+	
+    </head>
+    <body style="margin-left:10px">
+	
+	<h3><a id="over1">Program capabilities</a></h3>
+	<ul>
+		<li>Basic non-adiabatic molecular dynamics: FSSH-CPA</li>
+		<li>Decoherence correction via DISH</li>
+		<li>Multi-electron basis functions</li>
+		<li>Direct photoexcitation via light-matter interaction</li>
+		<li>Advanced integration schemes for solving TD-SE</li>
+		<li>Numerous pre- and post-processing utilities</li>
+	</ul>
+	
+	<h3><a id="over2">What does the acronym mean?</a></h3>
+	<p>The acronym stands for:  PYthon eXtension for Ab Initio Dynamics (primarily)</p>but the other meaningful deciphering is:
+	<p>PYthon for eXcited (states) Ab Inition Dynamics or, even simpler - XD (large letters in the logo) - eXcited Dynamics</p>
+		
+	<h3><a id="over3">What programs the PYXAID is compatible with?</a></h3>
+		<p>Currently the main focus in on <a href="http://www.quantum-espresso.org/">Quantum Espresso</a> (QE), also known as PWscf. In general the 
+		program can work with any other ab initio program - that is just a matter of little more programming/scripting.</p>
+		<p>Also note that the so-called step3 is performed independently of any quantum-mechanical package - it just requires the files containing necessary
+		input information (electronic Hamiltonian and, optionally, transition dipole moments), no matter how it was obtained.</p>
+
+	<h3><a id="ove4">What programming language the PYXAID is written with?</a></h3>
+		<p>The most time-critical parts are efficiently coded in C++. For less time-consuming procedures <a href="http://www.python.org/">Python</a> is
+		used, making the modules easy to understand, extend and use. In addition to that, the template PBS scripts are available for calculations on the 
+		clusters.
+		</p>
+		<br><br><br><br><br><br><br><br><br><br>
+		<br><br><br><br><br><br><br><br><br><br>
+		<br><br><br><br><br><br><br><br><br><br>
+		
+	</body>
+</html>

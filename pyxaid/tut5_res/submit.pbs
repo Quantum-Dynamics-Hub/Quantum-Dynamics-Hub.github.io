@@ -1,0 +1,76 @@
+#PBS -q exciton
+#PBS -l nodes=1:ppn=2
+#PBS -l walltime=00:30:00
+#PBS -l pvmem=1000mb
+#PBS -o qespresso.out
+#PBS -j oe
+#PBS -N pdos_test
+#PBS -m n
+#PBS -V
+
+cd $PBS_O_WORKDIR
+echo $PBS_O_WORKDIR
+
+NP=$(wc -l $PBS_NODEFILE | awk '{print $1}')
+echo $NP
+
+  # Define number of method
+  snap=1
+
+  echo "Starting method $snap"
+  mkdir method$snap
+  cd method$snap
+  cp ../x.scf.in .
+  cp ../x.pdos.in .
+  cp ../x.pp1.in .
+  cp ../x.pp2.in .
+  cp ../x.pp3.in .
+  cp ../x.pp4.in .
+
+  # SCF
+  exe_=/usr/local/group/oprezhdo_group/espresso-5.0.1/bin/pw.x
+  echo "Launching SCF"
+  mpirun -n $NP $exe_ < x.scf.in > x.scf.out
+
+  # PDOS
+  exe_=/usr/local/group/oprezhdo_group/espresso-5.0.1/bin/projwfc.x
+  echo "Launching pDOS"
+  mpirun -n $NP $exe_ < x.pdos.in > x.pdos.out
+
+  mkdir pdos
+  mv x.pdos_atm#* pdos
+  tar -cjf pdos.tar.bz2 pdos
+
+  # Post-processing
+  exe_=/usr/local/group/oprezhdo_group/espresso-5.0.1/bin/pp.x
+  echo "Launching PP"
+
+  for orb in 14 15 16 17
+  do
+
+    for i in 1 2 3 4
+    do 
+    
+      old_val=120
+      new_val=$orb
+      old_fl=x.pp$i.in
+      new_fl=x.pp$i.ks$orb.in
+
+      # Prepare new input files
+      cp $old_fl tmp
+      sed -i 's/kband='$old_val'/kband='$new_val'/g' tmp
+      sed -i 's/x-KS_'$old_val'/x-KS_'$new_val'/g' tmp
+      mv tmp $new_fl
+      
+      echo "Computing orbital $new_fl > x.pp$i.ks$orb.out"
+      mpirun -n $NP $exe_ < $new_fl > x.pp$i.ks$orb.out
+      
+    done # for i
+    
+    tar -cjf ks$orb.cube.tar.bz2 x-*.cube
+    rm x-*.cube
+
+  done # for orb
+
+
+

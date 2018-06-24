@@ -1,0 +1,1483 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+    
+	<script src="bootstrap/js/jquery.js"></script>    
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+
+	
+	<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+	<link href="bootstrap/css/style.css" rel="stylesheet">
+	
+	<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
+	<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushPython.js"></script>
+	<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushBash.js"></script>
+	<link type="text/css" rel="stylesheet" href="syntaxhighlighter_3.0.83/styles/shCoreDefault.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+
+	
+	<title>PYXAID</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-41555275-1', 'googledrive.com');
+  ga('send', 'pageview');
+
+</script>
+	
+    </head>
+    <body style="margin-left:10px">
+
+	<h2>Tutorials</h2><br>	
+	<p>In this tutorial we show, step-by-step, a typical workflow of studying the dynamics of the charge carrier relaxation. In particular, we 
+	will consider the non-radiative relaxation in crystalline pentacene. This is a typical 3-step sequence that applyies pretty-much to almost any
+	similar problem. All necessary files (code of the level 3) and some of the output
+	results I've produced during preparation of this tutorial can be downloaded from <a href="#">here</a>. To start this tutorial, download the archive and
+	unpack it somewhere - that will create the directory <b>PYXAID_tutorials</b>. Below, the lines like
+	<pre style="color:green">> </pre> will represent command line. You should type the commands that follow > sign (not the sign itself).<br> Sometimes we
+	will need to show what type of output the command line can produce. This will be indicated by: 
+	<pre style="color:green">]</pre>
+	</p>
+	
+	
+
+	<h3><a id="tut1">Tutorial 1: Basics. Relaxation dynamics in solid pentacene</a></h3>	
+	<p><b>IMPORTANT: If you use QE 5.0.2 or higher - update the files in the tutorial #1 in accord with those presented in Tutorial #2. Otherwise, the calculations may fail.
+	Alternatively, just start with Tutorial #2, but read the description of the operations from here (the workflow is the same for the two tutorials)</b>
+	</p>
+	
+	<p>To start the first tutorial go to the directory <b>PYXAID_tutorials/Tut1_basics</b>:</p>
+	<pre style="color:green">> cd PYXAID_tutorials/Tut1_basics</pre>
+	<p>This directory will contain a few sub-directories, containing required input files and scripts to run this example in a sequentiall manner.</p>
+	<pre style="color:green">> ls<br>] step1 step2 step3</pre>
+	<p>We will need to perform calculations in each of the subfolders, starting with <b>step1</b>, then going to <b>step2</b> and, finally, to <b>step3</b></p>
+	<div class="accordion" id="acc1">
+		
+			<div class="accordion-group">			
+				<div class="accordion-heading">
+					<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc1" href="#tut1_step1">
+					Tut 1.1 <h4>"Step 1" - Ab initio MD with Quantum Espresso</h4>
+					</a>
+				</div>
+				<div id="tut1_step1" class="accordion-body collapse">
+					<div class="accordion-inner">
+					<h4>Main coarse</h4>
+					<p>First of all, we need to produce an ab initio MD trajectory for our system (crystalline pentacene). Currently the main quantum-mechanical
+					driver for such kind of calculations is the Quantum Espresso package. The folder <b>step1</b> already contains all necessary input files:
+					<pre style="color:green">> cd step1<br>> ls<br>] py-scr5.py  submit.pbs  x.md.in</pre>					
+					</p>
+					<p>For now, all you will need to modify the QE input file called "x.md.in" such that the variable 'pseudo_dir' points to the location of the pseudopotential
+					files. Current value: pseudo_dir = '/usr/local/group/oprezhdo_group/QE_PP/upf_files/' The description of other parameters can be found in QE documentation. </p>
+					<p>Because most of the scientific computations are typically done on the Linux-based clusters managed by the batch systems such as PBS/Torque, we will also
+					be using the pbs script to excute our computations on several processors and, in principle, on several nodes. Thus, before submitting a job to the PBS
+					via submit.pbs script we will need to modify a few variables in it.
+					In the file "submit.pbs" modify the following parameters:<br>
+					<pre style="color:green">#PBS -q exciton_long </pre> to the name of the queue on the cluster that you are using
+					<pre style="color:green">exe_qespresso=/usr/local/group/oprezhdo_group/espresso-5.0.1/bin/pw.x</pre> to the location of the QE executable (PW code)
+					</p>
+					<p>Finally, to start computations:</p>
+					<pre style="color:green">> qsub submit.pbs</pre>
+					<p>Once the calculations are completed, the file "x.md.out" (this is defined in "submit.pbs" script) is produced, along with numerous other
+					files that we do not need, at least for our current puprose:</p>
+					<pre style="color:green">> ls<br>] py-scr5.py     x.md.out     x.old2wfc12  x.old2wfc6  x.oldwfc10  x.oldwfc4  x.oldwfc9  x.wfc11  x.wfc5
+] qespresso.out  x.msd.dat    x.old2wfc2   x.old2wfc7  x.oldwfc11  x.oldwfc5  x.rdf.dat  x.wfc12  x.wfc6
+] submit.pbs     x.old2wfc1   x.old2wfc3   x.old2wfc8  x.oldwfc12  x.oldwfc6  <style="color:blue;">x.save</style>     x.wfc2   x.wfc7
+] x.md           x.old2wfc10  x.old2wfc4   x.old2wfc9  x.oldwfc2   x.oldwfc7  x.wfc1     x.wfc3   x.wfc8
+] x.md.in        x.old2wfc11  x.old2wfc5   x.oldwfc1   x.oldwfc3   x.oldwfc8  x.wfc10    x.wfc4   x.wfc9</pre>
+					The file "x.md.out" contains the geometry of the molecular system at every time
+					step of nuclear evolution, along with some other usefull information. Again, for our current purpose we will only need these geometries.</p>
+					<h4>Optional coarse</h4>
+					<p>Before going to the next step of this tutorial we will examine a few post-processing capabilities of the PYXAID distribution. Namely,
+					we want	to convert the "x.md.out" file, into more common file format. This is because the .out files produced by QE can not be read by
+					many common visualization softwares, such as VMD. Among a few programs that can read it we want to note the J-ICE. </p> 
+					<p>To convert the "x.md.out" file to a "x.md.xyz" file and to a set of .pdb files we will be using the <a href="#">PYXAID.out2xyz</a> and 
+					<a href="#">PYXAID.out2pdb</a> modules,	respectively. To keep results of the conversion separate from all other files produced by QE lets 
+					first, create a directory called "snaps":</p>
+					<pre style="color:green">> mkdir snaps</pre>
+					<p>Finally, to produce .xyz and .pdb files run "py-scr5.py" script:</p>
+					<pre style="color:green">> python py-scr5.py</pre>
+					<p>The script "py-scr5.py" is a simple user-input file that takes advantage of the modules defined in PYXAID package. This is an excellent
+					illustration of the level 3 code. Lets examine what the commant above has produced. Go to "snap" folder first and check out its content:</p>
+					<pre style="color:green">> cd snap<br>> ls<br>] snap_0.pdb    snap_125.pdb  snap_175.pdb  snap_225.pdb  snap_50.pdb  traj.xyz
+] snap_100.pdb  snap_150.pdb  snap_200.pdb  snap_25.pdb   snap_75.pdb
+</pre>
+					<p>Lets examine the py-scr5.py script:</p>
+					<pre class="brush: python;">from PYXAID import*
+out2pdb.convert("x.md.out",250,25,"snaps/snap_")
+out2xyz.convert("x.md.out",250,25,"snaps/traj.xyz")
+	</pre>
+					<p>The line 3 instructs the module PYXAID.out2pdb to use the "x.md.out" file and to create a series of MD snapshots at times 0, 25, 50, etc. 
+for the first 250 steps (or less if the actual MD trajectory is shorter). The files will have a generic prefix "snaps/snap_", that is they will be located in
+the directory /snaps and will be named as snap_0.pdb, snap_25.pdb, snap_50.pdb, etc. By comparing the content of the produced files and the content
+of the "x.md.out" file it is easy to see that the file snap_0.pdb contains the very first (input) configuration of the molecular system, as it is intuitively
+expected from its name (indexing convention).</p>
+	<p>The line 4 does pretty much the same what the line 3, except now the module PYXAID.out2xyz is in play. The meaning of the input parameters and indexing 
+	convention are the same as for PYXAID.out2pdb module. The only difference is that instead of writing multiple files - one for each geometry,- a single
+	file, called "traj.xyz" is created in /snaps directory. The geometries for different times are just stacked in that file with each one of them being in the 
+	standard .xyz format. This is also a recognized .xyz format. 
+	</p>
+					
+					</div>
+				</div>
+			</div>  <!-- accordion group for step 1-->
+
+			<div class="accordion-group">			
+				<div class="accordion-heading">
+					<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc1" href="#tut1_step2">
+					Tut 1.2 <h4>"Step 2" - Computation of vibronic Hamiltonian and related quantities (NACs, transition dipol moments, spectra, etc)</h4>
+					</a>
+				</div>
+				<div id="tut1_step2" class="accordion-body collapse">
+					<div class="accordion-inner">
+					<h4>Main coarse</h4>
+					<p>The second step relied on the successfully completed step1 in that respect that it requires the molecular dynamics trajectory file 
+					produced by QE. Because obtaining MD trajectory file is a relatively standard procedure, it is likely that you have started from this 
+					step right away (may be the step1 MD trajectory is currently being computed to satisfy your honesty). So to start step2 go to this 
+					directory (I assume you are now in <b>PYXAID_tutorials/Tut1_basics</b> for some reasons) and check out its content:</p>
+					<pre style="color:green">> cd step2<br>> ls<br>] py-scr2.py  py-scr6.py  py-scr7.py  submit_templ.pbs  x0.exp.in  x0.scf.in  x1.exp.in  x1.scf.in</pre>
+					
+					
+					<p>Lets examine a few of these files. First of all, the file that drives the step2 calculations is "py-scr2.py". Lets see what is inside:</p>
+					<pre class="brush: python;">from PYXAID import *
+import os
+
+nsteps_per_job = 10
+tot_nsteps = 250
+
+# Step 1 - split MD trajectory on the time steps
+# Provide files listed below: "x.md.out" and "x.scf.in"
+# IMPORTANT:
+# 1) use only ABSOLUTE path for PP in x.scf.in file
+# 2) provided input file is just a template, so do not include coordinates
+out2inp.out2inp("x.md.out","x0.scf.in","wd","x0.scf",0,tot_nsteps,1)  # neutral setup
+out2inp.out2inp("x.md.out","x1.scf.in","wd","x1.scf",0,tot_nsteps,1)  # charged setup
+
+
+# Step 2 - distribute all time steps into groups(jobs)
+# several time steps per group - this is to accelerate calculations
+# creates a "customized" submit file for each job and submit it - run
+# a swarm in independent calculations (trajectory pieces)
+# (HTC paradigm)
+# Provide the files below:
+# submit_templ.pbs - template for submit files - manually edit the variables
+# x.exp.in - file for export of the wavefunction
+
+os.system("cp submit_templ.pbs wd")
+os.system("cp x0.exp.in wd")
+os.system("cp x1.exp.in wd")
+os.chdir("wd")
+distribute.distribute(0,tot_nsteps,nsteps_per_job,"submit_templ.pbs",["x0.exp.in","x1.exp.in"],["x0.scf","x1.scf"],1)
+
+					</pre>
+					<p>The step2 consists of basically repeating electronic structure calculations for all MD trajectory points. As it is described
+					in the paper[], this procedure can be easily parrallelized such that the pieces of the original MD trajectory can be computed
+					independently from each other. The lines 5 and 6 define in the above script define the way of doing this. Namely, we want to split
+					out 250 fs trajectory into 25 pieces 10 fs each and compute the electronic Hamiltonian matrices (couplings and energies) for each
+					of these pieces in parallel. More precisely, the parallelism we are talking about here implies submitting 25 independent PBS jobs, each
+					of which will handle its own piece of the original MD trajectory. So this is the main idea of the "py-scr2.py" script.</p>
+					<p>Obviously, we will need to copy (or move to save space) "x.md.out" file in this directory, so:</p>
+					<pre style="color:green">> cp ../step1/x.md.out .</pre>
+					<p></p>
+					<p>To split the MD trajectory stored in "x.md.out" file obtained in previous step and to prepare a bunch of input files for the QE
+					sincle point calculations we use the module PYXAID.out2inp. The function out2inp, defined in this module performs that operation.
+					Because the simulation parameters for single point calculations are in no way defined in the "x.md.out" and because we don't want to 
+					edit 250 input files manually, we use the input file headers, containing everything needed for calculations except for the actual coordinates.
+					The coordinates will be taken out of the "x.md.out" (argument #1) file, in a way similar to how they were extracted into .xyz of .pdb formats. The 
+					input file header is called "x0.scf.in" (argument #2) and is placed in this directory. For this tutorial all you will need to edit in this file
+					is the variable 'pseudo_dir'.</p>
+					<p>We also don't want 250 input files to be created in out current directory. That is why the function out2inp will create a working directory
+					called "wd" (arument #3) first and then the input files created will be placed there, leaving our current directory tidy. The files created
+					will have a generic prefix "x0.scf" (argument #4). The geometries will be extracted from time 0 (initial configuration, argument #5) till the 
+					time given by the variable tot_nsteps (argument #6) every 1 (arument #7) time step. That is the files x0.scf.0.in, x0.scf.1.in, ... x0.scf250.in
+					will eventually be created and placed in the working directory "wd"</p>
+					<p>The line 14 repeats the same operations but using different input file header (in this case for the -1 charged system). The calculations 
+					of such type are needed for the band gap and NAC correction calculations. So, similarly to how you the edited file "x0.scf.in" you need to edit
+					the file "x1.scf.in".</p>
+					<br>
+					<p>Once the script has prepared the necessary files it needs to submit a series (in our case 25) of pbs jobs. Again, we don't want to
+					prepare 25 submit files each of which will handle a specific range of the input files. To automate this we will be using the
+					PYXAID.distribute module. This is realized by the line 30. But before going into description of how this function works, we should note that
+					the script copies the files "submit_templ.pbs", "x0.exp.in" and "x1.exp.in" (lines 26-28) to the just created "wd" directory and then it 
+					goes into that directory (line 29). So when the line 39 is called the os.getcwd() (the function that returns the current working directory of
+					the Python interpreter/shell) will be ".../step2/wd", where "..." denotes arbitrary preceeding part of the path.
+					</p>
+					<p>Ok, now we are virtually in the ".../step2/wd" directory. So what are the parameters of the distribute(...) function called in line 30.
+					The first two arguments (0 and the value of the tot_nsteps variable, which is equal to 250) define the range of the input files to be actually 
+					used in the ongoing computations. The third argument (value of the nsteps_per_job variable) determines how many input files to be processed within
+					each single job. In our case it is equal to 10. Next argument ("submit_templ.pbs") indicates which file is to be used as a template for
+					submit files to be created. This file must be located in the current working directory - that is why we copied it from the upper level folder
+					by the command in line 26. The next argument is the list of the filenames containing the input for wavefunction extraction by the pw_extract 
+					program of the QE package. The files included in this list ("x0.exp.in" and "x1.exp.in") will be distributed with to all jobs and must be present
+					in cureent working directory at this point - that is why we copied them from the outer level by lines 27 and 28. The next argument - is also a list
+					but now it contains the prefixes for the input files to be distributed to each job. That means the script will look for the files called
+					x0.scf.#.in and x1.scf.#.in in the current directory (and they are already here, because the lines 13 and 14 did this job) and will pick
+					bundles of them to be used in given PBS job. The # character here represents the actual numbers to be used. For example, in our case the
+					job0 will require # to be in range from 0 to 10, job1 will require # in range from 10 to 20, and so on. These ranges are defined by the first 3 
+					arguments of the distribute function. The prefixes must be consitent with those used as the arguments in out2inp function in lines 13 and 14 
+					(otherwise the correct files will not be found).</p>
+					<p>
+					Finally, the last argument, equal to 1, is a flag of job execution. If it is set to 1 (as in our case) the jobs will actually be started,
+					if it is set to 0 - no PBS jobs will start - the script will only prepare the file system within "wd" directory to execution of the set of 
+					the jobs. So it is advisable to start experimenting by setting this flag to 0 and checking is everything went right. 
+					</p>
+					<p>Now, before actually starting calculations we need to modify the file "submit_template.pbs" that is present in our ".../step2" directory. 
+					Remember, the file and folder manipulations we have discussed above have not been actually performed yet. So lets take a look on the script:</p>
+					<pre class="brush:shell">
+#PBS -q exciton
+#PBS -l nodes=1:ppn=4
+#PBS -l walltime=120:00:00
+#PBS -l pvmem=1800mb
+#PBS -o qespresso.out
+#PBS -j oe
+#PBS -N pentacene
+#PBS -m n
+#PBS -V
+
+cd $PBS_O_WORKDIR
+echo "Current working directory is: $PBS_O_WORKDIR"
+# Automatically determine the number of available nodes
+NP=$(wc -l $PBS_NODEFILE | awk '{print $1}')
+echo "Running on $NP nodes"
+
+# Setup all manual parameters here
+# Must be ABSOLUTE paths
+exe_qespresso=/usr/local/group/oprezhdo_group/espresso-5.0.1/bin/pw.x
+exe_export=/usr/local/group/oprezhdo_group/espresso-5.0.1/bin/pw_export.x
+res=/scratch/aakimov/PYXAID_tutorials/Tut1_basics/step2/res
+
+# These will be assigned automatically, leave them as they are
+param1=
+param2=
+
+# This is invocation of the scripts which will further handle NA-MD calclculations
+# on the NAC calculation step
+python -c "from PYXAID import *
+params = { }
+params[\"NP\"]=$NP
+params[\"EXE\"]=\"$exe_qespresso\"
+params[\"EXE_EXPORT\"]=\"$exe_export\"
+params[\"start_indx\"]=$param1
+params[\"stop_indx\"]=$param2
+params[\"wd\"]=\"wd_test\"
+params[\"rd\"]=\"$res\"
+params[\"minband\"]=1
+params[\"nocc\"]=102
+params[\"maxband\"]=122
+params[\"nac_method\"]=1
+params[\"wfc_preprocess\"]=\"restore\"
+params[\"do_complete\"]=1
+params[\"prefix0\"]=\"x0.scf\"
+params[\"prefix1\"]=\"x1.scf\"
+params[\"compute_Hprime\"]=1
+print params
+runMD2.runMD2(params)
+"
+					</pre>
+					<p>The lines 2-10 define the PBS job parameters: which queue to use, how many nodes/CPUs and how much time and memory to request and how
+					to handle the input/output operations. Also note the line 10. It is particularly important, because it lets computing nodes know the 
+					current environment variables, including PYTHONPATH, in particular. So it is important to pass that information to all involved nodes
+					so that they could find the PYXAID package. You will need to modify the PBS-related parameters according to your cluster.
+					</p>
+					<p>The lines 12-16 define the working directory (now in the PBS filesystem) - each for each job submitted. Remember, we are discussing
+					the submit file <b>template</b> - it will be used to create actual submit files for each job to run. In addition, the number of available
+					processors is determined for each job and is used to parallelize computations (now on the level of the QE package). 
+					</p>
+					<p>The lines 20-22 define the paths that are used as the parameters in the further calculations requested by the script. It is important
+					to note here that, because each job has its own "current working directory", it is hard to use relative paths for many jobs. So one must
+					define the path variables in the lines 20-22 as the <b>ABSOLUTE</b> paths. For this tutorial, this is the only place that you will need 
+					to modify (apart from the PBS-specific variables). The variables in lines 20 and 21 define the paths to the pw and pw_export binaries of 
+					the QE package. The variable in line 22 sets the path to the directory in which all results (from each independently running job) will be
+					collected. You also need to <b>CREATE RESULTS DIRECTORY</b> defined by this path:
+					</p>
+					<pre style="color:green">> mkdir res</pre>
+					<p>Lines 25 and 26 is the main part of this file that makes it template. This is because the variables param1 and param2 are not set.
+					To turn this template to actual submit-file one simply needs to set this variables to specific values. The values determine the range
+					of the input files to be processed by each job. When multiple jobs (in our case 25) are spawned the distribute(...) function of the 
+					distribute module will set the variables param1 and param2 according to its arguments (see discussion above). 
+					</p>
+					<p>Finally, the variables are set, files and folders are created or copied, PBS-specific parameters are set, envoronmental variables
+					are defined. Now we are ready to perform some useful task. This task in defined by the lines 30-50. Basically, it is the invocation
+					of the python interpreter in the working directory of each job. The python is supplied with the command-line type of the argument taken
+					withing " on line 30 and " on line 50. The python script contained withing these limits involves the module runMD. In particular, the 
+					function runMD is called with the argument params of the dictionary type. A set of the key-value pairs of the dictionary params defined
+					in lines 31-47 determines the way the computations will be performed. In principle, this the other place of the script you need to edit
+					according to your needs. However, for this tutorial all parameters are already defined and need not be modified.
+					</p>
+					
+					<p>So now, when we have copied the "x.md.out" file in thise directory, created the results directory and edited the submit template and scf input 
+					header files, we are ready to actually run the second step of calculations.	</p>
+					<pre style="color:green">>python py-scr2.py<br>] 3503825.bhsn-int.bluehive.crc.private
+] 3503826.bhsn-int.bluehive.crc.private
+] 3503827.bhsn-int.bluehive.crc.private
+] 3503828.bhsn-int.bluehive.crc.private
+] 3503829.bhsn-int.bluehive.crc.private
+] 3503831.bhsn-int.bluehive.crc.private
+] 3503832.bhsn-int.bluehive.crc.private
+] 3503833.bhsn-int.bluehive.crc.private
+] 3503834.bhsn-int.bluehive.crc.private
+] 3503835.bhsn-int.bluehive.crc.private
+] ...
+</pre>
+				<p>Now if we check the content of our current directory we will see that the "wd" folder has been created:</p>
+				<pre style="color:green">> ls<br>] py-scr2.py  py-scr6.py  py-scr7.py  res  submit_templ.pbs  wd  x0.exp.in  x0.scf.in  x1.exp.in  x1.scf.in  x.md.out</pre>
+				<p>Lets now check what is in that directory:</p>
+				<pre style="color:green">> cd wd<br>> ls</pre>
+				<p>We can see that it contains the files x0.scf.0.in ...  x0.scf.250.in, x1.scf.0.in ... x1.scf.250.in and 25 sub-directories: job0, ...,
+				job24. The file submit_templ.pbs is also here.</p>
+				<p>Going deeper, lets see what is in job0. </p>
+				<pre style="color:green">> cd job0<br>> ls</pre>
+				<p>Depending on time you check the content the output may look like:</p>
+				<pre style="color:green">] submit_templ.pbs  <b>x0.save</b>       x0.scf.2.in  x0.scf.7.in  x0.wfc3     x1.scf.0.in   x1.scf.4.in  x1.scf.9.in
+] <b>wd_test</b>           x0.scf.0.in   x0.scf.3.in  x0.scf.8.in  x0.wfc4     x1.scf.10.in  x1.scf.5.in
+] x0.exp.in         x0.scf.10.in  x0.scf.4.in  x0.scf.9.in  x1.exp.in   x1.scf.1.in   x1.scf.6.in
+] <b>x0.export</b>         x0.scf.1.in   x0.scf.5.in  x0.wfc1      x1.exp.out  x1.scf.2.in   x1.scf.7.in
+] x0.exp.out        x0.scf.1.out  x0.scf.6.in  x0.wfc2      <b>x1.save</b>     x1.scf.3.in   x1.scf.8.in
+				</pre>
+				<p>or:</p>
+				<pre style="color:green">] qespresso.out     x0.exp.out    x0.scf.1.in  x0.scf.5.in  x0.scf.9.in  x1.scf.0.in   x1.scf.3.in  x1.scf.7.in
+] submit_templ.pbs  <b>x0.save</b>       x0.scf.2.in  x0.scf.6.in  x1.exp.in    x1.scf.10.in  x1.scf.4.in  x1.scf.8.in
+] <b>wd_test</b>           x0.scf.0.in   x0.scf.3.in  x0.scf.7.in  x1.exp.out   x1.scf.1.in   x1.scf.5.in  x1.scf.9.in
+] x0.exp.in         x0.scf.10.in  x0.scf.4.in  x0.scf.8.in  <b>x1.save</b>      x1.scf.2.in   x1.scf.6.in
+				</pre>
+				<p>In the first case we may observe the temporarily created and deleted folders x0.export and x1.export. They are created by the runMD function
+				of the runMD module and contain the temporary output of pw_export program. This output contains the wavefunction for given configuration 
+				exported in the ascii format (basically plain text) and then utilized to compute non-adiabatic couplings and the transition dipole matrix 
+				elements. In the last case we see that the file qespresso.out is created indicated that the job0 has completed. Keep in mind, that this does
+				not necesserily mean the job is completed successfully. In the case if some troubles are met it will contain the errors. In any case it will
+				also contain the output of the runMD function called many times - once for each geometry we handle.</p>
+				<p><a href="#">Add more detailed description of the output here</a></p>
+				
+				<p> After waiting for a while for the calculations to finish we are almost ready to the next step. But before that we want to check out a few 
+				other things.</p>
+				<p>First of all, we should verify if all our jobs have completed successfully. For long simulations and large systems it is possible that some of the
+				jobs have processed all necessary files, but others were somewhat slower or crashed, so the output for the configurations they were supposed
+				to handle will be missing. For the dynamics calculations in the step3 it is important to have all sequential files without empty gaps.
+				</p>
+				<p>So lets first go up to our <b>PYXAID_tutorials/Tut1_basics/step2</b> directory. In this directory you will find the file "py-scr7.py" file.
+				It is very symple python script that uses the function <i>check</i> of the <b>PYXAID.filesys</b> module. </p>
+				<pre class="brush: python;">
+import os
+from PYXAID import *
+
+# Edit parameters of the function called below
+# argument #1 - prefix of the file to be found
+# argument #2 - suffix of the file to be found
+# argument #3 - minimal index of the file to be found
+# argument #4 - maximal index of the file to be found
+filesys.check(os.getcwd()+"/res/0_Ham_","_re",0,300)
+				</pre>
+				<p>The script checks if the files 0_Ham_0_re, 0_Ham_1_re, ... 0_Ham_500_re exist in the subfolder /res of the current working directory. The
+				functions will output the list of the pieces of the MD trajectory that has been computed (defined by Ham_ files that are present). For example,
+				by running this script a while after starting the whole series of step2 calculations we can see that each job is steadily doing its work:</p>
+				<pre style="color:green">> python py-scr7.py<br>] range(0,3)       nelts = 3
+] range(10,12)       nelts = 2
+] range(20,23)       nelts = 3
+] range(30,35)       nelts = 5
+] range(40,43)       nelts = 3
+] range(50,53)       nelts = 3
+] range(60,63)       nelts = 3
+...				</pre>
+				<p>This means that the job0 is has processed 3 MD steps and has produced the files with the time step indes in range (0,3), that is
+				0_Ham_0_re, 0_Ham_1_re and 0_Ham_2_re. The job2 was a bit slower and produces only 2 files in its range - 0_Ham_10_re and 0_Ham_11_re. At the 
+				same time the job3 was much faster, producing 5 files - 0_Ham_30_re, ... 0_Ham_34_re. We should note that with the help of script "py-scr7.py"
+				we have only checked the files of 0_Ham_#_re type. Other files such as 0_Ham_#_im, 1_Ham_#_re, 0_Hprime_#x_re, 0_Hprime_#z_im, etc. are also
+				produced in thise calculations. But because they are produced simulataneously with the 0_Ham_#_re files we can judge about the completion of the
+				entire run by just checking one type of the files.
+				</p>
+				<p>Once the all the jobs have completed their portions of the calculation, the /res directory will contain a full set of the Hamiltonian and the
+				transition dipole moment matrix elements for all input geometries actually computed from 0 to 250. Note, the arguments 0 and 300 that are given in the
+				function check(...) in line 10 define only the range of  possible values of the file indexes. All the non-empty continuity ranges within 
+				such an interval will be shown.</p>
+				<p>So now we have:</p>
+				<pre style="color:green">> python py-scr7.py<br>] 
+				</pre>
+				This indicates that the all necessary quantities required for the next step - non-adiabatic MD - has been computed successfully.
+				<h4>Optional coarse</h4>
+				<p>Before going to the next step - NA-MD simulations we may be interested in the properties of the electronic Hamiltonian matrix and transition
+				dipole moments. In the sense of the avaverage values along the trajectory (or its piece). To perform such kind of the analysis we will use
+				the module <b>PYXAID.excitation_spectrum</b>. The script that makes use of the functions included in this modele is "py-scr6.py":
+				</p>
+				<pre class="brush:python;">
+from PYXAID import *
+# Example of usage
+opt = 1
+scl1 = 13.60569253 # Ry to eV
+scl2 = 1000.0 # some scaling to get plottable data
+HOMO = 102
+minE = 0.0
+maxE = 10.0
+dE = 0.05
+tmin = 0
+tmax = 250
+
+excitation_spectrum.calculate("res/0_Ham_","_re","res/0_Hprime_","x_re",tmin,tmax,opt,scl1,scl2,"spectr1/ab_spectrx.dat",HOMO,minE,maxE,dE)
+excitation_spectrum.calculate("res/0_Ham_","_re","res/0_Hprime_","y_re",tmin,tmax,opt,scl1,scl2,"spectr1/ab_spectry.dat",HOMO,minE,maxE,dE)
+excitation_spectrum.calculate("res/0_Ham_","_re","res/0_Hprime_","z_re",tmin,tmax,opt,scl1,scl2,"spectr1/ab_spectrz.dat",HOMO,minE,maxE,dE)
+
+
+
+# Energy, couplings and H' in space of orbital indexes
+excitation_spectrum.ham_map("res/0_Ham_",   tmin,tmax,"_re" ,opt,scl1,"spectr1/ave_Ham_re.dat")
+excitation_spectrum.ham_map("res/0_Ham_",   tmin,tmax,"_im" ,opt,scl1,"spectr1/ave_Ham_im.dat")
+excitation_spectrum.ham_map("res/0_Hprime_",tmin,tmax,"x_re",opt,scl2,"spectr1/ave_Hprime_x_re.dat")
+excitation_spectrum.ham_map("res/0_Hprime_",tmin,tmax,"y_re",opt,scl2,"spectr1/ave_Hprime_y_re.dat")
+excitation_spectrum.ham_map("res/0_Hprime_",tmin,tmax,"z_re",opt,scl2,"spectr1/ave_Hprime_z_re.dat")
+
+# Same, but in space of orbital energies
+excitation_spectrum.ham_map1("res/0_Ham_","_re","res/0_Ham_",   tmin,tmax,"_re" ,opt,scl1,scl1,"spectr1/1ave_Ham_re.dat")
+excitation_spectrum.ham_map1("res/0_Ham_","_re","res/0_Ham_",   tmin,tmax,"_im" ,opt,scl1,scl1,"spectr1/1ave_Ham_im.dat")
+excitation_spectrum.ham_map1("res/0_Ham_","_re","res/0_Hprime_",tmin,tmax,"x_re",opt,scl1,scl2,"spectr1/1ave_Hprime_x_re.dat")
+excitation_spectrum.ham_map1("res/0_Ham_","_re","res/0_Hprime_",tmin,tmax,"y_re",opt,scl1,scl2,"spectr1/1ave_Hprime_y_re.dat")
+excitation_spectrum.ham_map1("res/0_Ham_","_re","res/0_Hprime_",tmin,tmax,"z_re",opt,scl1,scl2,"spectr1/1ave_Hprime_z_re.dat")
+
+</pre>
+				<p>The lines 4-12 define some parameters used in the functions below. Their mening is either commented or relatively easy to deduce from
+				their names. Yet, some comments may be helpful: variable opt (line 4) chooses what kind of averaging procedure we will be using (0 - average
+				the values as they are, 1 - average the absolute values, 2 - compute the square root of the sum of squares and divide by the number of terms),
+				variable HOMO - defines the index of the highest occupied orbital in the files. If all orbitals are considered it will coincide with the 
+				value of the variable params["nocc"] set in the submit_templ.pbs discussed above (see line 40). However, if the params["minband"] (line 39, the
+				same script) is not 1, then the index of the HOMO will be smaller (because not all occupied orbitals are printed in that case). In particular,
+				in that case HOMO will be equal to params["nocc"]-params["minband"]+1.				
+				</p>
+				<p>The variable minE, maxE (lines 8-9) define the subset of orbitals for which matrix elements will be written. Only the matrix elements
+				H_ij will be printed if the orbital energy of both phi_i and phi_j are within the [minE,maxE] range. Variable dE (line 10) defines the spacing of the
+				energy grid.
+				</p>
+				<p>Finally, the variable tmin and tmax (line 11 and 12) define the temporal interval over which the averaging will be performed. In our case we 
+				request the averaging over the full MD trajectory we have computed.
+				</p>				
+				<p>The lines below in the script perform the computations of different variables - Hamiltonian matrix elements (Ham_) or the components of the 
+				transition dipole moment (Hprime_), different components - real and imaginary parts, different types of representation - in energy scale or
+				in the orbital index scale. See comment lines in the script.</p>
+				<p>One can see that the firt arguments in the functions utilized provide the file prefixes for the file series that need to be averaged. These
+				files are located in /res directory and is the output of the py-scr2.py script. The output containing the averaged values will be written in
+				the files such as "ab_spectrx.dat", "ave_Ham_re.dat", etc. in the directory /spectr1. The directory is assumed to exist, so we need to create it
+				manually:
+				</p>
+				<pre style="color:green">> mkdir spectr1				</pre>
+				And then we are ready to execute the "py-scr6.py" script:
+				<pre style="color:green">> python py-scr6.py			</pre>
+				<p>The calculations shouldn't take long. Once they are finished we get a bunch of useful files in the /spectr1 directory:</p>
+				<pre style="color:green">> cd spectr1<br>> ls<br>] 1ave_Ham_im.dat       1ave_Hprime_y_re.dat  ab_spectry.dat  ave_Ham_re.dat       ave_Hprime_z_re.dat
+] 1ave_Ham_re.dat       1ave_Hprime_z_re.dat  ab_spectrz.dat  ave_Hprime_x_re.dat
+] 1ave_Hprime_x_re.dat  ab_spectrx.dat        ave_Ham_im.dat  ave_Hprime_y_re.dat
+</pre>
+				<p>Finally, to visualize the computed results copy the gnuplot-scripts from the PYXAID/code_level3/plotting directory of your PYXAID package
+				to the spectr1 directory. Namely, to visulaize the Hamiltonian and transition dipole matrices you will need the scripts plt_map and plt_map1. 
+				The first will show these matrices in orbital index coordinates, while the second - in energy of the KS orbitals coordinates:</p>
+				<pre style="color:green">> spectr1<br>> cp ...PYXAID/code_level3/plotting/plt_map .<br>> gnuplot plt_map<br>> cp ...PYXAID/code_level3/plotting/plt_map1 .<br>> gnuplot plt_map1</pre>
+				<p>Make sure that you have adjusted the parameters in these plotting scripts to your specific needs. Also the current scripts are written
+				for pngcairo terminal, that is working on my Win 7 machine. On other systems this terminal may be unavailable, so you will pick the one
+				that works for you best. The visualization of the Ham_ and Hprime_ matrices produced is shown below:</p>
+				
+				<img src="tut1_pics/ave_Ham_re.png" width="40%"></img><img src="tut1_pics/ave_Ham_im.png" width="40%"></img><br>
+				<p><b>Figure 1.</b> Hamiltonian in orbital index coordinates:</p>
+				<br><br>
+				
+				<img src="tut1_pics/1ave_Ham_re.png" width="40%"></img><img src="tut1_pics/1ave_Ham_im.png" width="40%"></img><br>
+				<p><b>Figure 2.</b>Hamiltonian in orbital energy (shifted to make HOMO energy = 0) coordinates:</p>
+				<br><br>
+				
+				<img src="tut1_pics/ave_Hprime_x_re.png" width="30%"></img><img src="tut1_pics/ave_Hprime_y_re.png" width="30%"></img>
+				<img src="tut1_pics/ave_Hprime_z_re.png" width="30%"></img>
+				<p><b>Figure 3.</b>x, y and z components of the transition dipole matrix in orbital index coordinates:</p>
+				<br><br>
+				
+				<img src="tut1_pics/1ave_Hprime_x_re.png" width="30%"></img><img src="tut1_pics/1ave_Hprime_y_re.png" width="30%"></img>
+				<img src="tut1_pics/1ave_Hprime_z_re.png" width="30%"></img>
+				<p><b>Figure 4.</b>x, y and z components of the transition dipole matrix in orbital energy (shifted to make HOMO energy = 0) coordinates:</p>
+				<br><br>
+				
+				<p>In addition to maps shown above, that visualize the coupling (radiative or non-radiative) strength of all pairs of states one may be interested
+				in a sum of transition dipole moments (radiative coupling) for any transition withing given energy interval. In other words such type of 
+				information is equivalent to electronic absorption spectra. The total absorption intensities for the light coming along x, y and z directions
+				are computed in the lines 14-16 of the "py-scr6.py" script (see snippet above). The result is stored in the files "ab_spectrx.dat", "ab_spectry.dat"
+				and "ab_spectrz.dat". To visulaize these files copy gnuplot script "plt_spectr" from the ...PYXAID/code_level3/plotting directory and run gnuplot:</p>
+				<pre style="color:green">> cp ...PYXAID/code_level3/plotting/plt_spectr .<br>> gnuplot plt_spectr</pre>
+				<p>The resulting picture is shown below:</p>
+				<img src="tut1_pics/ab_spectr_all.png" width="40%">
+				<p><b>Figure 5.</b> x, y and z components of the absorption intensity</p>
+				<br><br>
+				
+
+					
+				</div> <!-- accordion-inner -->
+			</div>  <!-- accordion group for step 2-->
+	</div>
+	
+			<div class="accordion-group">			
+				<div class="accordion-heading">
+					<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc1" href="#tut1_step3">
+					Tut 1.3 <h4>"Step 3" - NA-MD computations</h4>
+					</a>
+				</div>
+				<div id="tut1_step3" class="accordion-body collapse">
+					<div class="accordion-inner">
+					<h4>Main coarse</h4>
+					<p>Now we have done all especially time-consuming and dirty work. And we are ready for more pleasant, faster, and clean step - doing the
+					actual NA-MD calculations. To start, go to the step3 directory:</p>
+					<pre style="color:green">> cd ...PYXAID_tutorials/Tut1_basics/step3</pre>
+					<p>Its content consists of only 3 files:</p>
+					<pre style="color:green">> ls<br>] py-scr3.py py-scr4.py submit_namd.pbs</pre>
+					<p>The file "py-scr3.py" contains all instructions for running NA-MD calculations and its analysis. Lets take a look on it:</p>
+					<pre id="py-scr3" class="brush: python;">
+from PYXAID import *
+import os
+
+#############################################################################################
+# Input section: Here everything can be defined in programable way, not just in strict format
+#############################################################################################
+
+params = {}
+
+# Define general control parameters (file names, directories, etc.)
+# Path to Hamiltonians
+# These paths must direct to the folder that contains the results of
+# the step2 calculations (Ham_ and (optinally) Hprime_ files) and give
+# the prefixes and suffixes of the files to read in
+rt = "/scratch/aakimov/PYXAID_tutorials/Tut1_basics/step2"
+params["Ham_re_prefix"] = rt+"/res/0_Ham_"
+params["Ham_re_suffix"] = "_re"
+params["Ham_im_prefix"] = rt+"/res/0_Ham_"
+params["Ham_im_suffix"] = "_im"
+params["Hprime_x_prefix"] = rt + "/res/0_Hprime_"
+params["Hprime_x_suffix"] = "x_re"
+params["Hprime_y_prefix"] = rt + "/res/0_Hprime_"
+params["Hprime_y_suffix"] = "y_re"
+params["Hprime_z_prefix"] = rt + "/res/0_Hprime_"
+params["Hprime_z_suffix"] = "z_re"
+params["energy_units"] = "Ry"                # This specifies the units of the Hamiltonian matrix elements as they
+                                             # are written in Ham_ files. Possible values: "Ry", "eV"
+
+
+# Set up other simulation parameters:
+# Files and directories (apart from the Ham_ and Hprime_)
+params["scratch_dir"] =  os.getcwd()+"/out"  # Hey! : you need to create this folder in the current directory
+                                             # This is were all (may be too many) output files will be written
+params["read_couplings"] = "batch"           # How to read all input (Ham_ and Hprime_) files. Possible values:
+                                             # "batch", "online"
+
+# Simulation type
+params["runtype"] = "namd"                   # Type of calculation to perform. Possible values:
+                                             # "namd" - to do NA-MD calculations, "no-namd"(or any other) - to
+                                             # perform only pre-processing steps - this will create the files with
+                                             # the energies of basis states and will output some useful information,
+                                             # it may be particularly helpful for preparing your input
+params["decoherence"] = 0                    # Do you want to include decoherence via DISH? Possible values:
+                                             # 0 - no, 1 - yes
+params["is_field"] = 0                       # Do you want to include laser excitation via explicit light-matter
+                                             # interaction Hamiltonian? Possible values: 0 - no, 1 - yes
+
+# Integrator parameters
+params["elec_dt"] = 1.0                      # Electronic integration time step, fs
+params["nucl_dt"] = 1.0                      # Nuclear integration time step, fs (this parameter comes from
+                                             # you x.md.in file)
+params["integrator"] = 0                     # Integrator to solve TD-SE. Possible values: 0, 10,11, 2
+
+# NA-MD trajectory and SH control
+params["namdtime"] = 200                     # Trajectory time, fs
+params["num_sh_traj"] = 1000                 # Number of stochastic realizations for each initial condition
+params["boltz_flag"] = 1                     # Boltzmann flag (set to 1 anyways)
+params["Temp"] = 300.0                       # Temperature of the system
+params["alp_bet"] = 0                        # How to treat spin. Possible values: 0 - alpha and beta spins are not
+                                             # coupled to each other, 1 - don't care about spins, only orbitals matter
+
+params["debug_flag"] = 0                     # If you want extra output. Possible values: 0, 1, 2, ...
+                                             # as the number increases the amount of the output increases too
+                                             # Be carefull - it may result in a huge output!
+
+# Parameters of the field (if it is included)
+params["field_dir"] = "xyz"                 # Direction of the field. Possible values: "x","y","z","xy","xz","yz","xyz"
+params["field_protocol"] = 1                # Envelope function. Possible values: 1 - step function, 2 - saw-tooth
+params["field_Tm"] = 25.0                   # Middle of the time interval during which the field is active
+params["field_T"] = 25.0                    # The period (duration) of the field pulse
+params["field_freq"] = 3.0                  # The frequency of the field radiation = energy of the photons
+params["field_freq_units"] = "eV"           # Units of the above quantity. Possible values: "eV", "nm","1/fs","rad/fs"
+params["field_fluence"] = 1.0               # Defines the light radiation intensity (fluence), mJ/cm^2
+
+
+
+# Define states:
+# Example of indexing convention with Nmin = 5, HOMO = 5, Nmax = 8
+# the orbitals indices are consistent with QE (e.g. PP or DOS) indexing, which starts from 1
+# [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] - all computed orbitals
+# [ 1, 2, 3, 4, 5]                     - occupied orbitals
+#                 [6, 7, 8, 9, 10, 11] - unoccupied orbitals
+#              [5, 6, 7, 8]            - active space
+
+
+# Excitations from 102 (HOMO) to [103,... Nmax]
+Nmin = 90
+HOMO = 102
+LUMO = HOMO+1
+Nmax = 122
+
+# Initial condition excitation: I->J
+I = 102
+J = 108
+# This is how I,J are mapped to index of the corresponding basis state
+# see module lazy.py for more details. This is not the most general way
+# of such mapping though.
+ex_indx = 1 + (J-LUMO)*(HOMO+1 - Nmin) + (I-Nmin)
+
+# Each entry of the list below is an initial condition. It is also a list
+# but containing only 2 elements - first is the time step at which we start
+# the dynamics, the second is the index of the excited state configuration
+params["iconds"] = [ [0,ex_indx], [25, ex_indx], [49, ex_indx] ]
+
+
+# Set active space and the basis states
+params["active_space"] = range(Nmin,Nmax+1)
+
+# Generate basis states
+GS = lazy.ground_state(Nmin,HOMO)  # ground state
+SE = lazy.single_excitations(Nmin,Nmax,HOMO,1)  # single excitations
+
+# Now combine the ground and singly excited states in one list
+# In our convention, the GS configuration must be the first state in the
+# list of the basis states.
+params["states"] = []
+params["states"].append(GS)
+for se in SE:
+    params["states"].append(se)
+
+
+#############################################################################################
+# Execution section: Here we actually start the NA-MD calculations and the analysis
+#############################################################################################
+
+############ Run calculations ######################
+print params                   # print out all simulation parameters first
+pyxaid_core.info().version()
+pyxaid_core.namd(params)
+
+
+########### Below we will be using the average.py module ########
+# Note: If you want to re-run averaging calculations - just comment out the line
+# calling namd() functions (or may be some other unnecessary calculations)
+
+Nstates = len(params["states"])  # Total number of basis states
+inp_dir = os.getcwd()+"/out"     # this is the directory containing the input for this stage
+                                 # it is the directory where pyxaid_core.namd() has written all
+                                 # it output (raw output)
+opt = 12                         # Defines the type of the averaging we want to do. Possible values:
+                                 # 1 - average over intial conditions, independnetly for each state
+                                 # 2 - sum the averages for groups of states (calculations with opt=1 must
+                                 # already be done). One can do this for different groups of states without
+                                 # recomputing initial-conditions averages - they stay the same
+                                 # 12 - do the steps 1 and 2 one after another
+
+# Define the groups of states for which we want to know the total population as a function of time
+MS = []
+for i in range(0,Nstates):
+    MS.append([i])   # In our case - each group of states (macrostate) contains only a single basis configuration
+                     # (microstate)
+
+res_dir = os.getcwd()+"/macro"  # Hey! : you need to create this folder in the current directory
+                                # This is where the averaged results will be written
+
+# Finally, run the averaging
+average.average(params["namdtime"],Nstates,params["iconds"],opt,MS,inp_dir,res_dir)
+
+</pre>
+					<p>Although the file may look a bit long, this size is due to numerous explanatory comments. The meaning of the most of the input
+					parameters is either explained in the file itself or is easy to understand. One can distinguish 3 main parts of this file: a)
+					lines 1-120 - the specification of practically all input paramters (even those that will not be used in this calculation); b)
+					line 130 - execution of the NA-MD calculations; c) lines 131-158 - analysis of the raw NA-MD results - to make them easier to
+					interpret and handle. The all necessary parameters are already set for our pentacene molecule, so you don't need to modify almos any
+					of them. Except... Note the lines 16, 33, and 154. The first line point to the location of the /res directory computed in the step2.
+					So you need to modify it according to your file system. The other two lines don't need to be altered. But they imply that in there
+					are sub-directories called <b>out</b> and <b>macro</b> in you current working directory. So you need to create them first:</p>
+					<pre style="color:green">> mkdir out<br>> mkdir macro</pre>
+					<p>Now you are ready to launch the script. You can do it in two ways:<br>Either as normal python script, from the command line:</p>
+					<pre style="color:green">> python py-scr3.py</pre>
+					<p>or via the PBS script "submit_namd.pbs":</p>
+					<pre style="color:green">> qsub submit_namd.pbs</pre>
+					<p>Note, that because the pyxaid_core.namd() function is not parallelizable, there is no need in using mpiexc and requesting more
+					than 1 CPU. You may also be wondering why would you need to use PBS if the step3 is relatively inexpensive stage? Well, it is much 
+					easier than ab initio calculations, but still may take quite long time to compute (especially if you use decoherence algorithms, 
+					integrator = 2, large basis set sizes, and small integration time steps). In addition, the code is still need to be improved in 
+					respect of memory-usage, so you may need to request alot of memory. </p>
+					<br>
+					<p>The computation didn't take long and we can now examine the content of the <b>out</b> and <b>macro</b> directories:</p>
+					<pre style="color:green">> cd out<br>> ls<br>] me_energies0  me_energies1  me_energies2  me_pop0  me_pop1  me_pop2  out0  out1  out2</pre>
+					<p>The files out0, out1, and out2 in the <b>out</b> directory contain the SH-based probabilities along 3 different initial conditions
+					specified in the input. Note, these conditions are different only by the starting (and consequent) geometries, but in all of them the
+					initial state is chosen to be the same - the one with index 78 = the excitation from the HOMO to the LUMO+5. The files me_pop0, me_pop1,
+					me_pop2 contain a similar information - the SE-based populations - the solutions of the TD-SE along the pieces of our trajectory. Finally,
+					the files me_energies0, me_energies1 and me_energies2 contain the energy of the configurations along these paths.</p>
+					<p>Now, the <b>macro</b> folder:</p>
+					<pre style="color:green">> cd ../macro<br>> ls<br>se_en_ex78  se_pop_ex78  sh_en_ex78  sh_pop_ex78</pre>
+					<p>It contials only 4 files: sh_pop_ex78 - the average of out0, out1 and out2;  se_pop_ex78 - the average of the me_pop0, me_pop1 and me_pop2;
+					se_en_ex78 - the average (over initial geometries) energy of the system, computed using SE-probabilities; sh_en_ex78 - the similar quantity
+					but that uses SH-based populations. The suffix _ex78 in all these files indicates that this is for the initial state prepared as the 
+					basis configuration with index 78 (HOMO->LUMO+5).</p>
+					<p>Finally, we want to visualize the results produced. Some information can be plotted right from the file we just produced. For example,
+					to plot the average (SH- and SE-based) energy as the function of time go to <b>macro</b> directory and copy the plotting script "plt_relax"
+					from the distributions directory <b>.../PYXAID/code_level3/plotting</b>:</p>
+					<pre style="color:green">> cd macro<br>cp .../PYXAID/code_level3/plotting/plt_relax .</pre>
+					<p>Run the script in a gnuplot:</p>
+					<pre style="color:green">> gnuplot plt_relax</pre>
+ 					<p>The same kind of caution should be exercised as in plotting results in the step2 - some adjustments may be required depending on the 
+					terminals available or the version of gnuplot. The resulting picture is shown below:</p>
+					<img src="tut1_pics/relax.png" width="40%">
+					<p><b>Figure 1.</b> Non-radiative relaxation dynamics in solid pentacene.</p>
+					<p>To obtain more advanced and comprehensive visualization of the results of the dynamics we use the PYXAID.td_map module. The function
+					make_map is called in "py-scr4.py" script:</p>
+					<pre class="brush:python;">
+from PYXAID import *
+
+# Example of usage
+td_map.make_map("out/me_energies0","macro/se_pop_ex78","macro/se.dat",1)
+td_map.make_map("out/me_energies0","macro/sh_pop_ex78","macro/sh.dat",1)
+</pre>
+					<p>This function utilizes the information about the energies of the states (from out/me_energies0), and time-dependent populations of all
+					states - either SH-based (macro/sh_pop_ex78) or SE-based (macro/se_pop_ex78). It produces the files se.dat and sh.dat (in the <b>macro</b>
+					directory). These files contain the information about the population of all basis states and the energies of these states as the function
+					of time. To plot this information in a 2D map use the script plt_td_map from the <b>.../PYXAID/code_level3/plotting</b> directory:</p>
+					<pre style="color:green">> cp .../PYXAID/code_level3/plotting/plt_relax .<br>> gnuplot plt_relax</pre>
+					<p>The resulting pictures are shown below:</p>
+					<img src="tut1_pics/se_map.png" width="40%"><img src="tut1_pics/sh_map.png" width="40%">
+					<p><b>Figure 2.</b>The TD-map plots showing the relaxation dynamics in solid pentacene. The x asis - is the time, y axis - is the energy of
+					the states, z axis (color scale) - is the population of given energy level/state.</p>
+					<h4>Optional coarse</h4>
+					<p>Coming soon...</p>
+					</div>
+				</div>
+			</div>
+
+	
+	</div>	<!-- whole accordion # 1 -->
+
+
+	<h3><a id="tut2">Tutorial 2: Small example. Program updates (as of 6/30/2014)</a></h3>	
+	<p>This tutorial is essentially similar to the tutorial #1, but the system is more suitable for rapid tests - ethylene in a 10 x 10 x 10 Angstrom box (vacuum).
+	The main workflow is the same as before, but a few modifications are introduced to reflect updated philosophy of the quantum mechanical engine - QE.
+	Also, we omit some calculations made in Tutorial 1 and show the rest from a slightly different angle. 	
+	</p>
+	<p><b>IMPORTANT: If you use QE 5.0.2 or higher - update the files in the tutorial #1 in accord with those presented in this one. Otherwise, the calculations may fail </b></p>
+	To start this tutorial go to the directory <b>PYXAID_tutorials/Tut2_small</b>
+	<pre style="color:green">> cd PYXAID_tutorials/Tut2_small</pre>
+	
+	<div class="accordion" id="acc2">
+	
+		<div class="accordion-group">			
+			<div class="accordion-heading">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc3" href="#tut2_small">
+				Tut 2.1 <h4>NA-MD computations with Pyxaid: Small system</h4>
+				</a>
+			</div>
+			<div id="tut2_small" class="accordion-body collapse">
+				<div class="accordion-inner">
+				
+	<h4>Main coarse</h4>
+	<p>Similarly to tutorial #1, this tutorial is organized in 3 steps. The files needed for going through it as well as some output results are already in the 
+	folders <b>step1</b>, <b>step2</b>, and <b>step3</b>.
+	</p>
+	<p>Here we only outline the differences with the previous tutorial</p>
+	<b>Step 1</b>
+	<p>The only difference here is just using on new job management environment - SLURM. This is reflected in the format of the submit.slm file, which is
+	now used instead of submit.pbs  For local users: Because of recent migration of the bluehive cluster to new bluehive2 platform, the path to the executables
+	(QE) has also changed. Also keep in mind that your specific environment may not be suitable for running calculations on the private partiotion - exciton, so
+	modify the header of the submit file accordingly. To learn more, see <a href="http://info.circ.rochester.edu/BlueHive/Running_Jobs.html" target="_blank">here</a>:</p>
+	<p>To run this step:</p>
+	<ol>		
+		<li><p>go to <b>step1</b> folder:</p>
+		<pre style="color:green">> cd step1</pre>
+		</li>
+		<li> Modify input files x.md.in and x.exp.in, and environment variables in submit.slm</li>
+		<li><p> submit the calculations:</p>
+			<pre style="color:green">> sbatch submit.slm</pre>
+		</li>
+	</ol>
+	<br><br>
+	
+	<b>Step 2</b>
+	<p>The main changes to <b style="color:blue">py-scr2.py</b> file:</p>
+	<ol>
+		<li>We do the calculations for only neutral set, so x1.scf.in and x1.exp.in files are not needed, and the lines with their use are now commented.</li>
+		<li>The files x1.scf.in and x1.exp.in are not distributed into the job folders - this is reflected in the new call of distribute.distribute(...) function</li>
+		<li>The option to run set of calculations under SLURM enviroment is now added - this is reflected in the argument "2" or the last parameter in distribute function. 
+		To be compatible with earlier version, the option 1 can be used to run jobs using mpirun (for PBS environment) or the option 0 - if one only wants to
+redistribute files and prepare job folders, but not run actual calculations. New option 2 will run jobs usin srun (for SLURM environment)</li>
+	</ol>
+	<br>
+	<p>The main changes to <b style="color:blue">submit_templ.slm</b> file:</p>
+	<ol>
+		<li>Adaptation to SLURM environment</li>
+		<li>Manual request of the number of cores (in this case 4) for parsing into the following embedded python script. The number of cores should be compatible with
+		the number requested in the header of the submit file.</li>
+		<li>Use of runMD1 module in the embedded python script. This module is corrected to perform intermediate file conversion transformations - from binary
+		to text. This is because QE (pw_export) now writes wfc.1 and grid.1 files in binary format. The runMD module is preserved for back-compatibility.</li>
+		<li>The new module runMD1 now requires additional argument: params[\"EXE_CONVERT\"] = \"$exe_convert\" The exe_convert should point to iotk executable,
+		which is supplied with QE distribution. In the present case it is in the /software/group/oprezhdo_group/espresso-5.0.2/bin/iotk directory.</li>
+		<li>We now use "complete" wavefunction pre-processing option: params[\"wfc_preprocess\"]=\"complete\". Why? What does it mean? See the tutorial # 3. </li>		
+	</ol>
+	<br>
+	<p>Changes to files <b style="color:blue">py-scr6.py</b> and <b style="color:blue">py-scr7.py</b> are mostly task-specific. In addition, in case of py-scr6.py
+	file we only compute Hamiltonian matrix in two different coordinate systems, but not H_prime matrices (because this was not requested in our submit_templ.slm)</p>
+	<br>
+	<p>So, to run this step:</p>
+	<ol>
+		<li><p>go to <b>step2</b> folder (assuming you are still in step1):</p>
+		<pre style="color:green">> cd ../step2</pre>
+		</li>
+		<li><p>copy the output file of the MD calculations obtained in the step1 to this directory:</p>
+		<pre style="color:green">> cp ../step1/x.md.out .</pre>
+		<p>or simply use the x.md.out file already provided with this tutorial</p>
+		</li>
+		<li><p>create <b>res</b> directory:</p>
+		<pre style="color:green">> mkdir res</pre>
+		</li>
+		<li><p>Modify the file submit_templ.slm : setup paths to executables - pw, pw_export, iotk, and to the results directory - the /res folder just created</p></li>
+		<li><p>Modify parameters of the py-scr2.py file, at you will - mainly the variables nsteps_per_job and tot_nsteps. The latter can not be larger than the actual
+		number of steps computed in MD during step 1, but it can be smaller.</p></li>
+		<li><p>Submit calculations:</p>
+		<pre style="color:green">> python py-scr2.py</pre>
+		</li>
+		<li><p>Check successfulness of completion of all calculations by running py-scr7.py from time to time</p>
+		<pre style="color:green">> python py-scr7.py</pre>
+		<p>The calculations are successfully completed if the output of this operation is:</p>
+		<pre style="color:green">] range(0,49)       nelts = 49</pre>		
+		</li>
+		<li><p>Once the calcuations are completed, create the folder <b>spectr</b>:</p>
+		<pre style="color:green">> mkdir spectr</pre>
+		</li>
+		<li><p>Modify the file py-scr6.py, if needed - mostly tmin, tmax options, but also scl1 and opt, if needed. Compute Hailtonian maps:</p>
+		<pre style="color:green">> python py-scr6.py</pre>
+		</li>
+		<li><p>Visualize the Hamiltonian maps as explained in Tutorial 1</p></li>
+		<li><p>The reference results are provided: see archives res.tar.bz2 and spectr.tar.bz2 provided with this tutorial</p></li>
+		
+	</ol>
+	
+	<b>Step 3</b>
+	<p>Here we compute relaxation dynamics of the first excited state (LUMO->HOMO) transition in planar (ground state-like geometry) of ethylene H2C=CH2. 
+	Our simulation time is set to 25 fs, and the averaging is perfromed over initial 20 fs. 1000 stochastic realizations are included. We consider the minimal
+	basis of just two determinants - ground and first excited states.</p>
+	<p>The main changes to <b style="color:blue">py-scr3.py</b> file:</p>
+	<ol>
+		<li>System-specific modifications: path, parameters</li>
+		<li>Unlike Tutorial 1, here we show how one can manually define basis states to include in simulations - see more info in HOW TO page. Here we just demonstrate
+		it in the practical application.</li>
+		<li>We also demonstrate how scripting capabilities of Python can be used within the input file (py-scr3.py), to define large number of initial conditions:
+		we consider 2 initial basis states - Ground and first excited, and 10 initial times for each of them. Thus, in total we have 20 initial conditions.</li>
+	</ol>
+	<p>Corrections to submit_namd.slm concern using SLURM environment. Corrections to the script py-scr4.py are system-specific.</p>
+	<p>To run this step:</p>
+	<ol>
+		<li><p>go to <b>step3</b> directory:</p>
+		<pre style="color:green">> cd ../step3</pre>
+		</li>
+		<li><p>Create directories <b>out</b> and <b>macro</b>:</p>
+		<pre style="color:green">> mkdir out
+> mkdir macro</pre>
+		</li>
+		<li>Modify parameters of the py-scr3.py file, most importantly - the path to the <b>res</b> directory that contains Hamiltonian files, computed in step 2</li>
+		<li><p>Run calculations:</p>
+		<pre style="color:green">> sbatch submit_namd.slm</pre>
+		</li>
+		<li><p>Compute se.dat and sh.dat files for further plotting of TD-energy maps (see more details in Tutorial 1):</p>
+		<pre style="color:green">> python py-scr4.py</pre>
+		<p>The files generated are now in <b>macro</b> directory</p>
+		</li>
+		<li>Analyse your results, plot figures - see Tutorial 1 how to do this. For comparison, this tutorial contains the reference results, archived in the
+		files macro.tar.bz2 out.tar.bz2</li>
+		<li>The timescale for relaxation dynamics of H2C=CH2 obtined in our calculations is far to large - one can not observe SH events at all, one can use SE-
+		derived populations to estimates the timescales. In reality, the transition occurs on the order of ~100 fs or so (if i remember it correctly). This tutorial
+		does not care much about the quality of the computed results in this case - the main goal was to show the basic mechanics of the calculations with a small, fast
+		example, such that the whole tutorial can be completed in the matter of 1 h, at most (rough estimate). The reason why a very long relaxation time is 
+		obtained is the use of CPA. With this approximation, the nuclear geometry evolves on the electronic ground state PES. As the result, the molecule stays
+almost planar all the time, and the NAC is small. In reality, the excited state PES may drive the system to the twisted conformation, at which the electronic energy
+		surfaces for GS and S1 states are degenerate and hence are strongly coupled. In this geometry NACs are sufficiently large to induce rapid electronic 
+		transitions. In the CPA this conformation is not achieved, however, leading to very slow relaxation dynamics.</li>
+		
+	</ol>
+	
+	
+	
+				</div>  <!-- accordion-inner -->
+			</div> <!-- tut2_small -->
+		</div> <!-- accordion-group -->
+	</div>  <!-- whole accordion # 2 -->
+
+	
+	
+
+
+
+
+	
+	
+	<h3><a id="tut3">Tutorial 3: Code level 2 - NAC computations</a></h3>	
+	<p>This tutorial described more advanced and basics topics, more suitable for developers or system administrators who may need better understanding of the
+code, for its adaptation to a particular computational environment. Of course, we hope that this tutorial will also be of use to researchers, who want to utilize
+full capabilities of the code, hidden from basic users. Specifically, in this Tutorial we will show how the classes and functions defined in the pyxaid_code 
+can be used in the python script. In fact, the first tutorial in this section will actually describe most of the content of the runMD.py module/file, but in the
+standalone manner. This code will then be adapted for further computations of NAC - e.g. in systematic manner for construction of model Hamiltonians of diatomic
+system or for investigation of NAC localization and directionality in more complex systems. </p>
+	To start this tutorial go to the directory <b>PYXAID_tutorials/Tut3_code_level2_NAC</b>
+	<pre style="color:green">> cd PYXAID_tutorials/Tut3_code_level2_NAC</pre>
+	
+	<div class="accordion" id="acc3">
+	
+		<div class="accordion-group">			
+			<div class="accordion-heading">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc3" href="#tut3_tut3_1">
+				Tut3.1 <h4>Computing NACs with Pyxaid</h4>
+				</a>
+			</div>
+			<div id="tut3_tut3_1" class="accordion-body collapse">
+				<div class="accordion-inner">
+				
+	
+	The files needed for the first sub-topic will be in the Tut3.1 folder:
+	<pre style="color:green">> cd Tut3.1</pre>
+	<p>The content of the directory is </p>
+	<pre style="color:green">> ls<br>] out  submit.slm  tut3.1.py  x0.exp.in  x0.scf.in  x1.exp.in  x1.scf.in</pre>	
+	<p>The directory <b>out</b> contains some reference results, for further verification</p>
+	<p>The files x0.scf.in and x1.scf.in are the almost identical input files for QE. Both of them request spin-polarized calculation of C-H molecule
+with 10 bands at gamma-point, in the cubic box 10x10x10 Angstrom. The bond distance r(C-H) is set to arbitrary reasonable value of 1.3 Angstrom in the file
+x0.scf.in. The only difference between the two files is that the bond distance is increased to 1.4 Angstrom in the x1.scf.in file. Thus, the calculations
+will yield the NACs along this direction at intermediate bond length r(C-H) = 1.35 Angstrom. </p>
+	<p>The files x0.exp.in and x1.exp.in are the input files for export calculations - they are only different in the value of prefix parameter, which is also 
+	reflected in their names. The naming is made consistent with x*.scf.in files.</p>
+	<p>The file submit.slm is the submit script for SLURM systems. Ok. Our computational facilities have recently switched to this system, so the example, as well
+as default parameters in many script will now be adapted to SLURM. Still, it should not be difficult for one to transform this input script to the PBS format. 
+The file content is following: </p>
+	<pre id="tut3_1_submit_slm" class="brush: python;">
+#!/bin/bash
+#SBATCH -A exciton
+#SBATCH -p exciton
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH --mem-per-cpu=1000
+#SBATCH -t 1:00:00
+#SBATCH -J qespresso
+#SBATCH -e out_%j
+#SBATCH -o out_%j
+
+
+exe_qespresso=/software/group/oprezhdo_group/espresso-5.1/bin/pw.x
+exe_export=/software/group/oprezhdo_group/espresso-5.1/bin/pw_export.x
+
+# Compute 1-st point
+srun $exe_qespresso < x0.scf.in > x0.scf.out
+srun $exe_export < x0.exp.in > x0.exp.out
+
+# Compute 2-nd point
+srun $exe_qespresso < x1.scf.in > x1.scf.out
+srun $exe_export < x1.exp.in > x1.exp.out
+
+	</pre>
+	<p>The script above basically computes two single-points, one for each of the input files. Then, with the help of pw_export utility the wavefunction information
+	is converted into convenient form. Since recently, the QE adopted the format according to which the resulting grid.1, wfc.1, etc. files are written in
+	the binary form, even if ascii = .TRUE. (or may be this is just a bug? please let me know if know something about it). In any way, this is not a problem -
+	in the latter stages we will utilize the iotk program to convert these files into txt format.</p>
+	<p>For now, to start the tutorial, modify the paths to executables as well as the computing resources section (if you use PBS - adopt it to the PBS conventions).
+On the system we SLURM, we do:</p>
+	<pre style="color:green">> sbatch submit.slm </pre>
+	<p>Once the computations are done (should take a few minutes), the directories <b>x0.export</b>, <b>x0.save</b> and <b>x1.export</b>, <b>x1.save</b> should be
+	created, as well as the output files - x0.scf.out, x0.exp.out, x1.scf.out, and x1.exp.out </p>
+	<p>We are now ready to the main part of this tutorial 3.1 - utilization of functions and classes of the module pyxaid_core. Specifically, we will utilize
+	them to compute NACs between all considered states, along the C-H bond direction. Start by examining the tut3.1.py code</p>
+<pre id="tut3_1_submit_slm" class="brush: python;">
+import os
+import sys
+from PYXAID.pyxaid_core import *
+
+def run_test():
+
+    # Parameters
+    dt = 0.1 # Angstrom
+    # Set #1
+    minband = 1  - 1
+    nocc = 3 - 1
+    maxband = 10 - 1
+
+    # Set #2
+#    minband = 1  - 1
+#    nocc = 3 - 1
+#    maxband = 5 - 1
+
+    # Set #3
+#    minband = 3 - 1
+#    nocc = 3 - 1
+#    maxband = 4 - 1
+
+
+    EXE_CONVERT = "/software/group/oprezhdo_group/espresso-5.0.2/bin/iotk"
+
+    # Containers for WFCs
+    curr_wfc0 = wfc()
+    curr_tmp0 = wfc()
+    next_wfc0 = wfc()
+    next_tmp0 = wfc()
+
+
+    # Convert exportent wavefunction from binary to text format - using IOTK utility of QE
+    os.system("%s convert x0.export/wfc.1 x0.export/wfc.1.xml" % EXE_CONVERT )
+    os.system("%s convert x1.export/wfc.1 x1.export/wfc.1.xml" % EXE_CONVERT )
+
+    # Read one wavefunction - at time t
+    curr_tmp0.QE_read_acsii_index("x0.export/index.xml" )
+    curr_tmp0.QE_read_acsii_wfc("x0.export/wfc.1.xml" )
+
+
+    # Read the next wavefunction - at time t + dt
+    next_tmp0.QE_read_acsii_index("x1.export/index.xml" )
+    next_tmp0.QE_read_acsii_wfc("x1.export/wfc.1.xml" )
+
+    # Trim each wavefunction to the active space chosen
+    curr_wfc0 = wfc(curr_tmp0,minband,nocc,curr_tmp0,nocc+1,maxband)
+    next_wfc0 = wfc(next_tmp0,minband,nocc,next_tmp0,nocc+1,maxband)
+
+    #============================================
+    # Try different pre-conditioning schemes:
+    do_complete = 1
+    # just choose one of the following options:
+    wfc_preprocess = ""
+#    wfc_preprocess = "normalize"
+#    wfc_preprocess = "complete"
+#    wfc_preprocess = "restore"
+
+    if wfc_preprocess=="normalize": # just normalize
+        curr_wfc0.normalize()
+        next_wfc0.normalize()
+
+    # This option is made defaut in the latest version
+    elif wfc_preprocess=="complete": # complete wfc with complex conjugate part,
+                                     # the result is then normalized
+        curr_wfc0.complete()
+        next_wfc0.complete()
+
+    # The following option exists - but may be very slow or not work
+    # a better diagonalization procedure is needed
+    # It is disabled in the new version
+    elif wfc_preprocess=="restore":  # restore real wfc from the projection, the result is normailzed
+                                     # optionally the wfc can be completed with complex conjugate
+                                     # before restoring
+        curr_wfc0.restore(0,do_complete) # first 0 - k-point, second 1 - do complete wfc
+        next_wfc0.restore(0,do_complete)
+
+
+    #============================================
+    # Compute Hamiltonian
+    ham(curr_wfc0,next_wfc0,0,0, 0,maxband-minband, dt,"Ham_original_"+wfc_preprocess )
+#    ham(curr_wfc0,next_wfc0,0,0, 0,maxband-minband, dt,"Ham_original_"+wfc_preprocess+"_5x5" )
+#    ham(curr_wfc0,next_wfc0,0,0, 0,maxband-minband, dt,"Ham_original_"+wfc_preprocess+"_2x2" )
+
+
+
+run_test()
+
+
+</pre>
+	<p>In general, the script should be quite self-explanatory. First, 4 instances of the <b>wfc</b> class are created -lines 28-32. The objects are empty and
+do not have any large memory allocated, the size (number of planewaves) of wfc is unknown, other parameters are not set. These objects are just needed for global
+referencing from later parts of the code.</p>
+	<p>As i already mentioned above, the new format of wfc.1 and grid.1 files (and others) is binary. So before we can proceed further we need to convert them into
+text format. This is done by using iotk tool supplied with the QE distribution. From the command line this conversion would look like:</p>
+	<pre style="color:green">> path-to-iotk/iotk convert file.dat file.xml </pre>
+	<p>where file.dat is the source file in binary format, and the file.xml is the output xml file in text format (plus the xml meta-data)</p>
+	<p>Although one can convert the files manually from the command line, like we just explained, in this tutorial the conversion is incorporated in the 
+	tut.3.1.py script - lines 36 and 37.</p>
+	<p>Once we have information about wavefunctions in the text format (now written in x0.export/wfc.1.xml and x1.export/wfc.1.xml files), we can load all that
+	information into our empty wfc objects. This is done in two steps - first all general information about dimensionality of all arrays and objects, flags and
+	options, etc. is loaded by function <b>QE_read_acsii_index(filename)</b>, where filename is the name of the index.xml file, generated by pw_export. In the second
+	stage, the actual data - coefficients - is loaded by function <b>QE_read_acsii_wfc(filename)</b>, where filename is the name of the wavefunction file in text 
+	format (xml), also generated by pw_export/iotk. Lines 40-41 and 45-46 illustrate utilization of the 2-step wavefunction loading processes - each corresponding to
+	a single point calculation with given geometry.</p>
+	<p>The next interesting part of the script is demonstration of the non-default constructor of the wfc class, which takes the format
+	<b>wfc(wfc wfc1, int min1, int max1, wfc wfc2, int min2, int max2)</b> This constructor creates a new wfc object from two wfc objects wfc1 and wfc2, taking 
+	a part of the orbitals from one of them - in the range [min1,max1] and the other part from the second object - in the range [min2, max2]. In the present 
+	case - lines 45-50 - both wfc1 and wfc2 are the same, so these lines effectively copy some part of the originally loaded wavefunctions (objects curr_tmp0 and
+	next_tmp0) into the new objects curr_wfc0, next_wfc0. The capability of the non-deafult constructor to mix two different electronic structures was initially
+	designed for band gap and NAC correction calculations (unpublished results) using two sets of calculations - for neutral and charged systems. This capability 
+can also be used for construction of some diabatic states that mix localized wavefunctions, but this need carefull considereation.</p>
+	<p>The second important capability of the non-default constructor, which will be tested later in this tutorial, is its ability to trim the electronic structure
+	to the active space of interest. For instance, our current calculation is setup to produce 10 orbitals, so the default size of the computed Hamiltonian matrices 
+	is 10 x 10. However, only 3 alpha and 2 beta orbitals are occupied, which make higher-lying states - e.g. from 5 to 10 not very important. To reduce utilization of
+	of the disc memory, one can reduce the size of the computed Hamiltonian matrices to 5x5 or even to 2x2, windowing the range of orbitals of interest.</p>
+	<p>Before the Hamiltonian (NACs and energies) can be computed, the wavefunctions loaded and trimmed must be pre-processed. There are three types of pre-processing
+	that are given by the functions <b>normalize()</b>, <b>complete()</b>, and <b>restore(int kpt, int do_complete)</b>. The pre-processing of each of the wavefunction objects
+	(one is at time t, the other at time t+dt) is performed	in lines 61-78, depending on chosen option - lines 54-59.</p> 
+	<p>The first option - <b>normalize()</b> - all KS orbitals will be normalized to unity, one-by-one. Keep in mind, that this does not mean the orbitals will be
+	orthogonal, because of the use of PP.</p>
+	<p>The second option - <b>complete()</b> - is designed to address the wavefunction storage format. For the G-point, which is very typical in our calculations, only
+	the coefficients for positive G-points are stored, the coefficients for negative one are simply complex conjugate: c(-G) = c^*(G). Pre-processing by this
+	option transforms initially created N+1-element array containing coefficients into 2N+1 array that also included complex conjugate points, except for G=0,
+	in which case the coefficient is real. This operation is performed for each KS orbital, independently. Finally, the resulting wavefunctions are then normalized.
+	Completion of wavefunction is typically needed only for gamma-point calculations, for all other k-points the entire set of coefficients is usually written.
+	Also, for the gamma point one does not need completion if it is requested via general format - "automatic 0 0 0" or so. In this case the gamma-trick is not
+	utilized, all coefficients are written and the completion is not needed.</p>
+	<p>We want to emphasize that most of the time, just normalizing the wfc (option - normalize) is not enough - the wavefunctions are incorrect because they 
+	do not contain the complex conjugate part. As the result, the deviation from the orthogonality of KS orbitals is large. If the wavefunctions are completed,
+	the deviation is relatively small for US-PPs and the orbitals are essentially orthogonal for NC-PPs.</p>
+	<p>Because of the utilization of PP, the orbitals we deal with may be non-orthogonal, especially in the US-PP case, while for NC-PP the orthogonality is practically
+	preserved. One of the way to restore "all-electron orbitals" we have developed was to perform Lowdin orthogonalization of the wavefunctions we have. This is performed
+	by the <b>restore(int kpt, int do_complete)</b> function. The first parameter chooses the k-point (typically 0 for gamma-point calculations), the second parameter
+	chooses is the complex conjugate part is first added, before diagonalization is performed.</p>
+	<p>Currently we recommend using the completion and not using the restoration option. This is because the latter uses not very efficient diagonalization 
+	scheme (self-made, not very robust and efficient yet), which may simply hang all calculations. In future more robust schemes from Eigen library may be 
+	implemented. The second reason for utilization that suggests sufficiency of the complete() preprocessing is the following. If the US-PP is used in calculations,
+	the "all-electron" wavefunctions (strictly orthonormal) can be obtained via pw_export utility by setting uspp_spsi flag to .TRUE. and utilization of the
+	corresponding output. If the NC-PP is used, the orbitals are already orthonormal to good accuracy, so no additional orbital transformation is needed.</p>
+	<p>Finally, once the wavefunctions corresponding to adjacent geometries are prepared and pre-processed, the Hamiltonian matrix can be computed. This is 
+	done in lines 83-85 by function <b>ham(...)</b> The NAC and energy of orbitals are computed as it is described in the first Pyxaid paper (JCTC 2013).</p>
+	<br><br>
+	<p>Now, to practical calculations. To run this tutorial script, just do:</p>
+	<pre style="color:green">> python tut3.1.py </pre>
+	<p>Examine the printed output - files Ham_original_*</p>
+	<p>To better understand all options and the effects of different flags (types of calculations), try the following exercises:</p>
+	<p><b>Example 1.</b> Run the default script - this will compute 10 x 10 Hamiltonian matrix obtained from non-preprocessed (raw) wavefunctions. The 
+	resulting files are: Ham_original__im and Ham_original__re</p>
+	<p><b>Example 2.</b> Run the script with each of the pre-processing options - this will compute 10 x 10 Hamiltonian matrix obtained from preprocessed 
+	(according to choice) wavefunctions. Note have the restore() option hangs. Note in which case the off-diagonal elements of the real-part of the Hamiltonian are nearly zero - this is 
+	the sign that the wavefunction is correct, because these elements should be zero in case of orthonormal basis. Compare the
+	off-diagonal elements of the imaginary part of the Hamiltonian (~NACs) with each other and with the raw calculations.</p>
+	<p><b>Example 3.</b> Choose complete() as the pre-processing option and try 3 sets of orbital ranges for which Hamiltonian is computed - 3 sets of parameters
+	in the beginning of the script (lines 10-23) and the corresponding 3 sets of ham() function invocation (lines 83-85, they are different only by output file name)
+	Observe how you shrink the active scale of KS orbitals from 10 to 5 and then to 2, leading to 10x10, 5x5, ad 2x2 Hamiltonian matrices, respectively. Observe
+	how the choice of minimal index of orbital > 1 is made and how it shift the window of the active space. In all cases it is most convenient to compare the 
+	diagonal elements of the real part of the produced Hamiltonian matrices (orbital energies).</p>
+	<p>Example 4(extra, not included in this tutorial files). We currently use NC-PP for our calculations. Try using US-PP and see how this will affect the
+	results above (especially regarding choice of the preprocessing option). Also try using uspp_spsi option for pw_export function. Play with different
+	ways of setup k-point to be gamma-point - we currently consider "K_POINTS gamma" (with gamma-point trick). Try using "K_POINTS automatic" or other options.
+	</p>
+
+	
+	
+
+	
+				</div> <!-- content of accordeon 3.1 -->
+			</div>
+		</div>
+		
+		<div class="accordion-group">			
+			<div class="accordion-heading">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc3" href="#tut3_tut3_2">
+				Tut3.2
+				</a>
+			</div>
+			<div id="tut3_tut3_2" class="accordion-body collapse">
+				<div class="accordion-inner">
+					<h4>Main coarse</h4>
+					<p>Under development...</p>
+				</div>
+			</div>
+		</div>
+	
+	</div> <!-- whole accordeon 3 -->
+
+
+	<h3><a id="tut4">Tutorial 4: Coding with Pyxaid</a></h3>	
+	<p> An important feature of the Pyxaid code is its flexibility - the code is not a black-box meant to perform 
+	a predefined set of operations/calculation types. Rather, the Pyxaid is a library of useful functions and routines. 
+	Ideally, one should learn to use these types of "hidden" utilities. The best way to familiarize oneself wth these capabilities
+is, of course, via exploration of the source code. For simplicity, I recommend to start with the Python modules (no C++) - they are
+very simple and easy to understand, yet they are very useful. In this mini-tutorial I will show how this can be done.</p>
+	To start this tutorial go to the directory <b>PYXAID_tutorials/Tut4_coding_with_Pyxaid</b>
+	<pre style="color:green">> cd PYXAID_tutorials/Tut4_coding_with_Pyxaid</pre>
+	
+	<div class="accordion" id="acc4">
+	
+		<div class="accordion-group">			
+			<div class="accordion-heading">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc4" href="#tut4_tut4_1">
+				Tut4.1 <h4>Computing convolution of the computed absorption spectrum with a Gaussian distribution (smoothing)</h4>
+				</a>
+			</div>
+			<div id="tut4_tut4_1" class="accordion-body collapse">
+				<div class="accordion-inner">
+						
+	<p>The tutorial is essentially the same as the Tut2_small. However, unlike the tutorial 2, we also want to compute the electronic spectrum, but
+	no NA-MD simulation is involved.
+	Thus, what we need is only the computations for the step2. Since in our earlier example (Tutorial 2) we didn't compute matrix elements
+	of dipole moment operator, we need to recompute them in this tutorial. This is done by setting the compute_Hprime variable to 1 in the 
+	submit_temp.pbs file</p>
+	<pre style="color:green">params[\"compute_Hprime\"]=1</pre>
+	<p>Now, I have changed the file py-scr2.py too. This is because at the time of writing this tutorial we are again on the PBS-driven 
+	computational facility, so I had to choose the right option. But this is good, because it demonstrates this feature of the function
+	<b>distribute</b> from the package <b>distribute</b>. Look at these lines:</p>
+	<pre class="brush: python;">
+	os.system("cp submit_templ.pbs wd") 
+	distribute.distribute(0,tot_nsteps,nsteps_per_job,"submit_templ.pbs",["x0.exp.in"],["x0.scf"],1) 
+	</pre>
+	<p>Two things were altered: 1) the name of the submit template file, which is now "submit_templ.pbs" and 2) the last argument of the
+	function <b>distribute</b> - now it is set to 1 (use the PBS commands in the submit file) instead of 2 (SLURM commands in the submit file).
+	Note that the file extension ".pbs" is needed only for convenience - it is not specific to PBS or SLURM, it just visually assists classification.</p>
+    <p>I also made a number of other system/environment-specific modifications in other files: </p>
+	<ul>
+	<li>in the file "x0.scf.in" - change "pseudo_dir" variable to point to the location of the pseudopotential files on the current computing system</li>
+	<li>in the file "x0.scf.in" - change the names of the atomic pseudopotential files in the ATOMIC_SPECIES record</li>
+	<li>in the file "x0.exp.in" - change the "pseudo_dir" variable and the names of the pseudopotential files (must be in the same order as in
+	the "x0.scf.in" file) to be consistent with those in the "x0.scf.in" file.</li>
+	</ul>
+	<p>After these minor preparations we are ready to compute Hamiltonian and dipole transition moment matrices: </p>
+	<pre style="color:green">>python py-scr2.py</pre>
+	<p>To verify if all calculations are finished use the auxiliary script py-scr7.py, which will show the number of files with given name pattern.
+	If it is 50 (from 0 to 49) - the number of MD steps we want to use in our further computations - then we can move on to next calculations.
+	Otherwise, the sript will return the continuity regions - that are the lists of the indexes in the successfully created files with a 
+	predefined filename prefix. For example if we have regions (0,7) and (10, 19) then we are missing files with indexes 8 and 9 in the first job,
+	but all 10 files are computed in the job2. In this situation, one can simply enter the /wd directory then the /job* directory, modify the param1
+	and param2 variables in the submit script and manually submit the job in that directory. Once this computation set is finished, check the
+	continuity of the generated filenames again.</p>
+	<p>In case you are lazy or unable to produce the Ham_ and Hprime_ files yourself, or if you just want to compare the results of your computations
+	with what I've obtained, just unzip the attached tarball res.tar.bz2: </p>
+	<pre style="color:green">>tar -xjf res.tar.bz2</pre>
+	<br>
+	<p>Great! Now we are ready for the main goal of this tutorial - learning how to use the capabilities of the Pyxaid for developing your
+custom code. In particular, we want to compute the absorption spectrum convolved with a Gaussian distribution. This is something
+	one would want for producing nice-looking absorption spectra figures. This capability is not implemented by itself as a part of the 
+	"black-box" and one needs a bit more familiarity with scripting and Python. What Pyxaid does have - is a set of convenient functions that
+	can greatly simplify our task. </p>
+	<p>All our computations are organized and performed in the py-scr6.py file. Lets look at it (in the snippet below I erased most of the commented
+	lines you can find in the files for this tutorial):</p>
+	<pre class="brush: python;">
+from PYXAID import *
+# Example of usage
+opt = 1
+scl1 = 13.60569253 # Ry to eV
+scl2 = 1000.0 # some scaling to get plottable data
+HOMO = 6
+minE = 0.0
+maxE = 10.0
+dE = 0.05
+tmin = 0
+tmax = 50
+
+#excitation_spectrum.
+[exE, exI] = excitation_spectrum.calculate("res/0_Ham_","_re","res/0_Hprime_","x_im",tmin,tmax,opt,scl1,scl2,"spectr/ab_spectrx.dat",HOMO,minE,maxE,dE)
+
+#===================== User scripting goes here ===================
+# Convert the 'naked' data in to the format for convolution
+XP = []
+i = 0
+while i < len(exI):
+	XP.append([exE[i], exI[i]])
+	i = i + 1
+	
+# Now do the convolution
+dx0 = dE # original grid spacing
+dx = dE # this is new grid spacing
+var = 2.0*dE # new variance
+TM,R = pdos.convolve(XP,dx0,dx,var)
+
+# Printing "broadened" results
+pdos.printout("spectr/ab_spectrx_conv.dat",TM,2,R) 
+	</pre>
+	
+<p>Now lets discuss what is interesting about this code. First, you can recognize that we utilize the function <b>calculate</b> from the
+<b>excitation_spectrum</b> module of the Pyxaid distribution. We already used this function and module in the Tutorial 1. The difference is
+that now we not only print the computed X and Y data for plotting the absorption spectrum, but we also return these variables as the result.
+They are stored in the lists exE and exI (line 15). Each one is a 1-D list of the floating-point values. The first contains the excitation
+energies (X axis) and the second one contains the intensities (Y axis). We return these quantities as the output of the function, because we
+will need to manipulate them in our next steps. Also note that the function <b>compute</b> prints out the computed data in the file
+"spectr/ab_spectrx.dat" (only x component). The data reflect temporal averaging of the signal over the computed time trajectory, and, in principle,
+this is the right way of computing spectral broadening. The trajectory must be long enough, of course. What we want on top of that is to add 
+some "artificial" broadening - e.g. from the known or precomputed spectral width. Just for a visual appeal or because of any other motivation.</p>
+
+<p>The broadening and convolution are implemented for DOS computations. Both are hidden in the <b>pdos</b> module. The convolution is run
+in the "black-box" mode for this type of calculations when the <b>sum_pdos</b> function is called. However, the module defines two more 
+auxiliary functions: <b>convolve</b> and <b>printout</b>. They are used in the present tutorial.</p>
+<p>The function <b>convolve</b> takes 4 arguments:
+<ul>
+<li>XP - the original ("raw") data. The format of XP is a list of lists ("2D array"), so that XP[i][n] comprizes data for n-th axis along grid points
+ i. The convention(ok, maybe a bit non-intuitive) is this: the set of pairs ({ XP[i][0], XP[i][n]), n>0, i = 0,...N} represents the function y_i = f_n(x_i).
+For example, within the <b>sum_pdos</b> this 2D list contained the densities of states for different projections along the common energy axis. In
+our present example we have only 1 function - the intensity vs. energy, so the XP object will have the dimension of Ngrid x 2, where Ngrid is 
+the number of grid points along the X (energy) axis.</li>
+<li>dx0 - is the original X axis grid spacing. In our example it is defined by the dE parameter used in the computation of the "raw" absorption 
+spectrum.</li>
+<li>dx - the final grid spacing - in case we want to change the resolution of the graph. In our case we will keep it the same as original (line 28)</li>
+<li>var - is the variance (width parameter) of the Gaussian distribution with which we want to convolve our original dataset. In this case we set var to the value
+of two grid spacing (var = 2*dE), so to smooth out all fluctuations on this excitation energy scale.</li>
+</ul>
+</p>
+<p>To use the function <b>convolve</b> we first prepare the input argument XP in the proper format using the results of the computations in 
+line 15. This preparation is a simple set of instruction in lines 19-23.</p>
+<p>As a result of computations, the <b>convolve</b> function returns two objects - TM and R. The first one is of integer type. This is simply the
+number of the points on the new X axis - remember we could increase or decrease the resolution of the graph, meaning the number of data
+points (pairs of x and y values) could have increased or decreased, respectively. The second object, R, has the same meaning and format as our
+original XP object - the list of TM lists each of which contains 2 entries - x and y values.</p>
+<p>Finally, we print out the 2-dimensional array (list of lists) R into the file "spectr/ab_spectrx_conv.dat" using the function <b>printout</b>
+of the module <b>pdos</b>(line 32). The first argument of this function is, obviously, the name of the output file. The other 3 arguments are:
+#2 (TM) and #3 (2, in our case) -are the dimensions of the output array, #4 (R) is the object containing the data to be printed out.</p>
+<p>Having added these new functionalities, we can generate the smoothed absorption spectrum. In our settings the data points are printed into 
+the file "ab_spectrx_conv.dat" in the folder /spectr. The results from two calculations ("raw" and convolved spectra) are plotted in the fig
+"spectr.png". Note that I probably missed a proper normalization in the convolution procedures, so the convolved intencities are much larger
+than the intensities of the original spectrum. So far I normalized them only manually (in the plotting script - "spectr.plt"), just for
+better comparison of the two types of spectra. In reality, the intensity of the absorption spectra are rather arbitrary (no units), so not many
+people really care about such normalization. If you do - please check out the modules and the functions we used - maybe you'll find a proper normalization
+coefficient (unless I find it earlier).</p>
+<p>To summarize, we have touched the "hidden" powers of the Pyxaid package and learned how to make use of the existing functions beyond the
+original prescriptions coded into the package. End of tutorial.</p> 
+
+	
+				</div> <!-- content of accordeon 4.1 -->
+			</div>
+		</div>
+		
+		<div class="accordion-group">			
+			<div class="accordion-heading">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc4" href="#tut4_tut4_2">
+				Tut4.2: <h4>Computing influence spectra (or just any FFT on provided data)</h4>
+				</a>
+			</div>
+			<div id="tut4_tut4_2" class="accordion-body collapse">
+				<div class="accordion-inner">
+	
+	<p>For this tutorial we can utilize any of the precomputed data. Typically, don't need to run a full-scale NA-MD simulations, only a 
+	preprocessing phase. So the setup is essentially the same as we used before - e.g. see Tutorial 1, step 3. However, at this point we are interested in the so-called "influence"
+	spectrum. This spectrum shows vibrational/phonon modes that drive particular electronic transition. It is computed as a Fourier transform
+	of the autocorrelation function of the energy gap fluctuation (not of the gap itself!). The math and definitions can be found in the papers
+	(see Literature section for references). Maybe later I'll put more formulai directly here in html. So... We need that autocorrelation function.
+	</p>
+	<p>To compute the autocorrelation functions for energy gap fluctuations for all pairs of states dE_{ij}, we need to ask for NA-MD simulations
+	with decoherence correctin. The program will compute all these functions first and will generate a lot of files - each file for a given initial 
+	condition and for each pair of states. So !!! BEWARE !!!! this may take quite a lot of disk space and may also be slow (because of frequent I/O
+	operations), so enable decoherence calculations with greate caution. As I said, the Pyxaid will generate all the files first and only then
+	it will use it in the NA-MD simulations (if we want NA-MD with decoherence effects). For now we can request only a preprocessing stage - this is all we need fpr 
+	computation of the "influence" spectra. So consider these options in your step 3 script (py-scr3.py in the tutorial files):
+	</p>
+	
+	<pre class="brush: python;">
+	params["runtype"] = "no-namd"  # or any other word, except for "namd"
+	params["decoherence"] = 1   # don't forget this part too
+	</pre>
+	
+	<p>At this point we should have generated a bunch of files in our "/out" directory. Now it is time to do a bit of Fourier transform. Now we will
+	be using the module called <b>spectrum</b>. The module defines couple functions with quite self-explanatory names: <b>get_data</b> and <b>do_fft</b>.
+	The first one extracts the data to be transformed, store it in a proper format, and sends it to the second function for further processing.
+	To cut the long story short, here is basic piece of code (script, really) that will do the calculations we want:
+	</p>
+	
+	<pre class="brush: python;">
+from PYXAID import *
+
+# Set parameters
+filename = "out/icond0pair1_6Dephasing_function.txt"  # this is the file that contains the information we need to compute "influence" spectrum
+                                                      # the name implies that this corresponds to the 0-th initial condition, and 
+													  # we look at the transition between the pair of states 1 and 6
+start_line = 2   # first_line = 1
+end_line = 1000  # assume we have at least these datapoints (defined by the trajectory length - see params["namdtime"] parameter)
+col = 4          # the 4-th column of the file above contains the autocorrelation function
+                 # look inside the .txt file - you'll find a lot of other useful data and you will know what is that
+
+# Read the data from the file
+x = spectrum.get_data(filename, start_line, end_line, col)
+
+# Define parameters for FFT
+dt = 1.0         # fs, this is the timestep used to propagate nuclear dynamics
+outfile = "icond0pair1_6_autocorr_fft.dat"  # the results will be printed to this file
+
+# Finally, compute the FFT
+spectrum.do_fft(x, dt, outfile)  # the first argument is the set of datapoints extracted from the file earlier
+	</pre>
+	
+	<p>Once the computations are done, the output file icond0pair1_6_autocorr_fft.dat" will contain 5 columns. The first two pairs of columns
+	provide the x (frequency) data - in 1/fs and in 1/cm units (columns 2 and 4 just show these units). The last column (5) contains the amplitudes
+	of all modes. To get the intencities, one needs to plot the squares of these amplitudes.</p>
+	<p>Important! Note that the <b>spectrum</b> module depends on the external <b>numpy</b> module. The latter is typically bundled with many modern
+	Python installations or can be easily installed manually. </p>
+	
+				</div>
+			</div>
+		</div>
+		
+		
+		
+		<div class="accordion-group">			
+			<div class="accordion-heading">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc4" href="#tut4_tut4_3">
+				...
+				</a>
+			</div>
+			<div id="tut4_tut4_3" class="accordion-body collapse">
+				<div class="accordion-inner">
+					<h4>Main coarse</h4>
+					<p>Under development...</p>
+				</div>
+			</div>
+		</div>
+	
+	</div> <!-- whole accordeon 4 -->
+
+	
+	
+	<h3><a id="tut5">Tutorial 5: Other capabilities of Pyxaid</a></h3>	
+	<div class="accordion" id="acc5">
+	
+	<div class="accordion-group">			
+		<div class="accordion-heading">
+			<a class="accordion-toggle" data-toggle="collapse" data-parent="#acc5" href="#tut5_tut5_1">
+			Tut5.1 <h4>Computing partial densities of states (pDOS) and orbital isosurfaces</h4>
+			</a>
+		</div>
+		<div id="tut5_tut5_1" class="accordion-body collapse">
+			<div class="accordion-inner">
+	
+	
+	<img src="tut5_res/method1/benzene_homo-1.bmp" width="20%">
+	<img src="tut5_res/method1/benzene_homo.bmp" width="20%">
+	<img src="tut5_res/method1/benzene_lumo.bmp" width="20%">
+	<img src="tut5_res/method1/benzene_lumo+1.bmp" width="20%">
+	<br>
+	<br>
+	
+	<p>In this tutorial you will learn how to do projected (also called partial) densities of states calculations, in which the density of states
+	is projected onto an arbitrary set of atoms/orbitals. We will also learn how to compute orbital isosurfaces, for visualization purposes. 
+	The electronic structure calculations are, of course, performed with the Quantum Espresso package. What is the role of Pyxaid? Well, what QE does
+	when you request computation of projection of DOS on all possible states is that it will generate a set of files each of which contains the
+	orbital-resolved DOS for orbitals of each atom. Also the QE computes the total DOS. Now, what if you need to know DOS for a group of atoms
+	(e.g. only N atoms, or only N and Fe atoms, or only atoms belonging to a particular functional group)? Then, obviously, you need to summ all
+	orbital-resolved DOSs up. This is exactly what the Pyxaid module <b>pdos</b> does. </p>
+	<p>I will also share with you my scripts for automated computations of many isosurfaces with QE. These scripts are not part of Pyxaid, but 
+	can still be really useful once you get using it. 
+	</p>
+	<p>Ok. So far I have only placed the needed files only here. Later, I'll add them to the Pyxaid distribution. So for now, here is a file
+	system and the files we need</p>
+	<a href="tut5_res/submit.pbs">submit.pbs</a><br>
+	<a href="tut5_res/method1/x.scf.in">method1/x.scf.in</a><br>
+	<a href="tut5_res/method1/x.scf.out">method1/x.scf.out</a><br>
+	<a href="tut5_res/method1/x.pdos.in">method1/x.pdos.in</a><br>
+	<a href="tut5_res/method1/x.pdos.out">method1/x.pdos.out</a><br>
+	<a href="tut5_res/method1/x.pdos_tot">method1/x.pdos_tot</a><br>
+	<a href="tut5_res/method1/x.pp1.in">method1/x.pp1.in</a><br>
+	<a href="tut5_res/method1/x.pp2.in">method1/x.pp2.in</a><br>
+	<a href="tut5_res/method1/x.pp3.in">method1/x.pp3.in</a><br>
+	<a href="tut5_res/method1/x.pp4.in">method1/x.pp4.in</a><br>
+	<a href="tut5_res/method1/py-scr7.py">method1/py-scr7.py</a><br>
+	<a href="tut5_res/method1/C6H6">method1/C6H6</a><br>
+	<a href="tut5_res/method1/plt">method1/plt</a><br>
+	<a href="tut5_res/method1/pdos.png">method1/pdos.png</a><br>
+	<!--
+	 This is how to display the context of a file in html
+	<object width=50% height="340" type="text/plain" data="tut5_res/submit.pbs" border="0" style="overflow: hidden;"></object>
+     -->
+	<br>
+	<p>Now it is time to give some explanation and instructions. The topmost level of our file tree contains a single submit file
+	that takes care of all the calculations done by QE. Examine it. What it does is following:
+	<ul>
+	<li></li>
+	</ul>
+	</p>
+			
+			</div> <!-- content of accordeon 5.1 -->
+		</div>
+	</div> <!-- whole accordeon 5 -->
+		
+
+		
+		
+		
+	
+	</body>

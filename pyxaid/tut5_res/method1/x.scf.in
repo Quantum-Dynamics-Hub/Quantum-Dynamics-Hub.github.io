@@ -1,0 +1,72 @@
+&CONTROL
+  calculation = 'scf',
+  dt = 20.67055,
+  nstep = 1,
+  pseudo_dir = '/usr/local/group/oprezhdo_group/QE_PP/upf_files/',
+  outdir = './',
+  prefix = 'x',
+  disk_io = 'low',
+/
+
+&SYSTEM
+  ibrav = 0,
+  celldm(1) = 1.89,
+  nat = 12,
+  ntyp = 2,
+  nspin = 2,
+  tot_magnetization = 0.0,
+  occupations = 'smearing',
+  smearing = 'gaussian',
+  degauss = 0.005,
+  nbnd = 40,
+  ecutwfc = 40,
+  ecutrho = 400,
+  tot_charge = 0.0,
+  nosym = .true.,
+  input_dft = 'pbe'
+
+/
+
+&ELECTRONS
+  electron_maxstep = 300,
+  conv_thr = 1.D-5,
+  mixing_beta = 0.45,
+/
+
+&IONS
+  ion_dynamics = 'verlet',
+  ion_temperature = 'andersen',
+  tempw = 300.00 ,
+  nraise = 25,
+  pot_extrapolation = 'second_order',
+  wfc_extrapolation = 'second_order', 
+/
+
+
+ATOMIC_SPECIES
+ C  12.01  C.pbe-rrkjus.UPF
+ H  1.008  H.pbe-rrkjus.UPF
+
+
+K_POINTS gamma                  
+                                
+CELL_PARAMETERS (alat=  1.89000000)
+  11.000000000   0.000000000   0.000000000
+   0.000000000  11.000000000   0.000000000
+   0.000000000   0.000000000  11.000000000
+
+ATOMIC_POSITIONS (alat)
+C 5.0000	3.6054	5.0000
+C 6.2077	4.3027	5.0000
+C 6.2077	5.6973	5.0000
+C 5.0000	6.3946	5.0000
+C 3.7923	5.6973	5.0000
+C 3.7923	4.3027	5.0000
+H 5.0000	2.5253	5.0000
+H 7.1431	3.7627	5.0000
+H 7.1431	6.2373	5.0000
+H 5.0000	7.4747	5.0000
+H 2.8569	6.2373	5.0000
+H 2.8569	3.7627	5.0000
+
+

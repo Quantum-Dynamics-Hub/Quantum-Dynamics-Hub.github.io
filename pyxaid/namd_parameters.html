@@ -1,0 +1,304 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+
+	<script src="bootstrap/js/jquery.js"></script>        
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+	
+	<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+	<link href="bootstrap/css/style.css" rel="stylesheet">
+	
+	<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
+	<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushPython.js"></script>
+	<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushBash.js"></script>
+	<link type="text/css" rel="stylesheet" href="syntaxhighlighter_3.0.83/styles/shCoreDefault.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+
+	
+	<title>PYXAID</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+	
+    </head>
+    <body style="margin-left:10px">
+
+	<h2>pyxaid_core.namd() parameters</h2><br>	
+	<h4>Introduction</h4>
+	<p>The pyxais_core.namd() function takes a single argument (called params in below examples) of the python dictionary data type.
+	This allows one to prepare a single object containing all simulation parameters an then pass it to pyxais_core.namd() function. 
+	One of the ways to do this is by setting key-value pairs as:
+	</p>
+	<pre class="brush:python;">
+params = []  # empty dictionary container
+params["key1"] = value1   # set the value corresponding to key1
+params["key2"] = value2   # set the value corresponding to key2
+...
+</pre>
+	<p>Alternative way to define a dictionary with the simulation parameters is:</p>
+	<pre class="brush:python;">params = {key1:value1, key2:value2, ...}</pre>
+	<p>Although the first way is a bit longer, it is easier to understand,  modify and support. That is why you will find it in the tutorial scripts. 
+	Especially in the script "py-scr3.py" Before going into description of the parameters used by <i>namd</i> function, you may find it very useful
+	to take a look on that script first - it is heavily commented and explaint most of the valid keys and their allowed values and also shows how to set
+	the corresponding parameters up. 
+	</p><br><br>
+	<h4>Recognized key values for the <i>namd</i> function:</h4><br>
+	<ul>
+	
+	
+		<li><b style="color:blue;">Ham_re_prefix / Ham_re_suffix</b><br>
+			<ul>
+				<li><b>Purpose:</b> defines the prefix/suffix for the files (including path to the directory) containing real part of the electronic Hamiltonian 
+				matrices for all time steps of the simulation (their range is determined by namdtime parameter and the initial conditions). Note that the
+				real part of the Hamiltonian is typically close to zero for the off-diagonal element, while the diagonal elements contain eigenenergies of 
+				corresponding KS orbitals. The format of the file content is simple - N x N matrix with real (floating-point values) entries, where N - is
+				the number of KS orbitals considered in calculations (see more details in ...)
+				</li>
+				<li><b>Value type:</b> string</li>
+				<li><b>Possible values:</b>anything</li>
+				<li><b>Default value:</b> ""</li>
+			</ul>
+		
+		</li><br>
+
+		<li><b style="color:blue;">Ham_im_prefix / Ham_im_suffix</b><br>
+			<ul>
+				<li><b>Purpose:</b> similarly to Ham_re_prefix / Ham_re_prefix, but for imaginary part of the Hamiltonian matrix. Typically the diagonal
+				terms of such matrix are zero, while the off-diagonal terms contain   -i*hbar*<i|d/dt|j> values.
+				</li>
+				<li><b>Value type:</b> string</li>
+				<li><b>Possible values:</b> anything</li>
+				<li><b>Default value:</b> ""</li>
+			</ul>
+		
+		</li><br>	
+
+		<li><b style="color:blue;">Hprime_x_prefix / Hprime_x_suffix</b><br>
+			<ul>
+				<li><b>Purpose:</b> defines the prefix/suffix for the files (including path to the directory) containing x-component of the transition 
+				dipole matrix elements for all time steps of the simulation (their range is determined by namdtime parameter and the initial conditions).
+				These files are required is explicit field-matter interaction is to be included in simulations or if one wishes to compute absorption spectra
+				</li>
+				<li><b>Value type:</b> string</li>
+				<li><b>Possible values:</b> anything</li>
+				<li><b>Default value:</b> ""</li>
+			</ul>
+		
+		</li><br>		
+
+		<li><b style="color:blue;">Hprime_y_prefix / Hprime_y_suffix</b><br>
+			<ul>
+				<li><b>Purpose:</b> similarly to Hprime_x_prefix / Hprime_x_suffix, but for y-component
+				</li>
+				<li><b>Value type:</b> string</li>
+				<li><b>Possible values:</b> anything</li>
+				<li><b>Default value:</b> ""</li>
+			</ul>
+		
+		</li><br>		
+
+		<li><b style="color:blue;">Hprime_z_prefix / Hprime_z_suffix</b><br>
+			<ul>
+				<li><b>Purpose:</b> similarly to Hprime_x_prefix / Hprime_x_suffix, but for z-component 
+				</li>
+				<li><b>Value type:</b> string</li>
+				<li><b>Possible values:</b> anything</li>
+				<li><b>Default value:</b> ""</li>
+			</ul>
+		
+		</li><br>		
+
+		<li><b style="color:blue;">runtype</b><br>
+			<ul>
+				<li><b>Purpose:</b> Defines the type of calculations you want to perform
+				</li>
+				<li><b>Value type:</b> string</li>
+				<li><b>Possible values:</b>
+				<p><u>"namd"</u> - perform NA-MD calculations (with or without decoherence, field, etc.)</p>
+				<p><u>"nonamd"</u>(or anything else) - only calculate the energies and input states	and parameters. No trajectory hopping and
+				TD-SE calculations are performed, no output is written (except for me_energies*). This is helpful for computing the energies 
+				of the excited states (determinants) along the trajectory.
+				</p>
+				</li>
+				<li><b>Default value:</b> "namd"</li>
+			</ul>
+		
+		</li><br>		
+
+		<li><b style="color:blue;">read_couplings</b><br>
+			<ul>
+				<li><b>Purpose:</b> Determined how (at which stage) the Hamiltonian (and, optionally, Hprime) matrices are read.
+				</li>
+				<li><b>Value type:</b> string</li>
+				<li><b>Possible values:</b>
+				<p><u>"batch"</u>  - in this case all Ham_ (and, optionally, Hprime_) files (as defined by namdtime and initial conditions) are read first and stored 
+				internally. This helps to save a great deal of time, because reading this (same) files for each initial condition is very time consuming part. 
+				The only drawback of this method is that a lot of memory may be required. This option is preferred if the memory allows. Also note that this
+				mode requires ALL Ham_ (and, optionally, Hprime_) files to be read in the beginning, even if the lowest initial excitation time is much larger
+				than 0. So such files must be present.</p>
+				<p><u>"online"</u> - in this case Ham_ (and, optionally, Hprime_) files are read as they need. This may be much slower than batch mode, 
+				but requires much less memory, because only current file is stored. This mode requires only those files which are actually used - that may
+				be convenient in some cases.</p>
+				<p><u>"online_all_in_one"</u> - this is similar to "online", but now both imaginary and real part are combined in a single Hamiltonian file.
+				See example of usage and more explanation <a href="examples.html#all_in_one">here</a></p>
+				</li>
+				<li><b>Default value:</b> "online"</li>
+			</ul>
+		
+		</li><br>		
+
+		<li><b style="color:blue;">namdtime</b><br>
+			<ul>
+				<li><b>Purpose:</b> Defines the length of the simulation, in number of steps (whatever the size of each MD step) - usually the size of such
+				step is 1 fs.
+				</li>
+				<li><b>Value type:</b> integer</li>
+				<li><b>Possible values:</b> any, starting from 0</li>
+				<li><b>Default value:</b> 0</li>
+			</ul>
+		
+		</li><br>	
+
+		<li><b style="color:blue;">num_sh_traj</b><br>
+			<ul>
+				<li><b>Purpose:</b> Number of surface-hopping trajectories (independent) calculated for each initial condition. The output populations
+				are averaged over this number of trajectories.
+				</li>
+				<li><b>Value type:</b> integer</li>
+				<li><b>Possible values:</b> any bigger than 0</li>
+				<li><b>Default value:</b> 1</li>
+			</ul>
+		
+		</li><br>	
+
+		<li><b style="color:blue;">integrator</b><br>
+			<ul>
+				<li><b>Purpose:</b> Defines the integration scheme for propagation of electronic amplitudes (by solving TD-SE)
+				</li>
+				<li><b>Value type:</b> integer</li>
+				<li><b>Possible values:</b> 
+				<p><u>0</u>    -  Based on Trotter splitting formula</p>
+                <p><u>10</u>   -  Finite difference approach with 1-st order interpolation of Hamiltonian</p>
+                <p><u>11</u>   -  Finite difference approach with 2-nd order interpolation of Hamiltonian</p>
+                <p><u>2</u>    -  Exact analytic formula, based on matrix exponential (eigenvalue problem)</p>
+				</li>
+				<li><b>Default value:</b> 0</li>
+			</ul>
+		
+		</li><br>	
+
+		<li><b style="color:blue;">nucl_dt</b><br>
+			<ul>
+				<li><b>Purpose:</b> Nuclear integration time step (slow) in fs. Needed only to determine how many electronic time steps to perform between
+				consequtive time-steps. Typically this is something like 1 fs.
+				</li>
+				<li><b>Value type:</b> real</li>
+				<li><b>Possible values:</b> any (>)</li>
+				<li><b>Default value:</b> 1.0</li>
+			</ul>
+		
+		</li><br>	
+
+		<li><b style="color:blue;">elec_dt</b><br>
+			<ul>
+				<li><b>Purpose:</b> Electronic integration time step (fast) in fs
+				</li>
+				<li><b>Value type:</b> real</li>
+				<li><b>Possible values:</b> any (>0)</li>
+				<li><b>Default value:</b> 0.001</li>
+			</ul>
+		
+		</li><br>	
+
+		<li><b style="color:blue;">Temp</b><br>
+			<ul>
+				<li><b>Purpose:</b> Defines the temperature of the system (in K units). It is used in the surface-hopping simulations for calculation of 
+				the Boltzmann factors affecting the propbability of going to the higher-energy states.
+				</li>
+				<li><b>Value type:</b> real</li>
+				<li><b>Possible values:</b> any (>0)</li>
+				<li><b>Default value:</b> 300.0</li>
+			</ul>
+		
+		</li><br>	
+		
+		<li><b style="color:blue;">alp_bet</b><br>
+			<ul>
+				<li><b>Purpose:</b> defines if the alpha and beta orbitals are coupled
+				</li>
+				<li><b>Value type:</b> integer</li>
+				<li><b>Possible values:</b></li>
+				<p><u>0</u> - in this case the electrons are considered as quasiparticles with spin (alpha and beta, see Figure 1a). 
+				This leads to a more detailed structure of the basis states - e.g. states 1 and 2 are distinct, as well as 3 and 4. The alpha and beta
+				orbitals are not coupled, thus transitions 1<-->2,  3<-->4  or 0<-->2 are not allowed, while transitions 0<-->1, 1<-->3 are possible. 
+				To developers: the current algorithm, which determines if two states are coupled, is based on the number of occupied orbitals by which 
+				two determinants are different. Thus, internally the states 1 and 2 are formally coupled as well as 0 and 2 or 3 and 4. The alp_bet flag 
+				set to 0 will simply nullify the NACs (transition dipole moments) for such elements (in KS orbital basis), so effectively the mentioned 
+				states will be decoupled.</p>
+				<p><u>1</u> - in this case the electrons are considered as spinless quasiparticles (Figure 1b). This results in the states, defined purely 
+				on the spatial parts of the KS orbitals, so no spin-multiplicity is considered and there are no restrictions on possible transitions is due 
+				to spin component. The possibility of transitions is solely defined by the occupation numbers of the orbitals. In such an approach states 1
+				and 2 are equivalent, as well as 3 and 4. The transitions 0<-->(1,2) or (1,2)<-->(3,4) are allowed, while 0<-->(3,4) are not.</p>
+				<div class="container">
+				<img src="doc_pics/alp_bet0.jpg" style="width:40%"><img src="doc_pics/alp_bet1.jpg" style="width:40%">
+				<h4><b>Figure 1.</b> Possible ways to treat coupling between orbitals</h4>
+				</div>
+				<li><b>Default value:</b> 0</li>
+			</ul>
+		
+		</li><br>	
+
+		<li><b style="color:blue;">debug_flag</b><br>
+			<ul>
+				<li><b>Purpose:</b> Printing some extra information. Carefully - the output may be very massive
+				</li>
+				<li><b>Value type:</b> integer</li>
+				<li><b>Possible values:</b>
+				<p><u>0</u> - do not output extra information</p>
+				<p><u>1</u> - print debug (extra) information</p>
+				<p><u>2</u> - print even more information</p>
+				<p>...</p>
+				</li>
+				<li><b>Default value:</b> 0</li>
+			</ul>
+		
+		</li><br>	
+		
+		<li><b style="color:blue;">decoherence</b><br>
+			<ul>
+				<li><b>Purpose:</b> Defines if the decoherence effects should be taken into account and how they should be treated.
+				</li>
+				<li><b>Value type:</b> integer</li>
+				<li><b>Possible values:</b>
+				<p><u>0</u> - no decoherence effects are included</p>
+				<p><u>1</u> - include the decoherence via DISH. In this case the dephasing (decoherence) functions will be computed for each pair of states
+				and for each initial condition. The decoherence functions will be fitted to gaussian curve to determine the dephasing rates. The computed and
+				fitted dephasing functions and the cumulants will be written in the files (located in <a href="#">scratch_dir</a> - see corresponding section).
+				The matrices of dephasing rates will also be written in that directory - one for each initial condition. These files will be re-opened during
+				the main DISH execution cycle. Note: the number of files created is quite large (~Nbas x Nbas x Nicond, where Nbas - the number of basis states
+				Nicond - the number of initial conditions), so be careful (in later version i'll try to fix this)</p>
+				</li>
+				<li><b>Default value:</b> 0</li>
+			</ul>
+		
+		</li><br>	
+		
+		<li><b style="color:blue;">regress_mode</b><br>
+			<ul>
+				<li><b>Purpose:</b> defines the type of fitting to be used in fitting the dephasing functions
+				</li>
+				<li><b>Value type:</b> integer</li>
+				<li><b>Possible values:</b>
+				<p><u>0</u> - y = ax, where P = log(D) and x = t<sup>2</sup> </p>
+				<p><u>1</u> - y = ax + b, where P = log(D) and x = t<sup>2</sup> </p>
+				</li>
+				<li><b>Default value:</b> 0</li>
+			</ul>
+		
+		</li><br>	
+		
+		
+	</ul>
+	</body>
+	
+</html>

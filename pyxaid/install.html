@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+
+	<script src="bootstrap/js/jquery.js"></script>        
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+	
+	<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+	<link href="bootstrap/css/style.css" rel="stylesheet">
+	
+	<title>PYXAID</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+	
+    </head>
+    <body style="margin-left:10px">
+	
+	
+
+	<h2>Installation</h2><br>
+	<h3><a id="inst1">Light installation</a></h3>
+	<p>Installation (in the sense described below) is not required to execute the <a href="documentation.html#pure_pyth_mod">purely python-based modules</a> that do not depend on 
+	the lower-level modules. The only condition
+	that should be met in this case is that the modules are in the PYTHON_PATH. Obviously, Python itself must be installed. Some modules also require 
+	<a href="http://www.numpy.org/">numpy</a>.	
+	</p><br>
+	<p><b>To summarize, the light installation requirements are:</b></p>
+	<ul>
+		<li>python interpreter (tested on version 2.7.3)</li>
+		<li>numpy (optional)</li>
+	</ul>
+	<br>
+	<h3><a id="inst2">Full installation</a></h3>
+	<p> Alternatively (for the full installation) follow these steps:
+	</p>
+	<ol>
+		<li><pre><code style="color:green">> cd PYXAID/src_cpp</code></pre></li>
+		<li>Edit Makefile to let the compiler know where the Python and Boost.Python include and library files are located</li>
+		<li><pre><code style="color:green">> make</code></pre>
+		<p>This will compile the source files and build the python extension (module) called pyxaid_core. It will be placed in the folder PYXAID/ where the
+rest of the modules are located.</p>
+		</li>
+		<li>To test if compilation and build were successful go to PYXAID root directory and run test.py script:
+		<pre><code style="color:green">> cd ..
+> python test.py</code></pre>
+		</li>
+		<li>Add PYXAIS root directory to PYTHONPATH</li>
+	</ol><br>
+	<p><b>To summarize, the full installation requirements are:</b></p>
+	<ul>
+		<li>python interpreter (tested on version 2.7.3)</li>
+		<li>boost.python library (tested on version 1.52.0)</li>
+		<li>c++ compiler (tested on gnu/c++)</li>
+		<li>make utility(almost always available on Unix sysstems)</li>
+		<li>numpy (optional)</li>
+	</ul>
+	
+	</body>

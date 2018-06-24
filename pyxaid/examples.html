@@ -1,0 +1,204 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+    
+	<script src="bootstrap/js/jquery.js"></script>    
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+
+	
+	<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+	<link href="bootstrap/css/style.css" rel="stylesheet">
+	
+	<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
+	<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushPython.js"></script>
+	<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushBash.js"></script>
+	<link type="text/css" rel="stylesheet" href="syntaxhighlighter_3.0.83/styles/shCoreDefault.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+
+	
+	<title>PYXAID</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-41555275-1', 'googledrive.com');
+  ga('send', 'pageview');
+
+</script>
+	
+    </head>
+    <body style="margin-left:10px">
+
+	<h2>Examples</h2><br>	
+	<p>On this page I will show some examples of how to do some common operations. The examples are organized as a collection of code snippets with some
+	explanation. These code blocks can be used as the prototypes of the scripts/code for your own calculations.	
+	</p>
+	<ol>
+		<li><a href="#basis_states">How to define basis states</a></li>
+		<li><a href="#nac">How to scale NACs</a></li>
+		<li><a href="#iconds">How to define initial conditions</a></li>
+	</ol>
+	<br><br><br><br>
+	
+	<h3><a id="basis_states">How to define basis states</a></h3>
+	
+	<p>The most basic, straightforward and simple way is to enlist all configurations explicitly.</p>
+	<pre class="brush: python;">params["active_space"] = range(12,21)  # [12,20]
+
+params["states"] = []
+params["states"].append(["GS",[12,-12,13,-13]])    # 0
+
+params["states"].append(["S1",[12,-12,-13,19]])    # 1
+params["states"].append(["S2",[-12,13,-13,19]])    # 2
+
+params["states"].append(["D1",[12,-12,19,-19]])    # 3
+params["states"].append(["D2",[-12,13,19,-19]])    # 4
+ </pre>
+ 
+	<p>In the code above the first thing one always needs to define is the active space - a list of KS orbitals that are or may be occupied in the basis
+	Slater determinants (configurations) defined afterwards. In the current example we specify that the orbitals from 12 to 20 including may be involved in
+	construction of the basis states</p>
+	<p>The second step is to define the basis states. Each state is encoded by the variable of type list. The list contains at least 2 items: first - the
+	label of the state (of type string), second - the list of integers that identify which orbitals are occupied by each of 4 electrons available in
+	active space (with positive numbers corresponding to spin-up or alpha electrons, and the negative numbers corresponding to spin-down or beta electrons)</p>
+	<p>Why there are 4 electrons in the active space in example presented above? This depends on how many occupied orbitals are likely to be involved
+	in excitations in particular systems. In our case we only consider two frontier occupied orbitals HOMO-1 (index 12), and HOMO (index 13). Therefore, only
+	4 electrons need to be distributed among the orbital pool from 12 to 20. When all 4 electrons occupy the lowest orbitals (HOMO-1 and HOMO) - this corresponds 
+	to the ground state configuration: [12, -12, 13, -13], which is labeled with "GS". Promotion of one electron from either HOMO or HOMO-1 to any of the
+	unoccupied orbital will result in a singly-excited state (e.g. S1 - in which an electron is promoted from the spin-orbital 13 to the spin-orbital 19, or 
+	S2 in which an electron is promoted from spin-orbital 12 to spin-orbital 19). Promotion of 2 electrons will result in a doubly excited states, such as 
+	D1 and D2</p>
+	<br>
+	<br>
+	<p>Definition of the states in the form presented above allows the user to adjust the average energy of the state according to specific needs. For
+	example, the DFT band gaps are often underestimated w.r.t. experimental or high-level ab initio results. As a consequence, the excitation energies
+	may be underestimated. The other situation where the energy adjustment may be needed is for describing multi-electron excited states. For example, the
+	energy of D1 or D2 states in organic crystals (e.g. in solid pentacene) may be comparable to the energy of singly-excited states S1 and S2, while the
+	computational model based on sums of the KS-orbital energies would notably overestimate the excitation energies of the D1 and D2 states. Finally, one
+	may simply be interested to study the charge or energy transfer rate as a function of the energy gap, with the latter considered as a variable.</p>
+	<p>The energy correction can be specific for each state and is defined as a third parameter in state definition (of float type):</p>
+	<pre class="brush: python;">params["active_space"] = range(12,21)  # [12,20]
+
+params["states"] = []
+params["states"].append(["GS",[12,-12,13,-13], 0.00])    # 0
+
+params["states"].append(["S1",[12,-12,-13,19]], 0.5)    # 1
+params["states"].append(["S2",[-12,13,-13,19]], 0.5)    # 2
+
+params["states"].append(["D1",[12,-12,19,-19]], -1.5)    # 3
+params["states"].append(["D2",[-12,13,19,-19]], -1.5)    # 4
+ </pre>	
+	<p>In the code above we have adjusted energies of states so to affect the excitation energies. In particular, the excitation energies of the 0->1 (GS->S1)
+	and 0->2 (GS->S2) transitions have been increased by 0.5 eV, while the energies of the D1 and D2 states has been lowered by 1.5 eV.</p>
+	<br>
+	<br>
+	<p>More compact way to define the basis states is by using the <b>lazy</b> module, as it is used in the tutorial examples:</p>
+	<pre class="brush: python;">Nmin = 12
+HOMO=13
+Nmax=20	
+# Set active space and the basis states
+params["active_space"] = range(Nmin,Nmax+1)
+
+# Generate basis states
+GS = lazy.ground_state(Nmin,HOMO)  # ground state
+SE = lazy.single_excitations(Nmin,Nmax,HOMO,1)  # single excitations
+
+# Now combine the ground and singly excited states in one list
+# In our convention, the GS configuration must be the first state in the
+# list of the basis states.
+params["states"] = []
+params["states"].append(GS)
+for se in SE:
+    params["states"].append(se)
+ </pre>		
+	<p>The script will work similarly to those presented above, except now ALL possible single excitations from any of occupied orbitals to any unoccupied orbitals
+	included in active space will be constructed. In this case the occupied orbitals are defined as all the orbitals in the range from Nmin to HOMO (including ends)
+	 and the unoccupied orbitals are defined as those in the range from HOMO+1 to Nmax (including ends). Note, that the "occupied orbitals" in this need not
+	 have the conventional physical meaning. Instead, if one considers the "hot" electron relaxation or el-el scattering in the CB manifolds without paying attention
+	 to accross-the-gap transitions (LUMO->HOMO), one may simply redefine the parameters Nmin, HOMO and Nmax according to the specific problem. So
+	 in our example, if we are interested in "hot" electron relaxation to LUMO (orbital 14) from any other CB orbital, then one can re-define Nmin=14,HOMO=14 and Nmax=20.
+	 In this case the "ground state"(first excited state) configuration will be defined by [14,-14], while the "hot" electron (higher excited) states will be
+    [14,-15], [14,-16],...[14,-20]</p>
+	
+	
+	
+	<br><br>
+	
+	
+	<h3><a id="nac">How to scale NACs</a></h3>
+	<p>Occasionally one may need to effectively exclude the possibility of transitions to specific states, one may be interested to study the dependence of 
+	the charge and/or energy transfer rates as a function of NAC magnitude, or one may simply need to correct the NAC scale to better agree with experiment or
+	higher-level ab initio calculations. For these and similar purposes, the PYXAID code recognizes the key-word "nac_scale" in the input parameters dictionary:</p>
+	<pre class="brush: python;">
+# Below is a small snippet that scales all NACs by 1.0 (so no practical effect)
+nmicrost = len(params["states"]) # number of (micro)states
+params["nac_scale"] = []
+for i in range(0,nmicrost):
+    for j in range(0,nmicrost):
+        params["nac_scale"].append([i,j,1.0])  
+
+ </pre>	
+	<p>The format is straightforward - the params["nac_scale"] is a list of items. Each item is list of 3 components - 2 integers and 1 float. The two integers
+	define the indices of the pairs of the basis states, and the floating-point value defines the factor by which the NAC between these pair of states will be
+	scaled. So, as in the example above, all pairs of NACs will be scaled by 1.0, so no effect will be observed. To shut down the transitions for state I to
+	state J do:</p>
+	<pre class="brush: python;">
+        params["nac_scale"].append([I,J,0.0])  
+		params["nac_scale"].append([J,I,0.0])  
+ </pre>		
+	<p>Don't forget that the NAC matrix should stay anti-symmetric all the time, so if some (i,j) element of the NAC matrix is scaled by some constant K,
+	the transpose element (j,i) should be scaled by the same constant K.</p>
+	
+	
+	<h3><a id="iconds">How to define initial conditions</a></h3>
+	<p>The initial conditions are defined by the value of the input parameter dictionary with the keyword "iconds", params["iconds"]. The object params["iconds"]
+	is a list of items. Each item is a list itsef, composed of 2 values - both of which are or the integer type. The first value indicates at which time step
+	of originally precomputed MD trajectory do we start our NA-MD calculations, the second integer indicates the state (one of the basis states) in which the
+	system is initially prepared. In the simplest case the definition of the initial conditions can look like:</p>
+	<pre class="brush: python;">
+ex_indx = 2
+params["iconds"] = [ [0,ex_indx],[50,ex_indx],[100,ex_indx] ]
+ </pre>		
+	<p>In the snippet above we consider initial excitation ex_indx = 2 but starting at times 0, 50 and 100 steps since the beginning of the MD trajectory
+	(normally these numbers correspond to time in fs)</p>
+	<p>A slightly more elaborate version of the initial conditions definition will be:</p>
+<pre class="brush: python;">
+# Initial conditions
+nmicrost = len(params["states"]) # number of (micro)states
+ic = []
+i = 0
+while i < 10:
+    j = 0
+    while j < nmicrost:
+        ic.append([50*i,j])
+        j = j + 1
+    i = i + 1
+params["iconds"] = ic
+ </pre>			
+	<p>In this example we consider nmicrost initial excitation - that is considering what would happen to each individual basis state. For each state we
+	consider evolution with the NA-MD starting at 0, 50, 100, 150, ... 450 time step of initially pre-computed MD trajectory.</p>
+	
+	
+	<h3><a id="all_in_one">How to use a single file that contains both imaginary (off-diagonal) and real (diagonal) parts of Hamiltonian</a></h3>
+	
+	<p>This is achieved via a new option for params["read_couplings"] - "online_all_in_one". In this case the prefixes to real and imaginary components
+	of Hamiltonian should be set to the same value, pointing to a given file that combines both parts. For example,</p>
+	<pre class="brush: python;">params["Ham_re_prefix"] = rt+"/0_Ham_"
+params["Ham_re_suffix"] = ""
+params["Ham_im_prefix"] = rt+"/0_Ham_"
+params["Ham_im_suffix"] = ""
+
+...
+
+params["read_couplings"] = "online_all_in_one"
+ </pre>
+ 
+	
+	
+	</body>
