@@ -1,0 +1,277 @@
+<!DOCTYPE HTML>
+
+<html>
+  <head>
+    <title>Quantum Dynamics Hub</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117524895-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-117524895-1');
+    </script>
+  </head>
+
+	
+  <body>
+
+    <!-- Title -->
+    <div class="row">
+      <div class="col-12"><h1>Quantum Dynamics Hub </h1></div>
+    </div>
+
+    <!-- Navigation bar" -->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            Software
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="libra/index.html">Libra</a>
+            <a class="dropdown-item" href="#">Libra-X</a>
+            <a class="dropdown-item" href="pyxaid/index.html">Pyxaid</a>
+            <a class="dropdown-item" href="#">Pyxaid2</a>
+          </div>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="workshop_2018.html">MolSSI workshop, 2018</a></li>
+        <li class="nav-item active"><a class="nav-link" href="naqd_software_list.html">NA/QD Software List</a></li>
+      </ul>
+    </nav>
+
+
+    <!-- Content   -->
+    <div class="container-fluid margin-left">
+      <br><br>
+
+      <h2>Overview</h2>
+      <p> 
+        Here, I have compiled a list of the (only open source!) codes implementing various nonadiabatic and quantum dynamics (NA/QD)
+        functionality. Please, keep in mind that NA/QD is understood broadly and includes ground and excited states dynamics,
+        classical, semi-classical, quantum-classical, and fully-quantum dynamics methods.
+        When possible, I provide the links to the source codes, documentation/webpage, relevant publications.
+        This is in spirit of the CCL Software list. However, I summarize not only the "working" codes, but also any codes that 
+        may implement some useful functionality. 
+      </p>
+      <p>
+        If you find any inaccuracies that you would like to correct or if you have anything useful to add, feel free to contact me
+        (Alexey Akimov at "alexeyak at buffalo dot edu" - of course replace "at" and "dot" with the corresponding symbols).
+      </p>
+      <p>
+        If you are an author of contributor of any of the packages listed here, I'd be glad if you could contribute by providing a short 
+        description of the package and perhaps updating the links/bibliography, etc. 
+        I hope this page will be useful and will help make the community to stay aware of your codes and their capabilities and can serve as
+        a comprehensive database/reference of the NA/QD codes and code blcoks.
+      </p>
+
+
+      <h2>Alphabetical list of codes</h2>
+
+
+
+
+
+      <!-- JADE -->
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#jade">JADE</a>
+            </h4>
+          </div>
+
+          <div id="jade" class="panel-collapse collapse">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <b>Brief description: </b>                 
+                An on-the-fly surface hopping code for nonadiabatic molecular dynamics of poly-atomic systems.
+                The JADE package has been implemented and primarily used for the simulation of ultrafast nonadiabatic
+                processes (femtosecond to picosecond time scale) in polyatomic molecules.
+                <p>Features: Dynamics -On-the-fly dynamics surface hopping dynamics -the velocity-Verlet algorithm;
+                -fewest switches algorithms -Langevin thermostat Interfaces -TURBOMOLE (CIS, TD-DFT, RI-CC2, ADC(2))
+                -GAUSSIAN (CIS, TD-DFT) -GAMESS (US) (CIS TD-DFT) -Q-CHEM (in progress) -Molpro (in progress) 
+                Initial conditions -Wigner distribution -ground state dynamics enviroment effects -Langevin dynamics
+                -effective fragment potential (interface with Gamess-US & Q-CHEM) in process Output and analysis 
+                -Statistical analysis of results -transition density analysis tools.  
+                </p>
+              </li>
+
+              <li class="list-group-item">
+                <b>Source code availability: </b> 
+                <a href="https://github.com/jade-package/JADE" target="_new">Here</a>
+              </li>
+
+              <li class="list-group-item">
+                <b>Package Website: </b> 
+                <a href="https://jade-package.github.io/JADE/" target="_new">Here</a>
+              </li>
+
+              <li class="list-group-item">
+                <b>References: </b>
+                Likai Du; Zhenggang Lan
+                "An On-the-Fly Surface-Hopping Program JADE for Nonadiabatic Molecular Dynamics of Polyatomic Systems: Implementation and Applications"
+                J. Chem. Theory Comput., 2015, 11, 1360.
+                <a href="http://pubs.acs.org/doi/abs/10.1021/ct501106d" target="_new">link</a>
+              </li>
+            </ul>
+            <div class="panel-footer"></div>
+          </div>
+        </div>
+      </div>  <!-- JADE  -->
+
+
+
+      <!-- Libra -->
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#libra">Libra</a>
+            </h4>
+          </div>
+
+          <div id="libra" class="panel-collapse collapse">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <b>Brief description: </b> 
+                A comprehensive library of NA/QD and chemical modeling/simulation tools. Can be used for 
+                methodology development/prototyping and for practical simulations.  
+              </li>
+
+              <li class="list-group-item">
+                <b>Source code availability: </b> 
+                <a href="https://github.com/Quantum-Dynamics-Hub/libra-code" target="_new">Here</a>
+              </li>
+
+              <li class="list-group-item">
+                <b>Package Website: </b> 
+                <a href="https://quantum-dynamics-hub.github.io/libra/index.html" target="_new">Here</a>
+              </li>
+
+              <li class="list-group-item">
+                <b>References: </b>
+                Akimov, A. V. "Libra: An open-Source 'methodology discovery' library for quantum and classical dynamics simulations"
+                J. Comput. Chem.  2016  37, 1626-1649 
+                <a href="http://onlinelibrary.wiley.com/doi/10.1002/jcc.24367/full" target="_new">link</a>
+              </li>
+            </ul>
+            <div class="panel-footer"></div>
+          </div>
+        </div>
+      </div>  <!-- Libra  -->
+
+
+      <!-- NEXMD -->
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#nexmd">NEXMD</a>
+            </h4>
+          </div>
+
+          <div id="nexmd" class="panel-collapse collapse">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <b>Brief description: </b> 
+                An application-oriented toolbox for NA-MD simulations. Features: solvation in excited states, 
+                semiempirical methods, large systems. 
+              </li>
+
+              <li class="list-group-item">
+                <b>Source code availability: </b> 
+                <a href="" target="_new">??</a>
+              </li>
+
+              <li class="list-group-item">
+                <b>Package Website: </b> 
+                <a href="" target="_new">None</a>
+              </li>
+
+              <li class="list-group-item">
+                <b>References: </b>               
+                Sifain, A.E.; Bjorgaard, J.A.; Nelson, T.R.; Nebgen, B.T.; White, A.J.; Gifford, B.J.; Gao, D.W.; 
+                Prezhdo, O.V.; Fernandez-Alberti, S.; Roitberg, A.E.; Tretiak, S. "Photoexcited Nonadiabatic Dynamics
+                of Solvated Push-Pull pi-Conjugated Oligomers with the NEXMD Software."
+                <a href="https://pubs.acs.org/doi/abs/10.1021/acs.jctc.8b00103" target="_new">link</a>
+              </li>
+            </ul>
+            <div class="panel-footer"></div>
+          </div>
+        </div>
+      </div>  <!-- NEXMD  -->
+
+
+      <!-- PYXAID -->
+      <div class="panel-group">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#pyxaid">PYXAID</a>
+            </h4>
+          </div>
+
+          <div id="pyxaid" class="panel-collapse collapse">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <b>Brief description: </b> 
+                The PYXAID program (PYthon eXtension for Ab Initio Dynamics) is an open source,
+                flexible, and computationally efficient implementation of the NA-MD methodology in the framework of Kohn-Sham
+                (KS) density functional theory (DFT). It implements a number of basic and more advanced functionalities, 
+                including fewest-switches surface hopping (FSSH), decoherence-induced surface hopping (DISH), multielectron adiabatic
+                representation of the time-dependent KS (TD-KS) equations, and explicit field-matter interactions. The classical path
+                approximation (CPA) achieves additional and considerable computational savings. The package is interfaced with the
+                Quantum Espresso (QE) distribution, which is used as an efficient driver for ab initio adiabatic electronic structure and MD
+                calculations. Particular attention is dedicated to stability, efficiency, and accuracy of solutions to the TD-KS equations in
+                the adiabatic representation.
+              </li>
+
+              <li class="list-group-item">
+                <b>Source code availability: </b> 
+                <a href="https://github.com/Quantum-Dynamics-Hub/pyxaid-code" target="_new">The original version</a>
+                <a href="https://github.com/Quantum-Dynamics-Hub/pyxaid-code-mpi" target="_new">The MPI-enabled version</a>
+              </li>
+
+              <li class="list-group-item">
+                <b>Package Website: </b> 
+                <a href="https://quantum-dynamics-hub.github.io/pyxaid/index.html" target="_new">Here</a>
+              </li>
+
+              <li class="list-group-item">
+                <b>References: </b>
+                <br>
+                Akimov A. V.; Prezhdo O. V. 
+                "The PYXAID program for non-adiabatic molecular dynamics in condensed matter systems"&nbsp; 
+                <i>J. Comp. Theory Comput.</i> <b>2013</b>, 9, 4959 
+                <a href="http://dx.doi.org/10.1021/ct400641n" target="_blank" rel="nofollow">link</a>
+                <br>
+                Akimov A. V.; Prezhdo O. V.
+                "Advanced capabilities of the PYXAID program: Integration schemes, decoherence effects, multiexcitonic states, and field-matter interaction"
+                <i>J. Chem. Theory Comput.</i> <b>2014</b>, 10, 789 
+                <a href="http://dx.doi.org/10.1021/ct400934c" target="_blank" rel="nofollow">link</a>
+
+              </li>
+            </ul>
+            <div class="panel-footer"></div>
+          </div>
+        </div>
+      </div>  <!-- PYXAID  -->
+
+
+
+
+    </div>
+
+  </body>
+
+</html>
