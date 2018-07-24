@@ -90,10 +90,14 @@ alias c='export PATH=${HOME}/miniconda2/bin:$PATH'
          You'll have to reload the terminal for the changes to take effect, or you could simply:
 <pre>source .bashrc 
 </pre>
-        After you've added the alias
+        <p>
+          It may help sometimes to restart your terminal after this step! 
+        </p>
         </li>
 
-        <li>Create conda environment (name it "libra") and activate it
+        <li>
+        After you've added the alias: <br>
+        Create conda environment (name it "libra") and activate it
           <pre>
 c
 conda create -n libra
@@ -108,11 +112,30 @@ source activate libra
           <pre>
 conda install python=2.7
 conda install conda-build
-conda install gcc-lunux-64
-conda install gxx-lunux-64
+conda install gcc_linux-64
+conda install gxx_linux-64
 conda install make
 conda install boost
 conda install cmake
+conda install git
+          </pre>
+        </li>
+
+        <li>
+          Download the code source files from: <a href="https://github.com/Quantum-Dynamics-Hub/libra-code" target="_new">here</a>
+          <pre>
+mkdir Libra 
+cd Libra
+git clone https://github.com/Quantum-Dynamics-Hub/libra-code.git .
+          </pre>
+        </li>
+
+        <li>
+          (Optionally) When you cloned the code, the "master" branch will be the default one. Note this branch
+          is updated only periodically, so you may need to switch to a suitable more recent branch.
+          Usually, this will be the "devel" (development branch). Do this by:
+          <pre>
+git checkout devel
           </pre>
         </li>
 
@@ -120,6 +143,8 @@ conda install cmake
           for binary files (results of compilation and linking). Prepare the make files (it is important to pass two variables
           to cmake: DCMAKE_PREFIX_PATH, which should point to the correspondingly used prefix, and the other one, DCMAKE_AR, which 
           should be set to the presently used archiver (needed for creating static libraries))
+          In the following instuctions, assume the source code is located in: /mnt/c/cygwin/home/Alexey-user/Programming/Project_libra
+          not just in "Libra" as in the example above, so please adjust accordingly.
           <pre>
 cd /mnt/c/cygwin/home/Alexey-user/Programming/Project_libra
 mkdir _build 
