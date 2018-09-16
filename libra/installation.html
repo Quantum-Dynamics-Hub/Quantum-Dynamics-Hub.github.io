@@ -152,6 +152,19 @@ cd _build
 cmake -DCMAKE_PREFIX_PATH=/home/alexey/miniconda2/envs/libra -DCMAKE_AR=${AR} ../
 make 
           </pre>
+          Sometimes, the cmake can not find the Boost installation, in this case the error message will suggest
+          you to set up the BOOST_ROOT. For intstance, this occurs on our CCR cluster where the search finds the
+          older boost version by default, but that version doesn't have developer's stuff (.h, .so, tc.). So my
+          workaround it is point the cmake to find a specific version of the boost by the following change in the CMakeLists.txt:
+          <pre>
+FIND_PACKAGE(Boost 1.67.0 REQUIRED)
+          </pre>
+          Please, make sure that this is the version that is insalled in your prefix (libra) by the instructions above.
+          Then, I have to call the cmake command with the BOOST_ROOT set to my prefix, which for the CCR system is:
+          <pre>
+cmake -DBOOST_ROOT=/user/alexeyak/Soft/Conda/miniconda2/envs/libra ../
+          </pre>
+          This is where I have installed my all the necessary packages. Yours is likely different.
         </li>
 
         <li>Add the following environment variables in .bash_profile
