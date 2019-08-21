@@ -97,20 +97,30 @@ alias c='export PATH=${HOME}/miniconda2/bin:$PATH'
 
         <li>
         After you've added the alias: <br>
-        Create conda environment (name it "libra") and activate it
+        Create conda environment (name it "py37") and activate it
           <pre>
 c
-conda create -n libra
-source activate libra
+conda create -n py37
+source activate py37
           </pre>
 
-          In this example, the environment will be created at: "/home/alexey/miniconda2/envs/libra". In the following steps,
-          we'll need to know it.
+          <p>
+            In this example, the environment will be created at: "/home/alexey/miniconda2/envs/py37". In the following steps,
+            we'll need to know it.
+          </p>
+          <p>
+            Analogously, you can also create another environment - the one with Python2 (e.g. 2.7) being the major Python version.
+            
+            This idea is probably not so good after 2020, when Python 2 will be deprecated. 
+
+            Then, one can switch between the two environments and compile Libra for corresponding Python version and then use the 
+            suitable Python environment.
+          </p>
         </li>
 
-        <li>Install all the dependencies into the presently active conda environment ("libra" in this example)
+        <li>Install all the dependencies into the presently active conda environment ("py37" in this example)
           <pre>
-conda install python=2.7
+conda install python=3.7
 conda install conda-build
 conda install gcc_linux-64
 conda install gxx_linux-64
@@ -118,6 +128,19 @@ conda install make
 conda install boost
 conda install cmake
 conda install git
+          </pre>
+
+          <p>
+            For some reason, it is best to do the installations one by one, not all together. When I tried all packages in one
+            command, I had some problems with the compilation later. 
+          </p>
+        </li>
+
+        <li>Optionally (not needed to compile Libra itself, but may be required for some examples), install the following packages:
+          <pre>
+conda install -c conda-forge matplotlib
+conda install -c rmg py3dmol
+conda install -c anaconda scipy 
           </pre>
         </li>
 
@@ -134,9 +157,20 @@ git clone https://github.com/Quantum-Dynamics-Hub/libra-code.git .
           (Optionally) When you cloned the code, the "master" branch will be the default one. Note this branch
           is updated only periodically, so you may need to switch to a suitable more recent branch.
           Usually, this will be the "devel" (development branch). Do this by:
+
           <pre>
 git checkout devel
           </pre>
+
+          <p>
+            If you want to use a specific version of the code (yes, we have started tagging!), you can also checkout
+            a particular tag - this may be a better way to be consistent in terms of which code version you are using,
+            but may be not the best option for the development/contribution purposes. Do this by:
+          </p>
+          <pre>
+git checkout v3.0.0
+          </pre>
+
         </li>
 
         <li>Navigate to the root of the Libra code (the one with the folders like: src, tests, and so on), create the folder 
@@ -147,11 +181,18 @@ git checkout devel
           not just in "Libra" as in the example above, so please adjust accordingly.
           <pre>
 cd /mnt/c/cygwin/home/Alexey-user/Programming/Project_libra
-mkdir _build 
-cd _build
-cmake -DCMAKE_PREFIX_PATH=/home/alexey/miniconda2/envs/libra -DCMAKE_AR=${AR} ../
+mkdir _build3 
+cd _build3
+cmake -DCMAKE_PREFIX_PATH=/home/alexey/miniconda2/envs/py37 -DCMAKE_AR=${AR} ../
 make 
           </pre>
+
+          <p>
+            In the case you decide to compile Libra for both Python2 and Python3 and want to switch between them,
+            I recommend to make two directories:  _build2 and _build3 and use each one to "host" the corresponding 
+            version of the code (you'll of course need to adjust the paths variables accordingly - see the instructions below)
+          </p>
+
           Sometimes, the cmake can not find the Boost installation, in this case the error message will suggest
           you to set up the BOOST_ROOT. For intstance, this occurs on our CCR cluster where the search finds the
           older boost version by default, but that version doesn't have developer's stuff (.h, .so, tc.). So my
@@ -159,18 +200,18 @@ make
           <pre>
 FIND_PACKAGE(Boost 1.67.0 REQUIRED)
           </pre>
-          Please, make sure that this is the version that is insalled in your prefix (libra) by the instructions above.
+          Please, make sure that this is the version that is insalled in your prefix (py37) by the instructions above.
           Then, I have to call the cmake command with the BOOST_ROOT set to my prefix, which for the CCR system is:
           <pre>
-cmake -DBOOST_ROOT=/user/alexeyak/Soft/Conda/miniconda2/envs/libra ../
+cmake -DBOOST_ROOT=/user/alexeyak/Soft/Conda/miniconda2/envs/py37 ../
           </pre>
           This is where I have installed my all the necessary packages. Yours is likely different.
         </li>
 
         <li>Add the following environment variables in .bash_profile
           <pre>
-export PYTHONPATH=/mnt/c/cygwin/home/Alexey-user/Programming/Project_libra/_build/src:$PYTHONPATH
-export LD_LIBRARY_PATH=/mnt/c/cygwin/home/Alexey-user/Programming/Project_libra/_build/src:$LD_LIBRARY_PATH
+export PYTHONPATH=/mnt/c/cygwin/home/Alexey-user/Programming/Project_libra/_build3/src:$PYTHONPATH
+export LD_LIBRARY_PATH=/mnt/c/cygwin/home/Alexey-user/Programming/Project_libra/_build3/src:$LD_LIBRARY_PATH
           </pre>         
           Load the settings so the changes take effect
           <pre>source .bash_profile</pre>
@@ -190,7 +231,7 @@ conda activate libra
 <pre>
 cmake ../
 make copy-libra-py
-<pre>
+</pre>
           Which will merely copy the Python files from the /src directory in the root to the /src in the build folder.
         </li>
 
@@ -275,6 +316,43 @@ export LD_LIBRARY_PATH=/home/Alexey-user/Programming/Project_libra/_build/src:$L
         The root directory contains the following items:
       </p>
       <ul>
+
+        <li>
+          <p>
+            <b>cmake</b> - the cmake scripts for finding some necessary packages - not yet fully functional, 
+            will be taken care of later
+          </p>
+        </li>
+
+        <li>
+          <p>
+            <b>developments</b> - the examples of scientific projects (often, published works) developed with the 
+            help of Libra package. This folder also includes some of our current developments and scientific-oriented
+            studies. 
+          </p>
+        </li>
+
+        <li>
+          <p>
+            <b>docs</b> - the directory containing some documentation and theory regarding the methods implemented in Libra
+          </p>
+        </li>
+
+        <li>
+          <p>
+            <b>notebooks</b> - the directory containing a lot of examples as Jupyter norebooks. These examples highlight 
+            various capabilities of Libra. 
+          </p>
+        </li>
+
+        <li>
+          <p>
+            <b>py2cpp_code</b> - former Python implementations that have been implemented on the C++ side and re-exposed to
+            Python again. So, this code is removed from the libra_py, but may be still useful as a building/testing/debugging 
+            blocks. So, instead of fully removing it from the package, we'll keep this "legacy" code here. 
+          </p>
+        </li>
+
         <li>
           <p>
             <b>src</b> - this is the directory containing the source code to be compiled
@@ -294,16 +372,11 @@ export LD_LIBRARY_PATH=/home/Alexey-user/Programming/Project_libra/_build/src:$L
 
         <li>
           <p>
-            <b>doc</b> - the directory containing some documentation and theory regarding the methods implemented in Libra
+            <b>unittests</b> - this directory contains a number of formal unit test modules to verify various features
+            of Libra. The codes can be quite useful for learning how to use various Libra functions and data types.
           </p>
         </li>
 
-        <li>
-          <p>
-            <b>cmake</b> - the cmake scripts for finding some necessary packages - not yet fully functional, 
-            will be taken care of later
-          </p>
-        </li>
       
         <li>
           <p>
