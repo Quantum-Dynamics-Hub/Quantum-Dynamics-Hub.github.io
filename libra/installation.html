@@ -81,7 +81,7 @@ sh ./Miniconda2-latest-Linux-x86_64.sh
           .bashrc file. If you do this, you don't need the do the next step.
         </li>
 
-        <li>
+        <li> [optional]
           If you select not to include the conda path to your PATH variable, you can create an alias which you'll need to
           invoke before you call conda. In the .bashrc file, you'l add:
 <pre>
@@ -99,7 +99,7 @@ alias c='export PATH=${HOME}/miniconda2/bin:$PATH'
         After you've added the alias: <br>
         Create conda environment (name it "py37") and activate it
           <pre>
-c
+c       [Skip this command, if you have skipped step 2]
 conda create -n py37
 source activate py37
           </pre>
@@ -118,7 +118,8 @@ source activate py37
           </p>
         </li>
 
-        <li>Install all the dependencies into the presently active conda environment ("py37" in this example)
+        <li>Install all the dependencies into the presently active conda environment ("py37" in this example, but you may have called
+          it differently)
           <pre>
 conda install python=3.7
 conda install conda-build
@@ -130,13 +131,21 @@ conda install cmake
 conda install git
           </pre>
 
+          <p> 
+            Make sure you are in the "py37" (or whatever you called it) environment. You can check it by seen the name of the environment
+            in the very left of you terminal prompt, in parenthesis. If you do the instructions above while being in another environment
+            (such as "base" - meaning the system-wide settings), the packages you request to install will be installed into that environment
+            in which case you may find some steps (e.g. compilation or during the run-time) not working properly when you activate the 
+            environment you thought you have installed all the needed packages to.
+          </p>
+
           <p>
             For some reason, it is best to do the installations one by one, not all together. When I tried all packages in one
             command, I had some problems with the compilation later. 
           </p>
         </li>
 
-        <li>Optionally (not needed to compile Libra itself, but may be required for some examples), install the following packages:
+        <li> [Optionally] (not needed to compile Libra itself, but may be required for some examples), install the following packages:
           <pre>
 conda install -c conda-forge matplotlib
 conda install -c rmg py3dmol
@@ -154,7 +163,7 @@ git clone https://github.com/Quantum-Dynamics-Hub/libra-code.git .
         </li>
 
         <li>
-          (Optionally) When you cloned the code, the "master" branch will be the default one. Note this branch
+          [ Optionally ] When you cloned the code, the "master" branch will be the default one. Note this branch
           is updated only periodically, so you may need to switch to a suitable more recent branch.
           Usually, this will be the "devel" (development branch). Do this by:
 
@@ -219,8 +228,8 @@ export LD_LIBRARY_PATH=/mnt/c/cygwin/home/Alexey-user/Programming/Project_libra/
 
         <li>Activate the environment and use the code
           <pre>
-c
-conda activate libra
+c   [Skip this command, if you have skipped step 2]
+conda activate py37
           </pre>
         </li>
 
